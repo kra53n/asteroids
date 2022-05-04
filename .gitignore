@@ -1,5 +1,8 @@
+# folders
 test/
-
+x64/
 .vs
+
+# files
 *.sln
 asteroids.vc*
