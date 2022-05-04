@@ -5,6 +5,7 @@
 int main(int argc, char* artgv[])
 {
     init();
+
     deInit(0);
     return 0;
 }
