@@ -10,5 +10,5 @@ extern SDL_Renderer* ren;
 extern int winWdt;
 extern int winHgt;
 
-void deInit(int error);
 void init();
+void deInit(int error);

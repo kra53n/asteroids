@@ -5,7 +5,7 @@ Texture loadTexture(const char filename[])
     SDL_Surface* surf = IMG_Load(filename);
     if (!surf)
     {
-        printf("Couldn't load image! Error: %s", SDL_GetError());
+        printf("\nCouldn't load image! Error: %s\n", SDL_GetError());
         system("pause");
         deInit(1);
     }
