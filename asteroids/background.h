@@ -7,7 +7,7 @@
 #pragma once
 
 const int BACKGROUND_FILENAMES_NUM = 3;
-const int BACKOGRUND_MOVE_SPEED = 3;
+const int BACKOGRUND_MOVE_SPEED = 6;
 
 const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
 	"assets/images/stars/Nebula Aqua-Pink.png",
@@ -16,4 +16,4 @@ const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
 };
 
 void BackgroundInit(Texture& texture, int index);
-void BackgroundUpdate(Texture& texture, int mouse_x, int mouse_y, int speed = BACKOGRUND_MOVE_SPEED);
+void BackgroundUpdate(Texture& texture, bool movementInX, bool movementInY, int sign, int speed = BACKOGRUND_MOVE_SPEED);
