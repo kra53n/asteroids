@@ -30,7 +30,6 @@ Texture loadFont(const char text[], const char fontname[], SDL_Color color, int 
     }
 
     SDL_Surface* surf = TTF_RenderText_Blended(font, text, color);
-    TTF_CloseFont(font);
     if (!surf)
     {
         printf("\nCouldn't load surface from TTF_RenderText_Blended! Error: %s\n", SDL_GetError());
@@ -42,6 +41,7 @@ Texture loadFont(const char text[], const char fontname[], SDL_Color color, int 
     texture.tex = SDL_CreateTextureFromSurface(ren, surf);
     texture.dstrect = { 0, 0, surf->w, surf->h };
 
+    TTF_CloseFont(font);
     SDL_FreeSurface(surf);
 
     return texture;

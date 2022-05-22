@@ -1,9 +1,11 @@
 #include "game.h"
+#include "menu.h"
 
 void GameInit(Game& game)
 {
     game.run = true;
     BackgroundInit(game.background, 0);
+    MenuInit(game.menu);
 }
 
 void GameDraw(Game& game)
@@ -12,6 +14,7 @@ void GameDraw(Game& game)
     SDL_RenderClear(ren);
 
     SDL_RenderCopy(ren, game.background.tex, NULL, &game.background.dstrect);
+    MenuDraw(game.menu);
 
     SDL_RenderPresent(ren);
 }

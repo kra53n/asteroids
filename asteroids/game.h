@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include "window.h"
 #include "background.h"
+#include "menu.h"
 
 #pragma once
 
@@ -22,7 +23,7 @@ struct Game {
 
     KeysStatus keysStatus;
 
-    Texture textureFont;
+    Menu menu;
 };
 
 void processKeys(Game& game);
