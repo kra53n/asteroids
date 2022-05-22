@@ -10,12 +10,19 @@ void init()
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        printf("SDL couldn't init! SDL_Error: %s\n", SDL_GetError());
+        printf("SDL couldn't init SDL_INIT_VIDEO! SDL_Error: %s\n", SDL_GetError());
         system("pause");
         deInit(1);
     }
 
     if (SDL_Init(IMG_INIT_PNG) < 0)
+    {
+        printf("SDL couldn't init IMG_INIT_PNG! SDL_Error: %s\n", SDL_GetError());
+        system("pause");
+        deInit(1);
+    }
+
+    if (TTF_Init())
     {
         printf("SDL couldn't init! SDL_Error: %s\n", SDL_GetError());
         system("pause");
