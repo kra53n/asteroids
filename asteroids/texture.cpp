@@ -12,9 +12,7 @@ Texture loadTexture(const char filename[])
 
     Texture texture;
     texture.tex = SDL_CreateTextureFromSurface(ren, surf);
-    texture.w = surf->w;
-    texture.h = surf->h;
-    texture.dstrect = { 0, 0, texture.w, texture.h };
+    texture.dstrect = { 0, 0, surf->w, surf->h };
 
     SDL_FreeSurface(surf);
 
@@ -30,14 +28,19 @@ Texture loadFont(const char text[], const char fontname[], SDL_Color color, int 
         system("pause");
         deInit(1);
     }
+
     SDL_Surface* surf = TTF_RenderText_Blended(font, text, color);
     TTF_CloseFont(font);
+    if (!surf)
+    {
+        printf("\nCouldn't load surface from TTF_RenderText_Blended! Error: %s\n", SDL_GetError());
+        system("pause");
+        deInit(1);
+    }
 
     Texture texture;
     texture.tex = SDL_CreateTextureFromSurface(ren, surf);
-    texture.w = surf->w;
-    texture.h = surf->h;
-    texture.dstrect = { 0, 0, texture.w, texture.h };
+    texture.dstrect = { 0, 0, surf->w, surf->h };
 
     SDL_FreeSurface(surf);
 

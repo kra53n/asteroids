@@ -21,6 +21,8 @@ struct Game {
     Texture background;
 
     KeysStatus keysStatus;
+
+    Texture textureFont;
 };
 
 void processKeys(Game& game);

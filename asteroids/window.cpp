@@ -24,7 +24,7 @@ void init()
 
     if (TTF_Init())
     {
-        printf("SDL couldn't init! SDL_Error: %s\n", SDL_GetError());
+        printf("SDL couldn't init TTF_Init! SDL_Error: %s\n", SDL_GetError());
         system("pause");
         deInit(1);
     }
