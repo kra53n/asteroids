@@ -5,5 +5,5 @@ x64/
 
 # files
 *.sln
-asteroids.vc*
+*.vc*
 asteroids/assets/fonts/*
