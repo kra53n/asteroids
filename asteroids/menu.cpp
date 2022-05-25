@@ -25,6 +25,21 @@ void MenuDestroy(Menu& menu)
 	}
 }
 
+void changeTextureOptionColor(Menu& menu)
+{
+	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
+	{
+		if (i == menu.choice)
+		{
+			menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_HGT);
+		}
+		else
+		{
+			menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, COLOR_OF_NON_ACTIVE_OPTION, MENU_FONT_HGT);
+		}
+	}
+}
+
 void MenuProcess(Menu& menu, KeysStatus& keysStatus)
 {
 	int tick = SDL_GetTicks();
@@ -33,15 +48,13 @@ void MenuProcess(Menu& menu, KeysStatus& keysStatus)
 		menu.lastKeyTick = tick;
 		if (keysStatus.up)
 		{
-			menu.textures[menu.choice] = loadFont(MENU_OPTIONS[menu.choice], MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_HGT);
 			menu.choice = menu.choice ? menu.choice - 1 : MENU_OPTIONS_NUM - 1;
-			menu.textures[menu.choice] = loadFont(MENU_OPTIONS[menu.choice], MENU_FONTNAME, COLOR_OF_NON_ACTIVE_OPTION, MENU_FONT_HGT);
+			changeTextureOptionColor(menu);
 		}
 		if (keysStatus.down)
 		{
-			menu.textures[menu.choice] = loadFont(MENU_OPTIONS[menu.choice], MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_HGT);
 			menu.choice = (menu.choice + 1) % MENU_OPTIONS_NUM;
-			menu.textures[menu.choice] = loadFont(MENU_OPTIONS[menu.choice], MENU_FONTNAME, COLOR_OF_NON_ACTIVE_OPTION, MENU_FONT_HGT);
+			changeTextureOptionColor(menu);
 		}
 	}
 
@@ -51,6 +64,7 @@ void MenuProcess(Menu& menu, KeysStatus& keysStatus)
 			(menu.textures[i].dstrect.y <= keysStatus.mouse_y && keysStatus.mouse_y <= menu.textures[i].dstrect.y + menu.textures[i].dstrect.h))
 		{
 			menu.choice = i;
+			changeTextureOptionColor(menu);
 		}
 	}
 }
