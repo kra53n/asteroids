@@ -5,7 +5,7 @@
 
 void MenuInit(Menu& menu)
 {
-	for (int i = 0; i < menu.texturesNum; i++)
+	for (int i = 0; i < FONT_NUM; i++)
 	{
 		menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_HGT);
 	}
@@ -14,7 +14,7 @@ void MenuInit(Menu& menu)
 
 void MenuDestroy(Menu& menu)
 {
-	for (int i = 0; i < menu.texturesNum; i++)
+	for (int i = 0; i < FONT_NUM; i++)
 	{
 		SDL_DestroyTexture(menu.textures[i].tex);
 	}
@@ -29,7 +29,7 @@ void MenuDraw(Menu& menu)
 {
 	SDL_Rect drawRect = { 0, menu.textBlockY, 0, 0};
 
-	for (int i = 0; i < menu.texturesNum; i++)
+	for (int i = 0; i < FONT_NUM; i++)
 	{
 		drawRect.w = menu.textures[i].dstrect.w;
 		drawRect.h = menu.textures[i].dstrect.h;
