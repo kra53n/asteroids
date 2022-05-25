@@ -1,9 +1,5 @@
-#include <stdio.h>
-#include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_image.h>
-
 #pragma once
+#include <SDL.h>
 
 extern SDL_Window* win;
 extern SDL_Renderer* ren;

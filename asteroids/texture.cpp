@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <SDL_ttf.h>
+#include <SDL_image.h>
+
 #include "texture.h"
 
 Texture loadTexture(const char filename[])

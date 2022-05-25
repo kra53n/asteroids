@@ -1,27 +1,18 @@
+#pragma once
 #include <SDL.h>
 #include "window.h"
-#include "background.h"
+#include "structs.h"
 #include "menu.h"
 
-#pragma once
-
-struct KeysStatus
-{
-    bool left = false;
-    bool right = false;
-    bool up = false;
-    bool down = false;
-};
-
 struct Game {
-    int wdt;
-    int hgt;
+    int wdt = winWdt;
+    int hgt = winHgt;
+
     bool run = false;
     SDL_Event event;
+    KeysStatus keysStatus;
 
     Texture background;
-
-    KeysStatus keysStatus;
 
     Menu menu;
 };

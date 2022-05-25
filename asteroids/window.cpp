@@ -1,10 +1,14 @@
+#include <stdio.h>
+#include <SDL_ttf.h>
+#include <SDL_image.h>
+
 #include "window.h"
 
-SDL_Window* win = NULL;
+SDL_Window*   win = NULL;
 SDL_Renderer* ren = NULL;
 
-int winWdt = 1200;
-int winHgt = 800;
+int winWdt = 1280;
+int winHgt = 720;
 
 void init()
 {

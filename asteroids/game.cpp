@@ -1,5 +1,6 @@
 #include "game.h"
 #include "menu.h"
+#include "background.h"
 
 void GameInit(Game& game)
 {
@@ -43,12 +44,13 @@ void GameUpdate(Game& game)
 {
     while (SDL_PollEvent(&game.event))
     {
-        int mouse_x; int mouse_y;
-
         switch (game.event.type)
         {
         case SDL_QUIT:
             game.run = false;
+            break;
+        case SDL_MOUSEMOTION:
+            SDL_GetMouseState(&game.keysStatus.mouse_x, &game.keysStatus.mouse_y);
             break;
         case SDL_KEYDOWN:
             switch (game.event.key.keysym.scancode)
@@ -87,7 +89,7 @@ void GameUpdate(Game& game)
         }
     }
     processKeys(game);
-
+    MenuProcess(game.menu, game.keysStatus);
 }
 
 void GameLoop(Game& game)
