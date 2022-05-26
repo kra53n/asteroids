@@ -1,6 +1,5 @@
-#include "window.h"
-
 #pragma once
+#include "window.h"
 
 struct Texture
 {

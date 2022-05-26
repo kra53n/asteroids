@@ -1,29 +1,10 @@
 #include <SDL.h>
 
-#include "game.h"
 #include "menu.h"
-#include "constants.h"
+#include "funcs.h"
 #include "window.h"
 #include "texture.h"
-
-void MenuInit(Menu& menu)
-{
-	menu.lastKeyTick = SDL_GetTicks();
-
-	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
-	{
-		menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, menu.choice == i ? COLOR_OF_NON_ACTIVE_OPTION : COLOR_OF_ACTIVE_OPTION, MENU_FONT_HGT);
-	}
-	menu.textBlockY = (winHgt - ((MENU_FONT_HGT + MENU_FONT_VERTICAL_DISTANCE) * MENU_OPTIONS_NUM - MENU_FONT_VERTICAL_DISTANCE)) / 2;
-}
-
-void MenuDestroy(Menu& menu)
-{
-	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
-	{
-		SDL_DestroyTexture(menu.textures[i].tex);
-	}
-}
+#include "constants.h"
 
 void changeTextureOptionColor(Menu& menu)
 {
@@ -40,31 +21,61 @@ void changeTextureOptionColor(Menu& menu)
 	}
 }
 
-void MenuProcess(Menu& menu, KeysStatus& keysStatus)
+void MenuInit(Menu& menu)
+{
+	menu.lastKeyTick = SDL_GetTicks();
+
+	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
+	{
+		menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_HGT);
+	}
+	menu.textBlockY = (winHgt - ((MENU_FONT_HGT + MENU_FONT_VERTICAL_DISTANCE) * MENU_OPTIONS_NUM - MENU_FONT_VERTICAL_DISTANCE)) / 2;
+	changeTextureOptionColor(menu);
+}
+
+void MenuDestroy(Menu& menu)
+{
+	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
+	{
+		SDL_DestroyTexture(menu.textures[i].tex);
+	}
+}
+
+void MenuProcess(Game& game)
 {
 	int tick = SDL_GetTicks();
-	if (tick - menu.lastKeyTick >= 100)
+	int minTime = 200;
+
+	// change choice for keyboard buttons
+	if ((game.keysStatus.up || game.keysStatus.down) && tick - game.menu.lastKeyTick >= minTime)
 	{
-		menu.lastKeyTick = tick;
-		if (keysStatus.up)
+		game.menu.lastKeyTick = tick;
+		if (game.keysStatus.up)
 		{
-			menu.choice = menu.choice ? menu.choice - 1 : MENU_OPTIONS_NUM - 1;
-			changeTextureOptionColor(menu);
+			game.menu.choice = game.menu.choice ? game.menu.choice - 1 : MENU_OPTIONS_NUM - 1;
+			changeTextureOptionColor(game.menu);
 		}
-		if (keysStatus.down)
+		if (game.keysStatus.down)
 		{
-			menu.choice = (menu.choice + 1) % MENU_OPTIONS_NUM;
-			changeTextureOptionColor(menu);
+			game.menu.choice = (game.menu.choice + 1) % MENU_OPTIONS_NUM;
+			changeTextureOptionColor(game.menu);
 		}
 	}
 
 	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
 	{
-		if ((menu.textures[i].dstrect.x <= keysStatus.mouse_x && keysStatus.mouse_x <= menu.textures[i].dstrect.x + menu.textures[i].dstrect.w) &&
-			(menu.textures[i].dstrect.y <= keysStatus.mouse_y && keysStatus.mouse_y <= menu.textures[i].dstrect.y + menu.textures[i].dstrect.h))
+		// change choice for option under mouse
+		SDL_Point point = { game.keysStatus.mouse_x, game.keysStatus.mouse_y };
+		if (isPointInRect(game.menu.textures[i].dstrect, point))
 		{
-			menu.choice = i;
-			changeTextureOptionColor(menu);
+			game.menu.choice = i;
+			changeTextureOptionColor(game.menu);
+		}
+		
+		if (game.keysStatus.enter && tick - game.menu.lastKeyTick >= minTime)
+		{
+			game.menu.lastKeyTick = tick;
+			game.state = game.menu.choice + 1;
 		}
 	}
 }

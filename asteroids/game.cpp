@@ -15,7 +15,10 @@ void GameDraw(Game& game)
     SDL_RenderClear(ren);
 
     SDL_RenderCopy(ren, game.background.tex, NULL, &game.background.dstrect);
-    MenuDraw(game.menu);
+    if (game.state == 0)
+    {
+        MenuDraw(game.menu);
+    }
 
     SDL_RenderPresent(ren);
 }
@@ -38,6 +41,11 @@ void processKeys(Game& game)
     {
         BackgroundUpdate(game.background, 1, 0, 1);
     }
+    if (game.keysStatus.escape)
+    {
+        game.keysStatus.enter = false;
+        game.state = 0;
+    }
 }
 
 void GameUpdate(Game& game)
@@ -55,41 +63,36 @@ void GameUpdate(Game& game)
         case SDL_KEYDOWN:
             switch (game.event.key.keysym.scancode)
             {
-            case SDL_SCANCODE_UP:
-                game.keysStatus.up = true;
-                break;
-            case SDL_SCANCODE_DOWN:
-                game.keysStatus.down = true;
-                break;
-            case SDL_SCANCODE_LEFT:
-                game.keysStatus.left = true;
-                break;
-            case SDL_SCANCODE_RIGHT:
-                game.keysStatus.right = true;
-                break;
+            case SDL_SCANCODE_UP:     game.keysStatus.up     = true; break;
+            case SDL_SCANCODE_DOWN:   game.keysStatus.down   = true; break;
+            case SDL_SCANCODE_LEFT:   game.keysStatus.left   = true; break;
+            case SDL_SCANCODE_RIGHT:  game.keysStatus.right  = true; break;
+            case SDL_SCANCODE_RETURN: game.keysStatus.enter  = true; break;
+            case SDL_SCANCODE_ESCAPE: game.keysStatus.escape = true; break;
             }
             break;
         case SDL_KEYUP:
             switch (game.event.key.keysym.scancode)
             {
-            case SDL_SCANCODE_UP:
-                game.keysStatus.up = false;
-                break;
-            case SDL_SCANCODE_DOWN:
-                game.keysStatus.down = false;
-                break;
-            case SDL_SCANCODE_LEFT:
-                game.keysStatus.left = false;
-                break;
-            case SDL_SCANCODE_RIGHT:
-                game.keysStatus.right = false;
-                break;
+            case SDL_SCANCODE_UP:     game.keysStatus.up     = false; break;
+            case SDL_SCANCODE_DOWN:   game.keysStatus.down   = false; break;
+            case SDL_SCANCODE_LEFT:   game.keysStatus.left   = false; break;
+            case SDL_SCANCODE_RIGHT:  game.keysStatus.right  = false; break;
+            case SDL_SCANCODE_RETURN: game.keysStatus.right  = false; break;
+            case SDL_SCANCODE_ESCAPE: game.keysStatus.escape = false; break;
             }
             break;
         }
     }
     processKeys(game);
-    MenuProcess(game.menu, game.keysStatus);
+    if (game.state == 0)
+    {
+        MenuProcess(game);
+    }
+    else if (game.state == 3)
+    {
+        game.run = false;
+    }
 }
 
 void GameLoop(Game& game)

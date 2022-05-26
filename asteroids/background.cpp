@@ -1,6 +1,5 @@
+#include <stdio.h>
 #include "background.h"
-
-#pragma once
 
 void BackgroundInit(Texture& texture, int index)
 {
