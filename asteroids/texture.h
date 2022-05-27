@@ -4,8 +4,8 @@
 struct Texture
 {
 	SDL_Texture* tex      = NULL;
-    int          w;
-    int          h;
+    	int          w;
+    	int          h;
 	SDL_Rect     dstrect;
 	double       angle    = 0;
 };
