@@ -1,12 +1,15 @@
 #include "game.h"
 #include "menu.h"
+#include "ship.h"
 #include "background.h"
 
 void GameInit(Game& game)
 {
     game.run = true;
     BackgroundInit(game.background, 0);
+    
     MenuInit(game.menu);
+    ShipInit(game, 100);
 }
 
 void GameDraw(Game& game)
@@ -15,9 +18,13 @@ void GameDraw(Game& game)
     SDL_RenderClear(ren);
 
     SDL_RenderCopy(ren, game.background.tex, NULL, &game.background.dstrect);
-    if (game.state == 0)
+    if (game.state == GAME_STATE_MENU)
     {
         MenuDraw(game.menu);
+    }
+    if (game.state == GAME_STATE_PLAY)
+    {
+        ShipDraw(game);
     }
 
     SDL_RenderPresent(ren);
@@ -60,6 +67,18 @@ void GameUpdate(Game& game)
         case SDL_MOUSEMOTION:
             SDL_GetMouseState(&game.keysStatus.mouse_x, &game.keysStatus.mouse_y);
             break;
+        case SDL_MOUSEBUTTONDOWN:
+            switch (game.event.button.button)
+            {
+            case SDL_BUTTON_LEFT: game.keysStatus.enter = true; break;
+            }
+            break;
+        case SDL_MOUSEBUTTONUP:
+            switch (game.event.button.button)
+            {
+            case SDL_BUTTON_LEFT: game.keysStatus.enter = false; break;
+            }
+            break;
         case SDL_KEYDOWN:
             switch (game.event.key.keysym.scancode)
             {
@@ -85,11 +104,15 @@ void GameUpdate(Game& game)
         }
     }
     processKeys(game);
-    if (game.state == 0)
+    if (game.state == GAME_STATE_MENU)
     {
         MenuProcess(game);
     }
-    else if (game.state == 3)
+    else if (game.state == GAME_STATE_PLAY)
+    {
+        ShipUpdate(game);
+    }
+    else if (game.state == GAME_STATE_EXIT)
     {
         game.run = false;
     }

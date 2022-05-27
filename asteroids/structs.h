@@ -33,6 +33,14 @@ struct Menu
     int lastKeyTick;
 };
 
+struct Ship
+{
+    Texture tex;
+    float   speedMovement = 10;
+    float   speedRotation = 4;
+    int     wdt           = 242;
+};
+
 struct Game {
     int        wdt = winWdt;
     int        hgt = winHgt;
@@ -43,6 +51,7 @@ struct Game {
     KeysStatus keysStatus;
 
     Texture    background;
+    Ship       ship;
 
     Menu       menu;
 };
