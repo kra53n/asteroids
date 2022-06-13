@@ -20,12 +20,8 @@ void GameDraw(Game& game)
     //SDL_RenderCopy(ren, game.background.tex, NULL, &game.background.dstrect);
     switch (game.state)
     {
-    case GAME_STATE_MENU:
-        MenuDraw(game.menu);
-        break;
-    case GAME_STATE_PLAY:
-        ShipDraw(game);
-        break;
+    case GAME_STATE_MENU: MenuDraw(game.menu); break;
+    case GAME_STATE_PLAY: ShipDraw(game);      break;
     }
 
     SDL_RenderPresent(ren);
@@ -123,17 +119,11 @@ void GameUpdate(Game& game)
         }
     }
     processKeys(game);
-    if (game.state == GAME_STATE_MENU)
+    switch (game.state)
     {
-        MenuProcess(game);
-    }
-    else if (game.state == GAME_STATE_PLAY)
-    {
-        ShipUpdate(game);
-    }
-    else if (game.state == GAME_STATE_EXIT)
-    {
-        game.run = false;
+    case GAME_STATE_MENU: MenuProcess(game); break;
+    case GAME_STATE_PLAY: ShipUpdate(game);  break;
+    case GAME_STATE_EXIT: game.run = false;  break;
     }
 }
 
