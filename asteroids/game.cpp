@@ -6,7 +6,7 @@
 void GameInit(Game& game)
 {
     game.run = true;
-    BackgroundInit(game.background, 0);
+    //BackgroundInit(game.background, 0);
     
     MenuInit(game.menu);
     ShipInit(game, 100);
@@ -17,14 +17,15 @@ void GameDraw(Game& game)
     SDL_SetRenderDrawColor(ren, 17, 18, 55, 255);
     SDL_RenderClear(ren);
 
-    SDL_RenderCopy(ren, game.background.tex, NULL, &game.background.dstrect);
-    if (game.state == GAME_STATE_MENU)
+    //SDL_RenderCopy(ren, game.background.tex, NULL, &game.background.dstrect);
+    switch (game.state)
     {
+    case GAME_STATE_MENU:
         MenuDraw(game.menu);
-    }
-    if (game.state == GAME_STATE_PLAY)
-    {
+        break;
+    case GAME_STATE_PLAY:
         ShipDraw(game);
+        break;
     }
 
     SDL_RenderPresent(ren);
@@ -32,22 +33,22 @@ void GameDraw(Game& game)
 
 void processKeys(Game& game)
 {
-    if (game.keysStatus.up)
-    {
-        BackgroundUpdate(game.background, 0, 1, -1);
-    }
-    if (game.keysStatus.down)
-    {
-        BackgroundUpdate(game.background, 0, 1, 1);
-    }
-    if (game.keysStatus.left)
-    {
-        BackgroundUpdate(game.background, 1, 0, -1);
-    }
-    if (game.keysStatus.right)
-    {
-        BackgroundUpdate(game.background, 1, 0, 1);
-    }
+    //if (game.keysStatus.up)
+    //{
+    //    BackgroundUpdate(game.background, 0, 1, -1);
+    //}
+    //if (game.keysStatus.down)
+    //{
+    //    BackgroundUpdate(game.background, 0, 1, 1);
+    //}
+    //if (game.keysStatus.left)
+    //{
+    //    BackgroundUpdate(game.background, 1, 0, -1);
+    //}
+    //if (game.keysStatus.right)
+    //{
+    //    BackgroundUpdate(game.background, 1, 0, 1);
+    //}
     if (game.keysStatus.escape)
     {
         game.keysStatus.enter = false;
@@ -70,13 +71,17 @@ void GameUpdate(Game& game)
         case SDL_MOUSEBUTTONDOWN:
             switch (game.event.button.button)
             {
-            case SDL_BUTTON_LEFT: game.keysStatus.enter = true; break;
+            case SDL_BUTTON_LEFT:
+                game.keysStatus.btnLeft = true;
+                break;
             }
             break;
         case SDL_MOUSEBUTTONUP:
             switch (game.event.button.button)
             {
-            case SDL_BUTTON_LEFT: game.keysStatus.enter = false; break;
+            case SDL_BUTTON_LEFT:
+                game.keysStatus.btnLeft = false;
+                break;
             }
             break;
         case SDL_KEYDOWN:
@@ -86,7 +91,14 @@ void GameUpdate(Game& game)
             case SDL_SCANCODE_DOWN:   game.keysStatus.down   = true; break;
             case SDL_SCANCODE_LEFT:   game.keysStatus.left   = true; break;
             case SDL_SCANCODE_RIGHT:  game.keysStatus.right  = true; break;
+
+            case SDL_SCANCODE_W:      game.keysStatus.up     = true; break;
+            case SDL_SCANCODE_S:      game.keysStatus.down   = true; break;
+            case SDL_SCANCODE_A:      game.keysStatus.left   = true; break;
+            case SDL_SCANCODE_D:      game.keysStatus.right  = true; break;
+
             case SDL_SCANCODE_RETURN: game.keysStatus.enter  = true; break;
+            case SDL_SCANCODE_SPACE:  game.keysStatus.space  = true; break;
             case SDL_SCANCODE_ESCAPE: game.keysStatus.escape = true; break;
             }
             break;
@@ -97,7 +109,14 @@ void GameUpdate(Game& game)
             case SDL_SCANCODE_DOWN:   game.keysStatus.down   = false; break;
             case SDL_SCANCODE_LEFT:   game.keysStatus.left   = false; break;
             case SDL_SCANCODE_RIGHT:  game.keysStatus.right  = false; break;
+
+            case SDL_SCANCODE_W:      game.keysStatus.up     = false; break;
+            case SDL_SCANCODE_S:      game.keysStatus.down   = false; break;
+            case SDL_SCANCODE_A:      game.keysStatus.left   = false; break;
+            case SDL_SCANCODE_D:      game.keysStatus.right  = false; break;
+
             case SDL_SCANCODE_RETURN: game.keysStatus.right  = false; break;
+            case SDL_SCANCODE_SPACE:  game.keysStatus.space  = false; break;
             case SDL_SCANCODE_ESCAPE: game.keysStatus.escape = false; break;
             }
             break;

@@ -7,8 +7,7 @@
 #include "structs.h"
 #include "constants.h"
 
-#define RADIANS 180 * M_PI
-
+/* wdt - width of ship in the game */
 void ShipInit(Game& game, int wdt)
 {
 	game.ship.tex = loadTexture(SHIP_FILENAMES_TEXTURES[0]);

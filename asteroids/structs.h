@@ -16,6 +16,8 @@ struct KeysStatus
     bool right    = false;
     bool up       = false;
     bool down     = false;
+    bool btnLeft  = false;
+    bool space    = false;
     bool enter    = false;
     bool escape   = false;
     int  mouse_x;

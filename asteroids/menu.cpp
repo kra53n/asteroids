@@ -66,13 +66,15 @@ void MenuProcess(Game& game)
 	{
 		// change choice for option under mouse
 		SDL_Point point = { game.keysStatus.mouse_x, game.keysStatus.mouse_y };
-		if (isPointInRect(game.menu.textures[i].dstrect, point))
+		bool cursorUnderTexture = isPointInRect(game.menu.textures[i].dstrect, point);
+		if (cursorUnderTexture)
 		{
 			game.menu.choice = i;
 			changeTextureOptionColor(game.menu);
 		}
 		
-		if (game.keysStatus.enter && tick - game.menu.lastKeyTick >= minTime)
+		bool oneOfBtns = game.keysStatus.enter || game.keysStatus.space || (game.keysStatus.btnLeft && cursorUnderTexture);
+		if (oneOfBtns && tick - game.menu.lastKeyTick >= minTime)
 		{
 			game.menu.lastKeyTick = tick;
 			game.state = game.menu.choice + 1;
