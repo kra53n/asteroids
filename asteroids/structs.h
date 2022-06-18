@@ -35,6 +35,20 @@ struct Menu
     int lastKeyTick;
 };
 
+struct Asteroid
+{
+    SDL_Point pos;
+    int       frame  = 0;
+    int       rowLen = 8;
+    int       colLen = 8;
+};
+
+struct Asteroids
+{
+    Texture   texture;
+    Asteroid* asteroids = NULL;
+};
+
 struct Ship
 {
     Texture tex;
@@ -44,15 +58,16 @@ struct Ship
 };
 
 struct Game {
-    int        wdt = winWdt;
-    int        hgt = winHgt;
-
-    bool       run = false;
-    int        state = 0;
+    int        wdt        = winWdt;
+    int        hgt        = winHgt;
+                          
+    bool       run        = false;
+    int        state      = 0;
     SDL_Event  event;
     KeysStatus keysStatus;
 
     Texture    background;
+    Asteroids  asteroids;
     Ship       ship;
 
     Menu       menu;

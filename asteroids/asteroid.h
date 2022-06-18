@@ -1,9 +1,6 @@
 #pragma once
+#include "structs.h"
 #include "texture.h"
 #include "constants.h"
 
-struct Asteroid {
-	Texture textures[ASTEROIDS_FRAMES_NUM];
-};
-
-void AsteroidInit();
+void AsteroidInit(Game& game);

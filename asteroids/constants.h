@@ -34,3 +34,4 @@ const char SHIP_FILENAMES_TEXTURES[][40] = {
 // ASTEROIDS CONFIGURATION
 #define ASTEROIDS_FRAMES_NUM    64
 #define ASTEROIDS_FRAMES_IN_ROW 8
+#define ASTEROIDS_FILENAME      "assets\images\asteroids\asteroids.png"
