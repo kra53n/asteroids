@@ -3,4 +3,6 @@
 #include "texture.h"
 #include "constants.h"
 
-void AsteroidInit(Game& game);
+void AsteroidsInit(Game& game);
+void AsteroidsUpdate(Game& game);
+void AsteroidsDraw(Game& game);

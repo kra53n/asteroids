@@ -5,7 +5,7 @@
 
 
 // MENU CONFIGURATION
-const char      MENU_FONTNAME[]             = "assets/fonts/Voyager Heavy.otf";
+#define         MENU_FONTNAME                 "assets/fonts/Voyager Heavy.otf"
 #define         MENU_FONT_HGT                 50
 #define         MENU_FONT_VERTICAL_DISTANCE   80
 #define         MENU_OPTIONS_NUM              3
@@ -32,6 +32,5 @@ const char SHIP_FILENAMES_TEXTURES[][40] = {
 
 
 // ASTEROIDS CONFIGURATION
-#define ASTEROIDS_FRAMES_NUM    64
-#define ASTEROIDS_FRAMES_IN_ROW 8
-#define ASTEROIDS_FILENAME      "assets\images\asteroids\asteroids.png"
+#define ASTEROIDS_FRAMES_NUM    57
+#define ASTEROIDS_FILENAME      "assets/images/asteroids/rock.png"

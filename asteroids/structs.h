@@ -38,15 +38,17 @@ struct Menu
 struct Asteroid
 {
     SDL_Point pos;
+    SDL_Rect  srcrect;
+    SDL_Rect  dstrect;
     int       frame  = 0;
-    int       rowLen = 8;
-    int       colLen = 8;
+    int       lastTick;
 };
 
 struct Asteroids
 {
     Texture   texture;
     Asteroid* asteroids = NULL;
+    int       num       = 10;
 };
 
 struct Ship

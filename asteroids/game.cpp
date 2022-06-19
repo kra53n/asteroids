@@ -1,12 +1,14 @@
 #include "game.h"
 #include "menu.h"
 #include "ship.h"
+#include "asteroid.h"
 #include "background.h"
 
 void GameInit(Game& game)
 {
     game.run = true;
     //BackgroundInit(game.background, 0);
+    AsteroidsInit(game);
     
     MenuInit(game.menu);
     ShipInit(game, 100);
@@ -21,7 +23,10 @@ void GameDraw(Game& game)
     switch (game.state)
     {
     case GAME_STATE_MENU: MenuDraw(game.menu); break;
-    case GAME_STATE_PLAY: ShipDraw(game);      break;
+    case GAME_STATE_PLAY:
+        AsteroidsDraw(game);
+        ShipDraw(game);
+        break;
     }
 
     SDL_RenderPresent(ren);
@@ -122,7 +127,10 @@ void GameUpdate(Game& game)
     switch (game.state)
     {
     case GAME_STATE_MENU: MenuProcess(game); break;
-    case GAME_STATE_PLAY: ShipUpdate(game);  break;
+    case GAME_STATE_PLAY:
+        AsteroidsUpdate(game);
+        ShipUpdate(game);
+        break;
     case GAME_STATE_EXIT: game.run = false;  break;
     }
 }
