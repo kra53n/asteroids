@@ -17,6 +17,8 @@ Texture loadTexture(const char filename[])
     Texture texture;
     texture.tex = SDL_CreateTextureFromSurface(ren, surf);
     texture.dstrect = { 0, 0, surf->w, surf->h };
+    texture.w = surf->w;
+    texture.h = surf->h;
 
     SDL_FreeSurface(surf);
 

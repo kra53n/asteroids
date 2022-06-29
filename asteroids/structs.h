@@ -40,15 +40,16 @@ struct Asteroid
     SDL_Point pos;
     SDL_Rect  srcrect;
     SDL_Rect  dstrect;
-    int       frame  = 0;
-    int       lastTick;
+    int       frame     = 0;
+    int       lastTicks;
 };
 
 struct Asteroids
 {
-    Texture   texture;
-    Asteroid* asteroids = NULL;
-    int       num       = 10;
+    Texture   texture[ASTEROIDS_TYPE_NUM];
+    int       asteroidsFrames[ASTEROIDS_TYPE_NUM];
+    Asteroid* asteroids[ASTEROIDS_TYPE_NUM];
+    int       num[ASTEROIDS_TYPE_NUM];
 };
 
 struct Ship

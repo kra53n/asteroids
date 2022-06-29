@@ -32,5 +32,16 @@ const char SHIP_FILENAMES_TEXTURES[][40] = {
 
 
 // ASTEROIDS CONFIGURATION
-#define ASTEROIDS_FRAMES_NUM    57
-#define ASTEROIDS_FILENAME      "assets/images/asteroids/rock.png"
+#define ASTEROIDS_TYPE_NUM      9
+#define ASTEROIDS_FILENAME      "assets/images/asteroids/iron.png"
+const char ASTEROIDS_FILENAMES[ASTEROIDS_TYPE_NUM][40] = {
+	"assets/images/asteroids/iron.png",
+	"assets/images/asteroids/large metal.png",
+	"assets/images/asteroids/large rock.png",
+	"assets/images/asteroids/medium rock.png",
+	"assets/images/asteroids/rock.png",
+	"assets/images/asteroids/silicon.png",
+	"assets/images/asteroids/silver.png",
+	"assets/images/asteroids/small rock.png",
+	"assets/images/asteroids/titanium.png",
+};
