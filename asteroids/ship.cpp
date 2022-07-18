@@ -35,6 +35,8 @@ void ShipUpdate(Game& game)
 	{
 		game.ship.tex.angle += game.ship.speedRotation;
 	}
+
+	boundWindow(game.ship.tex.dstrect);
 }
 
 void ShipDraw(Game& game)

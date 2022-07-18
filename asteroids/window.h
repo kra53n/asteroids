@@ -9,3 +9,4 @@ extern int winHgt;
 
 void init();
 void deInit(int error);
+void boundWindow(SDL_Rect &rect);
