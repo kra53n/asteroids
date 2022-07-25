@@ -62,15 +62,15 @@ void deInit(int error)
 
 void boundWindow(SDL_Rect &rect)
 {
-    int max_side = rect.w >= rect.h ? rect.w : rect.h;
+    int maxSide = rect.w >= rect.h ? rect.w : rect.h;
 
     bool right = rect.x >= winWdt;
-    bool left = rect.x + max_side <= 0;
+    bool left = rect.x + maxSide <= 0;
     bool bottom = rect.y >= winHgt;
-    bool top = rect.y + max_side <= 0;
+    bool top = rect.y + maxSide <= 0;
 
-    if (right) rect.x = -max_side;
+    if (right) rect.x = -maxSide;
     else if (left) rect.x = winWdt;
-    else if (bottom) rect.y = -max_side;
+    else if (bottom) rect.y = -maxSide;
     else if (top) rect.y = winHgt;
 }

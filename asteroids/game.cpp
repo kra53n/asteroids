@@ -7,7 +7,7 @@
 void GameInit(Game& game)
 {
     game.run = true;
-    //BackgroundInit(game.background, 0);
+    BackgroundInit(game.background, 0);
     AsteroidsInit(game);
     
     MenuInit(game.menu);
@@ -19,7 +19,7 @@ void GameDraw(Game& game)
     SDL_SetRenderDrawColor(ren, 17, 18, 55, 255);
     SDL_RenderClear(ren);
 
-    //SDL_RenderCopy(ren, game.background.tex, NULL, &game.background.dstrect);
+    BackgroundDraw(game);
     switch (game.state)
     {
     case GAME_STATE_MENU: MenuDraw(game.menu); break;
@@ -34,22 +34,6 @@ void GameDraw(Game& game)
 
 void processKeys(Game& game)
 {
-    //if (game.keysStatus.up)
-    //{
-    //    BackgroundUpdate(game.background, 0, 1, -1);
-    //}
-    //if (game.keysStatus.down)
-    //{
-    //    BackgroundUpdate(game.background, 0, 1, 1);
-    //}
-    //if (game.keysStatus.left)
-    //{
-    //    BackgroundUpdate(game.background, 1, 0, -1);
-    //}
-    //if (game.keysStatus.right)
-    //{
-    //    BackgroundUpdate(game.background, 1, 0, 1);
-    //}
     if (game.keysStatus.escape)
     {
         game.keysStatus.enter = false;
@@ -130,6 +114,7 @@ void GameUpdate(Game& game)
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game);
         ShipUpdate(game);
+        BackgroundUpdate(game);
         break;
     case GAME_STATE_EXIT: game.run = false;  break;
     }

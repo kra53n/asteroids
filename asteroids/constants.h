@@ -15,10 +15,11 @@ const SDL_Color COLOR_OF_NON_ACTIVE_OPTION  = { 150, 150, 220, 255 };
 
 
 // BACKGROUND CONFIGURATION
-#define BACKGROUND_FILENAMES_NUM 3
+#define BACKGROUND_FILENAMES_NUM 4
 #define BACKOGRUND_MOVE_SPEED    6
 
 const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
+	"assets/images/backgrounds/background.png",
 	"assets/images/stars/Nebula Aqua-Pink.png",
 	"assets/images/stars/Nebula Blue.png",
 	"assets/images/stars/Nebula Red.png"

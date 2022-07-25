@@ -19,6 +19,8 @@ void ShipInit(Game& game, int wdt)
 	game.ship.tex.dstrect.h /= coeff;
 }
 
+#include <stdio.h>
+
 void ShipUpdate(Game& game)
 {
 	if (game.keysStatus.up)
@@ -35,7 +37,7 @@ void ShipUpdate(Game& game)
 	{
 		game.ship.tex.angle += game.ship.speedRotation;
 	}
-
+	
 	boundWindow(game.ship.tex.dstrect);
 }
 
