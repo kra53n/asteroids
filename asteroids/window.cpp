@@ -60,7 +60,7 @@ void deInit(int error)
     exit(error);
 }
 
-void boundWindow(SDL_Rect &rect)
+void boundScreen(SDL_Rect &rect)
 {
     int maxSide = rect.w >= rect.h ? rect.w : rect.h;
 

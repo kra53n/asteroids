@@ -57,7 +57,7 @@ struct Ship
     Texture tex;
     float   speedMovement = 10;
     float   speedRotation = 4;
-    int     wdt           = 242;
+    int     wdt           = 121;
 };
 
 struct Game {

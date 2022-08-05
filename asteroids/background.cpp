@@ -22,13 +22,17 @@ void BackgroundUpdate(Game& game)
 	angle = angle >= 0 ? angle : 360 + angle;
 
 	// right
-	if (angle < 90 || angle > 270)  game.background.dstrect.x += speed;
+	if (angle < 90 || angle > 270)
+        game.background.dstrect.x -= speed;
 	// left
-	if (angle > 90 && angle < 270)  game.background.dstrect.x -= speed;
+	if (angle > 90 && angle < 270)
+        game.background.dstrect.x += speed;
 	// up
-	if (angle > 180 && angle < 360) game.background.dstrect.y -= speed;
+	if (angle > 180 && angle < 360)
+        game.background.dstrect.y += speed;
 	// down
-	if (angle > 0 && angle < 180)   game.background.dstrect.y += speed;
+	if (angle > 0 && angle < 180)
+        game.background.dstrect.y -= speed;
 
     if (game.background.dstrect.x < -game.background.dstrect.w
         || game.background.dstrect.x > game.background.dstrect.w)

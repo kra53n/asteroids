@@ -28,7 +28,7 @@ const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
 
 // SHIP CONFIGURATION
 const char SHIP_FILENAMES_TEXTURES[][40] = {
-	"assets/images/ships/megatrox.png",
+	"assets/images/ships/aurora.png",
 };
 
 
