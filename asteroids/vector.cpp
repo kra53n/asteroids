@@ -30,3 +30,9 @@ void VecSetDirection(Vec& vec, float angle)
 	vec.x = cos(angle) * len;
 	vec.y = -sin(angle) * len;
 }
+
+void VecSumCoords(Vec& vec1, Vec& vec2)
+{
+	vec1.x += vec2.x;
+	vec1.y += vec2.y;
+}
