@@ -1,4 +1,6 @@
 #include <stdio.h>
+
+#include "vector.h"
 #include "structs.h"
 #include "background.h"
 
@@ -17,22 +19,12 @@ void BackgroundUpdate(Game& game)
 {
 	if (!game.keysStatus.up) return;
 
-	int speed = 1;
-	int angle = (int)game.ship.tex.angle % 360;
-	angle = angle >= 0 ? angle : 360 + angle;
-
-	// right
-	if (angle < 90 || angle > 270)
-        game.background.dstrect.x -= speed;
-	// left
-	if (angle > 90 && angle < 270)
-        game.background.dstrect.x += speed;
-	// up
-	if (angle > 180 && angle < 360)
-        game.background.dstrect.y += speed;
-	// down
-	if (angle > 0 && angle < 180)
-        game.background.dstrect.y -= speed;
+	int speed = 10;
+    Vec vec = { speed, 0 };
+    VecSetDirection(vec, game.ship.tex.angle);
+    VecChangeDirection(vec, 180);
+    game.background.dstrect.x += vec.x;
+    game.background.dstrect.y += vec.y;
 
     if (game.background.dstrect.x < -game.background.dstrect.w
         || game.background.dstrect.x > game.background.dstrect.w)
