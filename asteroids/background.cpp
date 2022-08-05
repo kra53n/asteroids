@@ -17,14 +17,11 @@ void BackgroundInit(Texture& texture, int index)
 
 void BackgroundUpdate(Game& game)
 {
-	if (!game.keysStatus.up) return;
+	float speed = 0.5;
+    game.background.dstrect.x += -game.ship.vel.x * speed;
+    game.background.dstrect.y += -game.ship.vel.y * speed;
 
-	int speed = 10;
-    Vec vec = { speed, 0 };
-    VecSetDirection(vec, game.ship.tex.angle);
-    VecChangeDirection(vec, 180);
-    game.background.dstrect.x += vec.x;
-    game.background.dstrect.y += vec.y;
+	if (!game.keysStatus.up) return;
 
     if (game.background.dstrect.x < -game.background.dstrect.w
         || game.background.dstrect.x > game.background.dstrect.w)
