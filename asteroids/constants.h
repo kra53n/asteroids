@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL.h>
 
-#define RADIANS 180 * M_PI
+#define RADIANS M_PI / 180
 
 
 // MENU CONFIGURATION

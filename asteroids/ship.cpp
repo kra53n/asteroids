@@ -23,8 +23,8 @@ void ShipUpdate(Game& game)
 {
 	if (game.keysStatus.up)
 	{
-		game.ship.tex.dstrect.y += sin(game.ship.tex.angle / RADIANS) * game.ship.speedMovement;
-		game.ship.tex.dstrect.x += cos(game.ship.tex.angle / RADIANS) * game.ship.speedMovement;
+		game.ship.tex.dstrect.y += sin(game.ship.tex.angle * RADIANS) * game.ship.speedMovement;
+		game.ship.tex.dstrect.x += cos(game.ship.tex.angle * RADIANS) * game.ship.speedMovement;
 	}
 
 	if (game.keysStatus.left)
