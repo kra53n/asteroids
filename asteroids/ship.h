@@ -1,6 +1,6 @@
 #pragma once
 #include "structs.h"
 
-void ShipInit(Game& game, int wdt);
-void ShipUpdate(Game& game);
-void ShipDraw(Game& game);
+void ShipInit(Ship& self, int wdt);
+void ShipUpdate(Ship& self, KeysStatus& keys);
+void ShipDraw(Ship& self);

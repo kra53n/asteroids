@@ -1,4 +1,5 @@
 #pragma once
+#include "vector.h"
 #include "texture.h"
 #include "constants.h"
 
@@ -58,6 +59,10 @@ struct Ship
     float   speedMovement = 10;
     float   speedRotation = 4;
     int     wdt           = 121;
+    int     lastTicks     = 0;
+    int     maxSpeed      = 10;
+    Vec     vel           = { 0, 0 };
+    Vec     acc           = { 0, 0 };
 };
 
 struct Game {

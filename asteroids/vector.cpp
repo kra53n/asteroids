@@ -12,6 +12,13 @@ float VecGetLen(Vec& vec)
 	return sqrt(VecGetLenSquared(vec));
 }
 
+void VecSetLen(Vec& vec, float len)
+{
+	float angle = atan2(vec.y, vec.x);
+	vec.x = cos(angle) * len;
+	vec.y = -sin(angle) * len;
+}
+
 // Change direction of vector on angle in degrees
 void VecChangeDirection(Vec& vec, float angle)
 {

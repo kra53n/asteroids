@@ -11,7 +11,7 @@ void GameInit(Game& game)
     AsteroidsInit(game);
     
     MenuInit(game.menu);
-    ShipInit(game, 100);
+    ShipInit(game.ship, 100);
 }
 
 void GameDraw(Game& game)
@@ -25,7 +25,7 @@ void GameDraw(Game& game)
     case GAME_STATE_MENU: MenuDraw(game.menu); break;
     case GAME_STATE_PLAY:
         AsteroidsDraw(game);
-        ShipDraw(game);
+        ShipDraw(game.ship);
         break;
     }
 
@@ -113,7 +113,7 @@ void GameUpdate(Game& game)
     case GAME_STATE_MENU: MenuProcess(game); break;
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game);
-        ShipUpdate(game);
+        ShipUpdate(game.ship, game.keysStatus);
         BackgroundUpdate(game);
         break;
     case GAME_STATE_EXIT: game.run = false;  break;
