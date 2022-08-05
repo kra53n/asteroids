@@ -4,7 +4,7 @@
 
 float VecGetLenSquared(Vec& vec)
 {
-	return vec.x * vec.x + vec.y + vec.y;
+	return vec.x * vec.x + vec.y * vec.y;
 }
 
 float VecGetLen(Vec& vec)
@@ -12,12 +12,15 @@ float VecGetLen(Vec& vec)
 	return sqrt(VecGetLenSquared(vec));
 }
 
+#include <stdio.h>
+
 // Change direction of vector on angle in degrees
 void VecChangeDirection(Vec& vec, float angle)
 {
 	angle *= RADIANS;
 	angle += atan2(vec.y, vec.x);
 	float len = VecGetLen(vec);
+	printf("\n(angle) %f\t(len) %f\t(len) %f", angle, VecGetLen(vec), VecGetLenSquared(vec));
 	vec.x = cos(angle) * len;
 	vec.y = -sin(angle) * len;
 }
