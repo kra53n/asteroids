@@ -57,7 +57,9 @@ struct Ship
 {
     Texture tex;
     float   speedMovement = 10;
-    float   speedRotation = 4;
+    float   rotationSpeed = 2.7;
+    float   rotationCoeff = 0.1;
+    int     rotationPower = 0;
     int     wdt           = 121;
     int     lastTicks     = 0;
     int     maxSpeed      = 10;

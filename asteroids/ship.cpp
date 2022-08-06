@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include "ship.h"
+#include "vector.h"
 #include "window.h"
 #include "config.h"
 #include "texture.h"
@@ -31,35 +32,54 @@ void ShipUpdateVelocity(Ship& self, KeysStatus& keys)
 	self.tex.dstrect.y -= self.vel.y;
 
 	if (keys.up) return;
-
-	int ticks = SDL_GetTicks();
-	if (ticks - self.lastTicks >= 1000)
-	{
-		self.lastTicks = ticks;
-		self.vel.x /= 1.8;
-		self.vel.y /= 1.8;
-	}
 }
 
 void ShipUpdatAcceleration(Ship& self, KeysStatus& keys)
 {
 	if (keys.up)
 	{
-		self.acc = { 1, 0 };
+		self.acc = { 0.8, 0 };
 		VecSetDirection(self.acc, self.tex.angle);
 		VecSumCoords(self.vel, self.acc);
 	}
 }
 
+void ShipUpdateTicks(Ship& self, KeysStatus& keys)
+{
+	int ticks = SDL_GetTicks();
+	if (ticks - self.lastTicks >= 1000)
+	{
+		self.lastTicks = ticks;
+
+		if (keys.up)
+		{
+			int sign = self.rotationPower > 0 ? -1 : 1;
+			self.rotationPower += sign * self.rotationCoeff;
+		}
+		else
+		{
+			self.vel.x /= 1.8;
+			self.vel.y /= 1.8;
+		}
+	}
+}
+
 void ShipUpdate(Ship& self, KeysStatus& keys)
 {
+    int sign = 0;
+    if (keys.left)  sign = -1;
+    if (keys.right) sign = 1;
+	self.tex.angle += self.rotationPower;
+
+    if (keys.up && sign)
+    {
+		self.tex.angle += sign * self.rotationSpeed;
+        self.rotationPower = sign * 1.4;
+    }
+
 	ShipUpdateVelocity(self, keys);
 	ShipUpdatAcceleration(self, keys);
-
-	if (keys.left)
-		self.tex.angle -= self.speedRotation;
-	if (keys.right)
-		self.tex.angle += self.speedRotation;
+    ShipUpdateTicks(self, keys);
 
 	boundScreen(self.tex.dstrect);
 }
@@ -67,4 +87,19 @@ void ShipUpdate(Ship& self, KeysStatus& keys)
 void ShipDraw(Ship& self)
 {
 	SDL_RenderCopyEx(ren, self.tex.tex, NULL, &self.tex.dstrect, self.tex.angle, NULL, SDL_FLIP_NONE);
+
+     int side = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
+     Vec line = { side / 2, 0 };
+     int x1 = self.tex.dstrect.x + side / 2;
+     int y1 = self.tex.dstrect.y + side / 2;
+
+     SDL_SetRenderDrawColor(ren, 255, 0, 0, 0);
+     for (int i = 0; i < 360; i += 15)
+     {
+         VecSetDirection(line, i);
+         int x2 = x1 + line.x;
+         int y2 = y1 + line.y;
+         SDL_RenderDrawLine(ren, x1, y1, x2, y2);
+     }
+     SDL_RenderDrawRect(ren, &self.tex.dstrect);
 }
