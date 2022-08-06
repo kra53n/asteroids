@@ -1,9 +1,6 @@
 #pragma once
 #include <SDL.h>
 
-#define RADIANS M_PI / 180
-
-
 // MENU CONFIGURATION
 #define         MENU_FONTNAME                 "assets/fonts/Voyager Heavy.otf"
 #define         MENU_FONT_HGT                 50

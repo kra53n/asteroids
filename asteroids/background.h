@@ -1,6 +1,6 @@
 #pragma once
+#include "config.h"
 #include "texture.h"
-#include "constants.h"
 
 void BackgroundInit(Texture& texture, int index);
 void BackgroundUpdate(Game& game);

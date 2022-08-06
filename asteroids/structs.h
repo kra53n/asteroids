@@ -1,7 +1,7 @@
 #pragma once
 #include "vector.h"
 #include "texture.h"
-#include "constants.h"
+#include "config.h"
 
 enum gameStates
 {

@@ -1,5 +1,5 @@
 #include <math.h>
-#include "constants.h"
+#include "config.h"
 #include "vector.h"
 
 float VecGetLenSquared(Vec& vec)

@@ -3,9 +3,9 @@
 
 #include "ship.h"
 #include "window.h"
+#include "config.h"
 #include "texture.h"
 #include "structs.h"
-#include "constants.h"
 
 /* wdt - width of ship in the game */
 void ShipInit(Ship& self, int wdt)

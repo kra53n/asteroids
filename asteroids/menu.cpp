@@ -3,8 +3,8 @@
 #include "menu.h"
 #include "funcs.h"
 #include "window.h"
+#include "config.h"
 #include "texture.h"
-#include "constants.h"
 
 void changeTextureOptionColor(Menu& menu)
 {

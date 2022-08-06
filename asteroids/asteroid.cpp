@@ -1,10 +1,10 @@
 #include <malloc.h>
 #include <stdio.h>
 
+#include "config.h"
 #include "structs.h"
 #include "texture.h"
 #include "asteroid.h"
-#include "constants.h"
 
 void AsteroidsInit(Game& game)
 {

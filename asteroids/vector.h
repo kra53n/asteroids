@@ -1,5 +1,7 @@
 #pragma once
 
+#define RADIANS M_PI / 180
+
 struct Vec
 {
 	float x;
