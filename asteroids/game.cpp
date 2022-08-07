@@ -1,3 +1,6 @@
+#include <time.h>
+#include <stdlib.h>
+
 #include "game.h"
 #include "menu.h"
 #include "ship.h"
@@ -6,9 +9,11 @@
 
 void GameInit(Game& game)
 {
+    srand(time(0));
+
     game.run = true;
     BackgroundInit(game.background, 0);
-    AsteroidsInit(game);
+    AsteroidsInit(game.asteroids);
     
     MenuInit(game.menu);
     ShipInit(game.ship, 100);

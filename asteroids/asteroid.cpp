@@ -1,29 +1,36 @@
-#include <malloc.h>
 #include <stdio.h>
+#include <malloc.h>
+#include <stdlib.h>
 
 #include "config.h"
+#include "vector.h"
 #include "structs.h"
 #include "texture.h"
 #include "asteroid.h"
 
-void AsteroidsInit(Game& game)
+void AsteroidsInit(Asteroids& self)
 {
 	int ticks = SDL_GetTicks();
 
 	for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
 	{
-		game.asteroids.texture[i] = loadTexture(ASTEROIDS_FILENAMES[i]);
-		game.asteroids.asteroidsFrames[i] = game.asteroids.texture[i].w / game.asteroids.texture[i].h;
+		self.texture[i] = loadTexture(ASTEROIDS_FILENAMES[i]);
+		self.asteroidsFrames[i] = self.texture[i].w / self.texture[i].h;
 
-		game.asteroids.num[i] = 1;
-		game.asteroids.asteroids[i] = (Asteroid*)malloc(sizeof(Asteroid) * game.asteroids.num[i]);
-		if (!game.asteroids.asteroids[i]) { exit(1); }
+		self.num[i] = 1;
+		self.asteroids[i] = (Asteroid*)malloc(sizeof(Asteroid) * self.num[i]);
+		if (!self.asteroids[i]) { exit(1); }
 
-		for (int j = 0; j < game.asteroids.num[i]; j++)
+		for (int j = 0; j < self.num[i]; j++)
 		{
-			game.asteroids.asteroids[i][j].pos = { 256, 256 };
-			game.asteroids.asteroids[i][j].frame = 0;
-			game.asteroids.asteroids[i][j].lastTicks = ticks;
+			Vec pos;
+			int offset = 250;
+			VecSetLen(pos, (rand() % (winWdt2 - offset)) + offset);
+			VecSetDirection(pos, rand() % 360);
+
+			self.asteroids[i][j].pos = { winWdt2 + (int)pos.x, winHgt2 + (int)pos.y };
+			self.asteroids[i][j].frame = 0;
+			self.asteroids[i][j].lastTicks = ticks;
 		}
 	}
 }

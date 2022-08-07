@@ -9,6 +9,8 @@ SDL_Renderer* ren = NULL;
 
 int winWdt = 1280;
 int winHgt = 720;
+int winWdt2 = winWdt / 2;
+int winHgt2 = winHgt / 2;
 
 void init()
 {

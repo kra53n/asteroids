@@ -2,6 +2,6 @@
 #include "structs.h"
 #include "texture.h"
 
-void AsteroidsInit(Game& game);
+void AsteroidsInit(Asteroids& asteroids);
 void AsteroidsUpdate(Game& game);
 void AsteroidsDraw(Game& game);
