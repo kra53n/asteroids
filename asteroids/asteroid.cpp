@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "config.h"
+#include "window.h"
 #include "vector.h"
 #include "structs.h"
 #include "texture.h"
@@ -29,7 +30,7 @@ void AsteroidsInit(Asteroids& self)
 			VecSetDirection(pos, rand() % 360);
 
 			Vec vel;
-			VecSetLen(vel, rand() % 10 + 10);
+			VecSetLen(vel, rand() % 5 + 5);
 			VecSetDirection(vel, rand() % 360);
 			self.asteroids[i][j].vel = vel;
 
@@ -50,16 +51,24 @@ void AsteroidsUpdate(Asteroids& self)
 		
 		for (int j = 0; j < self.num[j]; j++)
 		{
-			if (sdlTicks - self.asteroids[i][j].lastTicks >= 10)
-			{
-				self.asteroids[i][j].lastTicks = sdlTicks;
+			bool timeSpent = sdlTicks - self.asteroids[i][j].lastTicks >= 10;
+			if (!timeSpent) continue;
 
-				self.asteroids[i][j].frame += 1;
-				self.asteroids[i][j].frame %= self.asteroidsFrames[i];
+			self.asteroids[i][j].lastTicks = sdlTicks;
 
-				self.asteroids[i][j].srcrect.x = (self.asteroids[i][j].frame % self.asteroidsFrames[i]) * hgt;
-				self.asteroids[i][j].srcrect.y = 0;
-			}
+			self.asteroids[i][j].frame += 1;
+			self.asteroids[i][j].frame %= self.asteroidsFrames[i];
+
+			self.asteroids[i][j].pos.x += self.asteroids[i][j].vel.x;
+			self.asteroids[i][j].pos.y += self.asteroids[i][j].vel.y;
+
+			self.asteroids[i][j].srcrect.x = (self.asteroids[i][j].frame % self.asteroidsFrames[i]) * hgt;
+			self.asteroids[i][j].srcrect.y = 0;
+
+			SDL_Rect rect = {self.asteroids[i][j].pos.x, self.asteroids[i][j].pos.y, hgt, hgt};
+			boundScreen(rect);
+			self.asteroids[i][j].pos.x = rect.x;
+			self.asteroids[i][j].pos.y = rect.y;
 		}
 	}
 }
