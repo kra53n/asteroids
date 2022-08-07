@@ -41,6 +41,7 @@ struct Asteroid
     SDL_Point pos;
     SDL_Rect  srcrect;
     SDL_Rect  dstrect;
+    Vec       vel;
     int       frame     = 0;
     int       lastTicks;
 };

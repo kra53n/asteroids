@@ -4,7 +4,7 @@
 #include "structs.h"
 #include "background.h"
 
-void BackgroundInit(Texture& texture, int index)
+void BackgroundInit(Texture& self, int index)
 {
 	if (index >= BACKGROUND_FILENAMES_NUM || index < 0)
 	{
@@ -12,59 +12,59 @@ void BackgroundInit(Texture& texture, int index)
 		system("pause");
 		exit(1);
 	}
-	texture = loadTexture(FILENAMES[index]);
+	self = loadTexture(FILENAMES[index]);
 }
 
-void BackgroundUpdate(Game& game)
+void BackgroundUpdate(Texture& self, Ship& ship)
 {
 	float speed = 0.5;
-    game.background.dstrect.x += -game.ship.vel.x * speed;
-    game.background.dstrect.y += -game.ship.vel.y * speed;
+    self.dstrect.x += -ship.vel.x * speed;
+    self.dstrect.y += -ship.vel.y * speed;
 
-	if (!VecGetLen(game.ship.vel)) return;
+	if (!VecGetLen(ship.vel)) return;
 
-    if (game.background.dstrect.x < -game.background.dstrect.w
-        || game.background.dstrect.x > game.background.dstrect.w)
-        game.background.dstrect.x = 0;
-    if (game.background.dstrect.y < -game.background.dstrect.h
-        || game.background.dstrect.y > game.background.dstrect.h)
-        game.background.dstrect.y = 0;
+    if (self.dstrect.x < -self.dstrect.w
+        || self.dstrect.x > self.dstrect.w)
+        self.dstrect.x = 0;
+    if (self.dstrect.y < -self.dstrect.h
+        || self.dstrect.y > self.dstrect.h)
+        self.dstrect.y = 0;
 }
 
-void BackgroundDraw(Game& game)
+void BackgroundDraw(Texture& self)
 {
     SDL_Rect rect;
     int wdt = 0;
     int hgt = 0;
 
-    if (game.background.dstrect.x < 0)
-        wdt = game.background.dstrect.w;
-    else if (game.background.dstrect.x > 0)
-        wdt = -game.background.dstrect.w;
+    if (self.dstrect.x < 0)
+        wdt = self.dstrect.w;
+    else if (self.dstrect.x > 0)
+        wdt = -self.dstrect.w;
 
-    if (game.background.dstrect.y < 0)
-        hgt = game.background.dstrect.h;
-    else if (game.background.dstrect.y > 0)
-        hgt = -game.background.dstrect.h;
+    if (self.dstrect.y < 0)
+        hgt = self.dstrect.h;
+    else if (self.dstrect.y > 0)
+        hgt = -self.dstrect.h;
 
-    SDL_RenderCopy(ren, game.background.tex, NULL, &game.background.dstrect);
+    SDL_RenderCopy(ren, self.tex, NULL, &self.dstrect);
     if (wdt)
     {
-        rect = game.background.dstrect;
+        rect = self.dstrect;
         rect.x += wdt;
-        SDL_RenderCopy(ren, game.background.tex, NULL, &rect);
+        SDL_RenderCopy(ren, self.tex, NULL, &rect);
     }
     if (hgt)
     {
-        rect = game.background.dstrect;
+        rect = self.dstrect;
         rect.y += hgt;
-        SDL_RenderCopy(ren, game.background.tex, NULL, &rect);
+        SDL_RenderCopy(ren, self.tex, NULL, &rect);
     }
     if (wdt && hgt)
     {
-        rect = game.background.dstrect;
+        rect = self.dstrect;
         rect.x += wdt;
         rect.y += hgt;
-        SDL_RenderCopy(ren, game.background.tex, NULL, &rect);
+        SDL_RenderCopy(ren, self.tex, NULL, &rect);
     }
 }

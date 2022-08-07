@@ -24,12 +24,12 @@ void GameDraw(Game& game)
     SDL_SetRenderDrawColor(ren, 17, 18, 55, 255);
     SDL_RenderClear(ren);
 
-    BackgroundDraw(game);
+    BackgroundDraw(game.background);
     switch (game.state)
     {
     case GAME_STATE_MENU: MenuDraw(game.menu); break;
     case GAME_STATE_PLAY:
-        AsteroidsDraw(game);
+        AsteroidsDraw(game.asteroids);
         ShipDraw(game.ship);
         break;
     }
@@ -117,9 +117,9 @@ void GameUpdate(Game& game)
     {
     case GAME_STATE_MENU: MenuProcess(game); break;
     case GAME_STATE_PLAY:
-        AsteroidsUpdate(game);
+        AsteroidsUpdate(game.asteroids);
         ShipUpdate(game.ship, game.keysStatus);
-        BackgroundUpdate(game);
+        BackgroundUpdate(game.background, game.ship);
         break;
     case GAME_STATE_EXIT: game.run = false;  break;
     }

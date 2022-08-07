@@ -2,6 +2,6 @@
 #include "config.h"
 #include "texture.h"
 
-void BackgroundInit(Texture& texture, int index);
-void BackgroundUpdate(Game& game);
-void BackgroundDraw(Game& game);
+void BackgroundInit(Texture& self, int index);
+void BackgroundUpdate(Texture& self, Ship& ship);
+void BackgroundDraw(Texture& self);
