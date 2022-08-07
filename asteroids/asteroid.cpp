@@ -17,7 +17,7 @@ void AsteroidsInit(Asteroids& self)
 		self.texture[i] = loadTexture(ASTEROIDS_FILENAMES[i]);
 		self.asteroidsFrames[i] = self.texture[i].w / self.texture[i].h;
 
-		self.num[i] = 1;
+		self.num[i] = rand() % 3;
 		self.asteroids[i] = (Asteroid*)malloc(sizeof(Asteroid) * self.num[i]);
 		if (!self.asteroids[i]) { exit(1); }
 

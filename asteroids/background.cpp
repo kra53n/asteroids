@@ -21,7 +21,7 @@ void BackgroundUpdate(Game& game)
     game.background.dstrect.x += -game.ship.vel.x * speed;
     game.background.dstrect.y += -game.ship.vel.y * speed;
 
-	if (!game.keysStatus.up) return;
+	if (!VecGetLen(game.ship.vel)) return;
 
     if (game.background.dstrect.x < -game.background.dstrect.w
         || game.background.dstrect.x > game.background.dstrect.w)
