@@ -118,7 +118,7 @@ void GameUpdate(Game& game)
     case GAME_STATE_MENU: MenuProcess(game); break;
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game.asteroids);
-        ShipUpdate(game.ship, game.keysStatus);
+        ShipUpdate(game.ship, game.asteroids, game.keysStatus);
         BackgroundUpdate(game.background, game.ship);
         break;
     case GAME_STATE_EXIT: game.run = false;  break;

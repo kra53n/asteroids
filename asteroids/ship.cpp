@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include "ship.h"
+#include "funcs.h"
 #include "vector.h"
 #include "window.h"
 #include "config.h"
@@ -31,15 +32,13 @@ void ShipUpdateVelocity(Ship& self, KeysStatus& keys)
 
 	self.tex.dstrect.x += self.vel.x;
 	self.tex.dstrect.y -= self.vel.y;
-
-	if (keys.up) return;
 }
 
 void ShipUpdatAcceleration(Ship& self, KeysStatus& keys)
 {
 	if (keys.up)
 	{
-		self.acc = { 0.8, 0 };
+		self.acc = { 0.6, 0 };
 		VecSetDirection(self.acc, self.tex.angle);
 		VecSumCoords(self.vel, self.acc);
 	}
@@ -65,7 +64,30 @@ void ShipUpdateTicks(Ship& self, KeysStatus& keys)
 	}
 }
 
-void ShipUpdate(Ship& self, KeysStatus& keys)
+void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
+{
+    int shipR = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
+	shipR /= 2;
+
+	for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
+	{
+		int asterR = asters.texture[i].dstrect.h / 2;
+
+		for (int j = 0; j < asters.num[i]; j++)
+		{
+			bool collided = isCircsColliding(
+				{ self.tex.dstrect.x + self.tex.dstrect.w/2 , self.tex.dstrect.y + self.tex.dstrect.h/2 },
+				shipR,
+				{ asters.asteroids[i][j].pos.x + asterR, asters.asteroids[i][j].pos.y + asterR },
+				asterR
+			);
+			if (!collided) continue;
+			// process collision
+		}
+	}
+}
+
+void ShipUpdate(Ship& self, Asteroids& asters, KeysStatus& keys)
 {
     int sign = 0;
     if (keys.left)  sign = -1;
@@ -81,6 +103,7 @@ void ShipUpdate(Ship& self, KeysStatus& keys)
 	ShipUpdateVelocity(self, keys);
 	ShipUpdatAcceleration(self, keys);
     ShipUpdateTicks(self, keys);
+	ShipUpdateCollisionWithAstroids(self, asters);
 
 	boundScreen(self.tex.dstrect);
 }
@@ -89,18 +112,18 @@ void ShipDraw(Ship& self)
 {
 	SDL_RenderCopyEx(ren, self.tex.tex, NULL, &self.tex.dstrect, self.tex.angle, NULL, SDL_FLIP_NONE);
 
-     //int side = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
-     //Vec line = { side / 2, 0 };
-     //int x1 = self.tex.dstrect.x + side / 2;
-     //int y1 = self.tex.dstrect.y + side / 2;
+     // int side = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
+     // Vec line = { side / 2, 0 };
+     // int x1 = self.tex.dstrect.x + side / 2;
+     // int y1 = self.tex.dstrect.y + side / 2;
 
-     //SDL_SetRenderDrawColor(ren, 255, 0, 0, 0);
-     //for (int i = 0; i < 360; i += 15)
-     //{
-     //    VecSetDirection(line, i);
-     //    int x2 = x1 + line.x;
-     //    int y2 = y1 + line.y;
-     //    SDL_RenderDrawLine(ren, x1, y1, x2, y2);
-     //}
-     //SDL_RenderDrawRect(ren, &self.tex.dstrect);
+     // SDL_SetRenderDrawColor(ren, 255, 0, 0, 0);
+     // for (int i = 0; i < 360; i += 15)
+     // {
+     //     VecSetDirection(line, i);
+     //     int x2 = x1 + line.x;
+     //     int y2 = y1 + line.y;
+     //     SDL_RenderDrawLine(ren, x1, y1, x2, y2);
+     // }
+     // SDL_RenderDrawRect(ren, &self.tex.dstrect);
 }
