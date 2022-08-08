@@ -13,7 +13,9 @@ void GameInit(Game& game)
 
     game.run = true;
     BackgroundInit(game.background, 0);
-    AsteroidsInit(game.asteroids);
+
+    int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 3, 2, 1, 1, 1, 1, 1, 1, 1 };
+    AsteroidsInit(game.asteroids, asteroidsTypes);
     
     MenuInit(game.menu);
     ShipInit(game.ship, 100);

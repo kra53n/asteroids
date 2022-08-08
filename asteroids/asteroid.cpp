@@ -9,87 +9,100 @@
 #include "texture.h"
 #include "asteroid.h"
 
-void AsteroidsInit(Asteroids& self)
+int AsteroidsGetNum(int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
+{
+	int num = 0;
+	for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
+		num += asteroidTypeNums[i];
+	return num;
+}
+
+// asteroidsTypes - array of bool that show how many asteroids will be
+void AsteroidsInit(Asteroids& self, int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 {
 	int ticks = SDL_GetTicks();
 
+	self.num = AsteroidsGetNum(asteroidTypeNums);
+	self.asteroids = (Asteroid*)malloc(sizeof(Asteroid) * self.num);
+	if (!self.asteroids) { deInit(1); }
+
+	int asteroidIndex = 0;
 	for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
 	{
 		self.texture[i] = loadTexture(ASTEROIDS_FILENAMES[i]);
 		self.asteroidsFrames[i] = self.texture[i].w / self.texture[i].h;
 
-		self.num[i] = rand() % 3;
-		self.asteroids[i] = (Asteroid*)malloc(sizeof(Asteroid) * self.num[i]);
-		if (!self.asteroids[i]) { exit(1); }
-
-		for (int j = 0; j < self.num[i]; j++)
+		int j;
+		for (j = 0; j < asteroidTypeNums[i]; j++)
 		{
-			Vec pos;
-			int offset = 250;
-			VecSetLen(pos, (rand() % (winWdt2 - offset)) + offset);
-			VecSetDirection(pos, rand() % 360);
-
-			Vec vel;
-			VecSetLen(vel, rand() % 5 + 5);
-			VecSetDirection(vel, rand() % 360);
-			self.asteroids[i][j].vel = vel;
-
-			self.asteroids[i][j].pos = { winWdt2 + (int)pos.x, winHgt2 + (int)pos.y };
-			self.asteroids[i][j].frame = 0;
-			self.asteroids[i][j].lastTicks = ticks;
+			self.asteroids[asteroidIndex + j].asteroidType = i;
 		}
+		asteroidIndex += j;
 	}
+
+	for (int i = 0; i < self.num; i++)
+	{
+		Vec pos;
+		int offset = 250;
+		VecSetLen(pos, (rand() % (winWdt2 - offset)) + offset);
+		VecSetDirection(pos, rand() % 360);
+
+		Vec vel;
+		VecSetLen(vel, rand() % 5 + 5);
+		VecSetDirection(vel, rand() % 360);
+		self.asteroids[i].vel = vel;
+
+		self.asteroids[i].pos = { winWdt2 + (int)pos.x, winHgt2 + (int)pos.y };
+		self.asteroids[i].frame = 0;
+		self.asteroids[i].lastTicks = ticks;
+	}
+}
+
+void AsteroidsDestroy(Asteroids& self)
+{
+	free(self.asteroids);
 }
 
 void AsteroidsUpdate(Asteroids& self)
 {
 	int sdlTicks = SDL_GetTicks();
 
-	for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
+	for (int i = 0; i < self.num; i++)
 	{
-		int hgt = self.texture[i].dstrect.h;
+		int asterType = self.asteroids[i].asteroidType;
+		int hgt = self.texture[asterType].dstrect.h;
 		
-		for (int j = 0; j < self.num[j]; j++)
-		{
-			bool timeSpent = sdlTicks - self.asteroids[i][j].lastTicks >= 10;
-			if (!timeSpent) continue;
+		bool timeSpent = sdlTicks - self.asteroids[i].lastTicks >= 10;
+		if (!timeSpent) continue;
 
-			self.asteroids[i][j].lastTicks = sdlTicks;
+		self.asteroids[i].lastTicks = sdlTicks;
 
-			self.asteroids[i][j].frame += 1;
-			self.asteroids[i][j].frame %= self.asteroidsFrames[i];
+		self.asteroids[i].frame += 1;
+		self.asteroids[i].frame %= self.asteroidsFrames[i];
 
-			self.asteroids[i][j].pos.x += self.asteroids[i][j].vel.x;
-			self.asteroids[i][j].pos.y += self.asteroids[i][j].vel.y;
+		self.asteroids[i].pos.x += self.asteroids[i].vel.x;
+		self.asteroids[i].pos.y += self.asteroids[i].vel.y;
 
-			self.asteroids[i][j].srcrect.x = (self.asteroids[i][j].frame % self.asteroidsFrames[i]) * hgt;
-			self.asteroids[i][j].srcrect.y = 0;
+		self.asteroids[i].srcrect.x = (self.asteroids[i].frame % self.asteroidsFrames[asterType]) * hgt;
+		self.asteroids[i].srcrect.y = 0;
 
-			SDL_Rect rect = {self.asteroids[i][j].pos.x, self.asteroids[i][j].pos.y, hgt, hgt};
-			boundScreen(rect);
-			self.asteroids[i][j].pos.x = rect.x;
-			self.asteroids[i][j].pos.y = rect.y;
-		}
+		SDL_Rect rect = {self.asteroids[i].pos.x, self.asteroids[i].pos.y, hgt, hgt};
+		boundScreen(rect);
+		self.asteroids[i].pos.x = rect.x;
+		self.asteroids[i].pos.y = rect.y;
 	}
 }
 
 void AsteroidsDraw(Asteroids& self)
 {
-	for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
-	{
-		int hgt = self.texture[i].dstrect.h;
+	for (int i = 0; i < self.num; i++)
+ 	{
+		int asterType = self.asteroids[i].asteroidType;
+ 		int hgt = self.texture[asterType].dstrect.h;
+ 
+		SDL_Rect srcrect = { self.asteroids[i].srcrect.x, self.asteroids[i].srcrect.y, hgt, hgt };
+		SDL_Rect dstrect = { self.asteroids[i].pos.x, self.asteroids[i].pos.y, hgt, hgt };
 
-		for (int j = 0; j < self.num[i]; j++)
-		{
-			SDL_Rect srcrect = { self.asteroids[i][j].srcrect.x, self.asteroids[i][j].srcrect.y, hgt, hgt };
-			SDL_Rect dstrect = { self.asteroids[i][j].pos.x, self.asteroids[i][j].pos.y, hgt, hgt };
-
-			SDL_RenderCopyEx(ren, self.texture[i].tex, &srcrect, &dstrect, 0, 0, SDL_FLIP_NONE);
-		}
-	}
-}
-
-void AsteroidsDestroy(Game& game)
-{
-
-}
+		SDL_RenderCopyEx(ren, self.texture[asterType].tex, &srcrect, &dstrect, 0, 0, SDL_FLIP_NONE);
+ 	}
+ }

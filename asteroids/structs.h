@@ -42,7 +42,8 @@ struct Asteroid
     SDL_Rect  srcrect;
     SDL_Rect  dstrect;
     Vec       vel;
-    int       frame     = 0;
+    int       asteroidType;
+    int       frame;
     int       lastTicks;
 };
 
@@ -50,8 +51,8 @@ struct Asteroids
 {
     Texture   texture[ASTEROIDS_TYPE_NUM];
     int       asteroidsFrames[ASTEROIDS_TYPE_NUM];
-    Asteroid* asteroids[ASTEROIDS_TYPE_NUM];
-    int       num[ASTEROIDS_TYPE_NUM];
+    Asteroid* asteroids;
+    int       num;
 };
 
 struct Ship
