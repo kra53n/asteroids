@@ -68,20 +68,26 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 {
 	int shipR = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
 	shipR /= 2;
+	SDL_Point shipPoint = {
+		self.tex.dstrect.x + self.tex.dstrect.w/2 ,
+		self.tex.dstrect.y + self.tex.dstrect.h/2 
+	};
 
 	for (int i = 0; i < asters.num; i++)
 	{
 		int asterType = asters.asteroids[i].asteroidType;
 		int asterR = asters.texture[asterType].dstrect.h / 2;
+		SDL_Point asterPoint = {
+			asters.asteroids[i].pos.x + asterR,
+			asters.asteroids[i].pos.y + asterR
+		};
 
-		bool collided = isCircsColliding(
-			{ self.tex.dstrect.x + self.tex.dstrect.w/2 , self.tex.dstrect.y + self.tex.dstrect.h/2 },
-			shipR,
-			{ asters.asteroids[i].pos.x + asterR, asters.asteroids[i].pos.y + asterR },
-			asterR
-		);
-		if (!collided) continue;
-		// process collision
+		if (!isCircsColliding(shipPoint, shipR, asterPoint, asterR)) continue;
+		
+		VecSetDirectionByCoords(self.vel, asterPoint, shipPoint);
+		VecSetDirectionByCoords(asters.asteroids[i].vel, shipPoint, asterPoint);
+		// NOTE: take in mind the size and type of asteroid for setting vector len
+		VecSetLen(asters.asteroids[i].vel, 10);
 	}
 }
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <SDL.h>
 
 #define RADIANS M_PI / 180
 
@@ -14,5 +15,6 @@ float VecGetLen(Vec& vec);
 void VecSetLen(Vec& vec, float len);
 void VecChangeDirection(Vec& vec, float angle);
 void VecSetDirection(Vec& vec, float angle);
+void VecSetDirectionByCoords(Vec& vec, SDL_Point p1, SDL_Point p2);
 
 void VecSumCoords(Vec& vec1, Vec& vec2);
