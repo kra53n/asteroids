@@ -63,6 +63,38 @@ void AsteroidsDestroy(Asteroids& self)
 	free(self.asteroids);
 }
 
+// void AsteroidsUpdateCollision(Asteroids& self)
+// {
+// 	int asterType, asterR;
+// 
+// 	for (int i = 0; i < self.num; i++)
+// 	{
+// 		asterType = self.asteroids[i].asteroidType;
+// 		asterR = self.texture[asterType].dstrect.h / 2;
+// 		SDL_Point asterPoint1 = {
+// 			self.asteroids[i].pos.x + asterR,
+// 			self.asteroids[i].pos.y + asterR
+// 		};
+// 
+// 		for (int j = 0; j < self.num; j++)
+// 		{
+// 			if (i == j) continue;
+// 
+// 			asterType = self.asteroids[j].asteroidType;
+// 			asterR = self.texture[asterType].dstrect.h / 2;
+// 			SDL_Point asterPoint2 = {
+// 				self.asteroids[j].pos.x + asterR,
+// 				self.asteroids[j].pos.y + asterR
+// 			};
+// 			
+// 			VecSetDirectionByCoords(self.asteroids[i].vel, asterPoint2, asterPoint1);
+// 			VecSetDirectionByCoords(self.asteroids[j].vel, asterPoint1, asterPoint2);
+// 			VecSetLen(self.asteroids[i].vel, 10);
+// 			VecSetLen(self.asteroids[j].vel, 10);
+// 		}
+// 	}
+// }
+
 void AsteroidsUpdate(Asteroids& self)
 {
 	int sdlTicks = SDL_GetTicks();
