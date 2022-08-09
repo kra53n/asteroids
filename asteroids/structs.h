@@ -1,7 +1,7 @@
 #pragma once
 #include "vector.h"
-#include "texture.h"
 #include "config.h"
+#include "texture.h"
 
 enum gameStates
 {
@@ -79,6 +79,7 @@ struct Game {
     KeysStatus keysStatus;
 
     Texture    background;
+    Texture    particles[PARTICLES_FILENAMES_NUM];
     Asteroids  asteroids;
     Ship       ship;
 

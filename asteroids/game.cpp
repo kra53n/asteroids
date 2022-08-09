@@ -14,9 +14,10 @@ void GameInit(Game& game)
 
     game.run = true;
     BackgroundInit(game.background, 0);
+    ParticlesInit(game.particles);
 
-    //int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 3, 2, 1, 1, 1, 1, 1, 1, 1 };
-    int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 3, 2, 1, 1, 1, 1, 1, 1, 1 };
+    //int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     AsteroidsInit(game.asteroids, asteroidsTypes);
     
     MenuInit(game.menu);
@@ -29,12 +30,15 @@ void GameDraw(Game& game)
     SDL_RenderClear(ren);
 
     TextureDrawAsInfiniteImage(game.background);
+    TextureDrawAsInfiniteImage(game.particles[0]);
     switch (game.state)
     {
     case GAME_STATE_MENU: MenuDraw(game.menu); break;
     case GAME_STATE_PLAY:
         AsteroidsDraw(game.asteroids);
         ShipDraw(game.ship);
+		TextureDrawAsInfiniteImage(game.particles[1]);
+		TextureDrawAsInfiniteImage(game.particles[2]);
         break;
     }
 
@@ -128,6 +132,7 @@ void GameUpdate(Game& game)
             { -game.ship.vel.x * game.ship.speedMovement, game.ship.vel.y * game.ship.speedMovement },
             VecGetLen(game.ship.vel)
         );
+        ParticlesUpdate(game.particles, game.ship);
         break;
     case GAME_STATE_EXIT: game.run = false;  break;
     }

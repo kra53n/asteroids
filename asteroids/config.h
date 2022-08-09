@@ -24,6 +24,16 @@ const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
 	"assets/images/stars/Nebula Red.png"
 };
 
+// PARTICLES CONFIGURATION
+
+#define PARTICLES_FILENAMES_NUM 3
+
+const char PARTICLES_FILENAMES[PARTICLES_FILENAMES_NUM][41] = {
+	"assets/images/backgrounds/particles1.png",
+	"assets/images/backgrounds/particles2.png",
+	"assets/images/backgrounds/particles3.png",
+};
+
 
 // SHIP CONFIGURATION
 
