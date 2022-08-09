@@ -2,6 +2,7 @@
 #include <SDL.h>
 
 // MENU CONFIGURATION
+
 #define         MENU_FONTNAME                 "assets/fonts/Voyager Heavy.otf"
 #define         MENU_FONT_HGT                 50
 #define         MENU_FONT_VERTICAL_DISTANCE   80
@@ -12,6 +13,7 @@ const SDL_Color COLOR_OF_NON_ACTIVE_OPTION  = { 150, 150, 220, 255 };
 
 
 // BACKGROUND CONFIGURATION
+
 #define BACKGROUND_FILENAMES_NUM 4
 #define BACKOGRUND_MOVE_SPEED    6
 
@@ -24,14 +26,17 @@ const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
 
 
 // SHIP CONFIGURATION
+
 const char SHIP_FILENAMES_TEXTURES[][40] = {
 	"assets/images/ships/aurora.png",
 };
 
 
 // ASTEROIDS CONFIGURATION
+
 #define ASTEROIDS_TYPE_NUM      9
 #define ASTEROIDS_FILENAME      "assets/images/asteroids/iron.png"
+
 const char ASTEROIDS_FILENAMES[ASTEROIDS_TYPE_NUM][40] = {
 	"assets/images/asteroids/iron.png",
 	"assets/images/asteroids/large metal.png",
@@ -42,4 +47,16 @@ const char ASTEROIDS_FILENAMES[ASTEROIDS_TYPE_NUM][40] = {
 	"assets/images/asteroids/silver.png",
 	"assets/images/asteroids/small rock.png",
 	"assets/images/asteroids/titanium.png",
+};
+
+const float ASTEROIDS_DENSITY[ASTEROIDS_TYPE_NUM] = {
+    7.874      ,
+    10.3  * 2  ,
+    4.34  * 2  ,
+    4.34  * 0.9,
+    4.34       ,
+    4.6        ,
+    10.49      ,
+    4.34  * 0.8,
+    6.505      ,
 };

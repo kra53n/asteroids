@@ -64,6 +64,7 @@ void ShipUpdateTicks(Ship& self, KeysStatus& keys)
 	}
 }
 
+#include <stdio.h>
 void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 {
 	int shipR = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
@@ -86,8 +87,14 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 		
 		VecSetDirectionByCoords(self.vel, asterPoint, shipPoint);
 		VecSetDirectionByCoords(asters.asteroids[i].vel, shipPoint, asterPoint);
-		// NOTE: take in mind the size and type of asteroid for setting vector len
-		VecSetLen(asters.asteroids[i].vel, 10);
+
+		float asterRebound = 60 / ASTEROIDS_DENSITY[asterType];
+		float shipRebound = 70 / asterRebound;
+		asterRebound /= shipR / 10;
+		asterRebound *= shipR / 10;
+
+		VecSetLen(self.vel, 70 / asterRebound);
+		VecSetLen(asters.asteroids[i].vel, asterRebound);
 	}
 }
 
