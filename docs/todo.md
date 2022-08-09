@@ -8,7 +8,7 @@
 - [ ] 2 type of asteroids
 - [ ] record file
 - [ ] level loading
-- [ ] parallax effect
+- [x] parallax effect
 - [ ] shooting enemy
 - [ ] animations
     - [ ] explosions
