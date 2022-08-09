@@ -4,6 +4,7 @@
 #include "game.h"
 #include "menu.h"
 #include "ship.h"
+#include "texture.h"
 #include "asteroid.h"
 #include "background.h"
 
@@ -14,7 +15,8 @@ void GameInit(Game& game)
     game.run = true;
     BackgroundInit(game.background, 0);
 
-    int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 3, 2, 1, 1, 1, 1, 1, 1, 1 };
+    //int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 3, 2, 1, 1, 1, 1, 1, 1, 1 };
+    int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     AsteroidsInit(game.asteroids, asteroidsTypes);
     
     MenuInit(game.menu);
@@ -26,7 +28,7 @@ void GameDraw(Game& game)
     SDL_SetRenderDrawColor(ren, 17, 18, 55, 255);
     SDL_RenderClear(ren);
 
-    BackgroundDraw(game.background);
+    TextureDrawAsInfiniteImage(game.background);
     switch (game.state)
     {
     case GAME_STATE_MENU: MenuDraw(game.menu); break;
@@ -121,7 +123,11 @@ void GameUpdate(Game& game)
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game.asteroids);
         ShipUpdate(game.ship, game.asteroids, game.keysStatus);
-        BackgroundUpdate(game.background, game.ship);
+        TextureUpdateAsInfiniteImage(
+            game.background,
+            { -game.ship.vel.x * game.ship.speedMovement, game.ship.vel.y * game.ship.speedMovement },
+            VecGetLen(game.ship.vel)
+        );
         break;
     case GAME_STATE_EXIT: game.run = false;  break;
     }

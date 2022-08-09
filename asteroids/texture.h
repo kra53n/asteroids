@@ -1,4 +1,6 @@
 #pragma once
+#include <SDL.h>
+
 #include "window.h"
 
 struct Texture
@@ -12,3 +14,6 @@ struct Texture
 
 Texture loadTexture(const char filename[]);
 Texture loadFont(const char text[], const char fontname[], SDL_Color color, int hgt);
+
+void TextureUpdateAsInfiniteImage(Texture& self, SDL_FPoint offset, bool cond = true);
+void TextureDrawAsInfiniteImage(Texture& self);

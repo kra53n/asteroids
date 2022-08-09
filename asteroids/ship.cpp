@@ -64,7 +64,6 @@ void ShipUpdateTicks(Ship& self, KeysStatus& keys)
 	}
 }
 
-#include <stdio.h>
 void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 {
 	int shipR = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
