@@ -55,6 +55,19 @@ struct Asteroids
     int       num;
 };
 
+struct Bullet
+{
+    Vec       vel;
+    SDL_Point pos;
+    unsigned  type;
+    Bullet*   next;
+};
+
+struct Bullets
+{
+    Bullet* head = 0;
+};
+
 struct Ship
 {
     Texture tex;

@@ -21,7 +21,7 @@ const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
 	"assets/images/backgrounds/background.png",
 	"assets/images/stars/Nebula Aqua-Pink.png",
 	"assets/images/stars/Nebula Blue.png",
-	"assets/images/stars/Nebula Red.png"
+	"assets/images/stars/Nebula Red.png",
 };
 
 // PARTICLES CONFIGURATION
@@ -32,6 +32,12 @@ const char PARTICLES_FILENAMES[PARTICLES_FILENAMES_NUM][41] = {
 	"assets/images/backgrounds/particles1.png",
 	"assets/images/backgrounds/particles2.png",
 	"assets/images/backgrounds/particles3.png",
+};
+
+// BULLET CONFIGURATION
+
+const char BULLETS_FILENAMES[][40] = {
+    "assets/images/bullets/bullet1.png",
 };
 
 
