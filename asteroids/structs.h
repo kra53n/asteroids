@@ -66,6 +66,7 @@ struct Bullet
 struct Bullets
 {
     Bullet* head = 0;
+    Texture texs[BULLETS_TYPE_NUM];
 };
 
 struct Ship
@@ -95,6 +96,7 @@ struct Game {
     Texture    particles[PARTICLES_FILENAMES_NUM];
     Asteroids  asteroids;
     Ship       ship;
+    Bullets    bullets;
 
     Menu       menu;
 };

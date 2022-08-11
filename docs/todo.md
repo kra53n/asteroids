@@ -19,6 +19,7 @@
 
 ## todo
 
+- [ ] remove funcs of `background.cpp` to `texture.cpp`
 - [ ] look at interesting thgins in LazyFoo.net
 - [ ] camera
 - [ ] blasters

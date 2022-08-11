@@ -12,6 +12,13 @@ float VecGetLen(Vec& vec)
 	return sqrt(VecGetLenSquared(vec));
 }
 
+float VecGetAngle(Vec& vec)
+{
+	float angle = atan2(-vec.y, vec.x);
+	angle /= RADIANS;
+	return angle;
+}
+
 void VecSetLen(Vec& vec, float len)
 {
 	float angle = atan2(vec.y, vec.x);

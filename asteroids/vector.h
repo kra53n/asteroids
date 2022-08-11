@@ -11,6 +11,7 @@ struct Vec
 
 float VecGetLenSquared(Vec& vec);
 float VecGetLen(Vec& vec);
+float VecGetAngle(Vec& vec);
 
 void VecSetLen(Vec& vec, float len);
 void VecChangeDirection(Vec& vec, float angle);

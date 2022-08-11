@@ -36,6 +36,8 @@ const char PARTICLES_FILENAMES[PARTICLES_FILENAMES_NUM][41] = {
 
 // BULLET CONFIGURATION
 
+#define BULLETS_TYPE_NUM 1
+
 const char BULLETS_FILENAMES[][40] = {
     "assets/images/bullets/bullet1.png",
 };
