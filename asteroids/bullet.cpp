@@ -37,6 +37,7 @@ void BulletsClear(Bullets& self)
 void BulletsPush(Bullets& self, Vec vel, SDL_Point pos, int type)
 {
 	Bullet* elem = (Bullet*)malloc(sizeof(Bullet));
+	elem->next = NULL;
 	elem->vel = vel;
 	elem->type = type;
 	elem->pos = pos;
@@ -45,7 +46,7 @@ void BulletsPush(Bullets& self, Vec vel, SDL_Point pos, int type)
 	{
 		if (cur->next == NULL)
 		{
-			elem->next = cur->next;
+			elem->prev = cur;
 			cur->next = elem;
 			break;
 		}
@@ -53,28 +54,47 @@ void BulletsPush(Bullets& self, Vec vel, SDL_Point pos, int type)
 
 	if (self.head == NULL)
 	{
-		elem->next = NULL;
+		elem->prev = NULL;
 		self.head = elem;
 	}
 }
 
-void BulletsDelBullet(Bullets& self, Bullet& bullet)
+void BulletsDelBullet(Bullets& self, Bullet* bullet)
 {
+	if (bullet->next == NULL)
+	{
+		self.head = NULL;
+	}
+	else if (self.head == bullet)
+	{
+		self.head = bullet->next;
+		self.head->prev = NULL;
+	}
+	else
+	{
+		bullet->prev->next = bullet->next;
+		bullet->next->prev = bullet->prev;
+	}
 
+	free(bullet);
 }
 
 void BulletsUpdate(Bullets& self, Ship& ship, KeysStatus& keys)
 {
-	static int m = 0;
-	for (Bullet* cur = self.head; cur != NULL; cur = cur->next)
+	for (Bullet* cur = self.head; cur != NULL;)
 	{
+		Bullet* curNext = cur->next;
+
 		cur->pos.x += cur->vel.x;
 		cur->pos.y -= cur->vel.y;
 
-		bool cond = cur->pos.x < 0 || cur->pos.x > winWdt || 
-			        cur->pos.y < 0 || cur->pos.y > winHgt;
-		if (!cond) continue;
+		if (cur->pos.x < 0 || cur->pos.x > winWdt || 
+		    cur->pos.y < 0 || cur->pos.y > winHgt)
+		{
+			BulletsDelBullet(self, cur);
+		}
 
+		cur = curNext;
 	}
 
 	if (!keys.space) return;

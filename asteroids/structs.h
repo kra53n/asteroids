@@ -61,6 +61,7 @@ struct Bullet
     SDL_Point pos;
     unsigned  type;
     Bullet*   next;
+    Bullet*   prev;
 };
 
 struct Bullets
