@@ -42,6 +42,14 @@ const char BULLETS_FILENAMES[][40] = {
     "assets/images/bullets/bullet1.png",
 };
 
+const unsigned BULLETS_SPEED[] = {
+	80,
+};
+
+const unsigned BULLETS_DELAY[] = {
+	200,
+};
+
 
 // SHIP CONFIGURATION
 

@@ -37,9 +37,10 @@ void BulletsClear(Bullets& self)
 void BulletsPush(Bullets& self, Vec vel, SDL_Point pos, int type)
 {
 	Bullet* elem = (Bullet*)malloc(sizeof(Bullet));
+	elem->ticks = SDL_GetTicks();
+	elem->type = type;
 	elem->next = NULL;
 	elem->vel = vel;
-	elem->type = type;
 	elem->pos = pos;
 
 	for (Bullet* cur = self.head; cur != NULL; cur = cur->next)
@@ -101,8 +102,12 @@ void BulletsUpdate(Bullets& self, Ship& ship, KeysStatus& keys)
 
 	int type = 0;
 
+	int ticks = SDL_GetTicks();
+	if (!(ticks - self.ticks >= BULLETS_DELAY[type])) return;
+	self.ticks = ticks;
+
 	Vec vel = {};
-	VecSetLen(vel, 30);
+	VecSetLen(vel, BULLETS_SPEED[type]);
 	VecSetDirection(vel, ship.tex.angle);
 
 	Vec pos = { ship.tex.dstrect.w / 2, ship.tex.dstrect.h / 2 };

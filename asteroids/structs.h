@@ -60,14 +60,16 @@ struct Bullet
     Vec       vel;
     SDL_Point pos;
     unsigned  type;
+    unsigned  ticks;
     Bullet*   next;
     Bullet*   prev;
 };
 
 struct Bullets
 {
-    Bullet* head = 0;
-    Texture texs[BULLETS_TYPE_NUM];
+    Bullet*  head                    = 0;
+    Texture  texs[BULLETS_TYPE_NUM];
+    unsigned ticks                   = 0;
 };
 
 struct Ship
