@@ -1,11 +1,17 @@
 ## tasks
 
 - [ ] menu
-- [ ] base controlling
+- [x] base controlling
 - [ ] shooting
 - [x] asteroids
 - [ ] 4 type of guns
-- [ ] 2 type of asteroids
+    - [x] 1
+    - [ ] 2
+    - [ ] 3
+    - [ ] 4
+- [x] 2 type of asteroids
+    - [x] 1
+    - [x] 2
 - [ ] record file
 - [ ] level loading
 - [x] parallax effect

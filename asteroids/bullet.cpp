@@ -34,14 +34,32 @@ void BulletsClear(Bullets& self)
 	self.head = NULL;
 }
 
-void BulletsPush(Bullets& self, Vec vel, SDL_Point pos, int type)
+Bullet* BulletsGetNewBullet(Bullets& self, Ship& ship, int type)
 {
 	Bullet* elem = (Bullet*)malloc(sizeof(Bullet));
+
+	VecSetLen(elem->vel, BULLETS_SPEED[type]);
+	VecSetDirection(elem->vel, ship.tex.angle);
+
+	Vec pos = { ship.tex.dstrect.w / 2, ship.tex.dstrect.h / 2 };
+	VecSetLen(pos, ship.tex.dstrect.w / 2);
+	VecSetDirection(pos, -ship.tex.angle);
+
+	elem->pos = {
+		(int)(ship.tex.dstrect.x + ship.tex.dstrect.w / 2 + pos.x),
+		(int)(ship.tex.dstrect.y + ship.tex.dstrect.h / 2 + pos.y),
+	};
+
 	elem->ticks = SDL_GetTicks();
 	elem->type = type;
 	elem->next = NULL;
-	elem->vel = vel;
-	elem->pos = pos;
+
+	return elem;
+}
+
+void BulletsPush(Bullets& self, Ship& ship, int type)
+{
+	Bullet* elem = BulletsGetNewBullet(self, ship, type);
 
 	for (Bullet* cur = self.head; cur != NULL; cur = cur->next)
 	{
@@ -106,20 +124,7 @@ void BulletsUpdate(Bullets& self, Ship& ship, KeysStatus& keys)
 	if (!(ticks - self.ticks >= BULLETS_DELAY[type])) return;
 	self.ticks = ticks;
 
-	Vec vel = {};
-	VecSetLen(vel, BULLETS_SPEED[type]);
-	VecSetDirection(vel, ship.tex.angle);
-
-	Vec pos = { ship.tex.dstrect.w / 2, ship.tex.dstrect.h / 2 };
-	VecSetLen(pos, ship.tex.dstrect.w / 2);
-	VecSetDirection(pos, -ship.tex.angle);
-
-	SDL_Point point = {
-		ship.tex.dstrect.x + ship.tex.dstrect.w / 2 + pos.x,
-		ship.tex.dstrect.y + ship.tex.dstrect.h / 2 + pos.y,
-	};
-
-	BulletsPush(self, vel, point, type);
+	BulletsPush(self, ship, type);
 }
 
 void BulletsDraw(Bullets& self)
