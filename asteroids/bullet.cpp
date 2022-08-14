@@ -6,6 +6,7 @@
 #include "config.h"
 #include "bullet.h"
 #include "structs.h"
+#include "asteroid.h"
 
 void BulletsInit(Bullets& self)
 {
@@ -102,18 +103,18 @@ void BulletsDelBullet(Bullets& self, Bullet* bullet)
 // return status of collision
 bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids& asters)
 {
-	for (int i = 0; i < asters.num; i++)
+	for (Asteroid* aster = asters.head; aster != NULL; aster = aster->next)
 	{
-		int asterR = asters.texture[asters.asteroids[i].asteroidType].h / 2;
+		int asterR = asters.texture[aster->type].h / 2;
 
         bool cond = isPointInCirc(
-            { asters.asteroids[i].pos.x + asterR, asters.asteroids[i].pos.y + asterR },
+            { aster->pos.x + asterR, aster->pos.y + asterR },
             asterR,
             { bullet->pos.x, bullet->pos.y }
         );
         if (!cond) continue;
 
-		// delete asteroid here
+        AsteroidsDelAsteroid(asters, aster);
         BulletsDelBullet(self, bullet);
 
 		return true;

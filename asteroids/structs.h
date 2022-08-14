@@ -42,17 +42,18 @@ struct Asteroid
     SDL_Rect  srcrect;
     SDL_Rect  dstrect;
     Vec       vel;
-    int       asteroidType;
+    int       type;
     int       frame;
-    int       lastTicks;
+    int       ticks;
+    Asteroid* next;
+    Asteroid* prev;
 };
 
 struct Asteroids
 {
     Texture   texture[ASTEROIDS_TYPE_NUM];
-    int       asteroidsFrames[ASTEROIDS_TYPE_NUM];
-    Asteroid* asteroids;
-    int       num;
+    int       frames[ASTEROIDS_TYPE_NUM];
+    Asteroid* head                        = 0;
 };
 
 struct Bullet
