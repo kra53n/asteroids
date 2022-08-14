@@ -17,6 +17,28 @@ int AsteroidsGetNum(int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 	return num;
 }
 
+void AsteroidsCreateByNum(Asteroids& self, int ticks)
+{
+	for (int i = 0; i < self.num; i++)
+	{
+		Vec pos;
+		int offset = 250;
+		VecSetLen(pos, (rand() % (winWdt2 - offset)) + offset);
+		VecSetDirection(pos, rand() % 360);
+
+		Vec vel;
+		VecSetLen(vel, rand() % 5 + 5);
+		VecSetDirection(vel, rand() % 360);
+		self.asteroids[i].vel = vel;
+
+		self.asteroids[i].pos = { winWdt2 + (int)pos.x, winHgt2 + (int)pos.y };
+		self.asteroids[i].frame = 0;
+		self.asteroids[i].lastTicks = ticks;
+		self.asteroids[i].lastTicks = true;
+	}
+
+}
+
 // asteroidsTypes - array of bool that show how many asteroids will be
 void AsteroidsInit(Asteroids& self, int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 {
@@ -40,22 +62,7 @@ void AsteroidsInit(Asteroids& self, int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 		asteroidIndex += j;
 	}
 
-	for (int i = 0; i < self.num; i++)
-	{
-		Vec pos;
-		int offset = 250;
-		VecSetLen(pos, (rand() % (winWdt2 - offset)) + offset);
-		VecSetDirection(pos, rand() % 360);
-
-		Vec vel;
-		VecSetLen(vel, rand() % 5 + 5);
-		VecSetDirection(vel, rand() % 360);
-		self.asteroids[i].vel = vel;
-
-		self.asteroids[i].pos = { winWdt2 + (int)pos.x, winHgt2 + (int)pos.y };
-		self.asteroids[i].frame = 0;
-		self.asteroids[i].lastTicks = ticks;
-	}
+    AsteroidsCreateByNum(self, ticks);
 }
 
 void AsteroidsDestroy(Asteroids& self)

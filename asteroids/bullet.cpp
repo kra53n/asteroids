@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <malloc.h>
 
+#include "funcs.h"
 #include "window.h"
 #include "config.h"
 #include "bullet.h"
@@ -98,7 +99,28 @@ void BulletsDelBullet(Bullets& self, Bullet* bullet)
 	free(bullet);
 }
 
-void BulletsUpdate(Bullets& self, Ship& ship, KeysStatus& keys)
+// return status of collision
+bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids& asters)
+{
+	for (int i = 0; i < asters.num; i++)
+	{
+		int asterR = asters.texture[asters.asteroids[i].asteroidType].h / 2;
+
+        bool cond = isPointInCirc(
+            { asters.asteroids[i].pos.x + asterR, asters.asteroids[i].pos.y + asterR },
+            asterR,
+            { bullet->pos.x, bullet->pos.y }
+        );
+        if (!cond) continue;
+
+		// delete asteroid here
+        BulletsDelBullet(self, bullet);
+
+		return true;
+	}
+}
+
+void BulletsUpdate(Bullets& self, Ship& ship, Asteroids& asters, KeysStatus& keys)
 {
 	for (Bullet* cur = self.head; cur != NULL;)
 	{
@@ -106,6 +128,12 @@ void BulletsUpdate(Bullets& self, Ship& ship, KeysStatus& keys)
 
 		cur->pos.x += cur->vel.x;
 		cur->pos.y -= cur->vel.y;
+
+		if (BulletsUpdateCollisionWithAstroids(self, cur, asters))
+		{
+			cur = curNext;
+			continue;
+		}
 
 		if (cur->pos.x < 0 || cur->pos.x > winWdt || 
 		    cur->pos.y < 0 || cur->pos.y > winHgt)

@@ -19,7 +19,8 @@ void GameInit(Game& game)
     BulletsInit(game.bullets);
 
     //int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 3, 2, 1, 1, 1, 1, 1, 1, 1 };
-    int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+    //int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     AsteroidsInit(game.asteroids, asteroidsTypes);
     
     MenuInit(game.menu);
@@ -129,7 +130,7 @@ void GameUpdate(Game& game)
     case GAME_STATE_MENU: MenuProcess(game); break;
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game.asteroids);
-        BulletsUpdate(game.bullets, game.ship, game.keysStatus);
+        BulletsUpdate(game.bullets, game.ship, game.asteroids, game.keysStatus);
         ShipUpdate(game.ship, game.asteroids, game.keysStatus);
         TextureUpdateAsInfiniteImage(
             game.background,
