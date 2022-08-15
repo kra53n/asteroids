@@ -10,6 +10,8 @@ void changeTextureOptionColor(Menu& menu)
 {
 	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
 	{
+		SDL_DestroyTexture(menu.textures[i].tex);
+
 		if (i == menu.choice)
 		{
 			menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_HGT);
@@ -23,7 +25,7 @@ void changeTextureOptionColor(Menu& menu)
 
 void MenuInit(Menu& menu)
 {
-	menu.lastKeyTick = SDL_GetTicks();
+	menu.ticks = SDL_GetTicks();
 
 	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
 	{
@@ -43,23 +45,21 @@ void MenuDestroy(Menu& menu)
 
 void MenuProcess(Game& game)
 {
-	int tick = SDL_GetTicks();
-	int minTime = 200;
+	int ticks = SDL_GetTicks();
 
 	// change choice for keyboard buttons
-	if ((game.keysStatus.up || game.keysStatus.down) && tick - game.menu.lastKeyTick >= minTime)
+	if ((game.keysStatus.up || game.keysStatus.down) && ticks - game.menu.ticks >= MENU_DELAY_BUTTONS)
 	{
-		game.menu.lastKeyTick = tick;
+		game.menu.ticks = ticks;
 		if (game.keysStatus.up)
 		{
 			game.menu.choice = game.menu.choice ? game.menu.choice - 1 : MENU_OPTIONS_NUM - 1;
-			changeTextureOptionColor(game.menu);
 		}
 		if (game.keysStatus.down)
 		{
 			game.menu.choice = (game.menu.choice + 1) % MENU_OPTIONS_NUM;
-			changeTextureOptionColor(game.menu);
 		}
+		changeTextureOptionColor(game.menu);
 	}
 
 	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
@@ -74,9 +74,9 @@ void MenuProcess(Game& game)
 		}
 		
 		bool oneOfBtns = game.keysStatus.enter || game.keysStatus.space || (game.keysStatus.btnLeft && cursorUnderTexture);
-		if (oneOfBtns && tick - game.menu.lastKeyTick >= minTime)
+		if (oneOfBtns && ticks - game.menu.ticks >= MENU_DELAY_BUTTONS)
 		{
-			game.menu.lastKeyTick = tick;
+			game.menu.ticks = ticks;
 			game.state = game.menu.choice + 1;
 		}
 	}

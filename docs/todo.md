@@ -23,8 +23,13 @@
 - [ ] hot-seat mode
 - [ ] music
 
+## bugs
+
+- [x] memory leak menu
+
 ## todo
 
+- [ ] change name of `MenuProcess` to `MenuUpdate`
 - [ ] remove funcs of `background.cpp` to `texture.cpp`
 - [ ] look at interesting thgins in LazyFoo.net
 - [ ] camera

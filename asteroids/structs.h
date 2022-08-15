@@ -33,7 +33,7 @@ struct Menu
     int choice = 0;
     // text block position of top
     int textBlockY;
-    int lastKeyTick;
+    int ticks;
 };
 
 struct Asteroid

@@ -7,6 +7,7 @@
 #define         MENU_FONT_HGT                 50
 #define         MENU_FONT_VERTICAL_DISTANCE   80
 #define         MENU_OPTIONS_NUM              3
+#define         MENU_DELAY_BUTTONS            200
 const char      MENU_OPTIONS[][9]           = { "start", "settings", "exit" };
 const SDL_Color COLOR_OF_ACTIVE_OPTION      = { 255, 0, 0, 255 };
 const SDL_Color COLOR_OF_NON_ACTIVE_OPTION  = { 150, 150, 220, 255 };
