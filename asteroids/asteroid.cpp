@@ -60,19 +60,14 @@ void AsteroidsPush(Asteroids& self, int type, int ticks)
 	}
 }
 
-#include <stdio.h>
 void AsteroidsDelAsteroid(Asteroids& self, Asteroid* aster)
 {
 	if (aster->next == NULL)
 	{
 		if (aster->prev == NULL)
-		{
 			self.head = NULL;
-		}
 		else
-		{
 			aster->prev->next = NULL;
-		}
 	}
 	else if (self.head == aster)
 	{

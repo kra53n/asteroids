@@ -121,7 +121,7 @@ bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids
 	}
 }
 
-void BulletsUpdate(Bullets& self, Ship& ship, Asteroids& asters, KeysStatus& keys)
+void BulletsUpdate(Bullets& self, Ship& ship, Asteroids& asters, Keys& keys)
 {
 	for (Bullet* cur = self.head; cur != NULL;)
 	{

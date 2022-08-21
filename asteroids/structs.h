@@ -11,7 +11,7 @@ enum gameStates
     GAME_STATE_EXIT     = 3,
 };
 
-struct KeysStatus
+struct Keys
 {
     bool left     = false;
     bool right    = false;
@@ -102,7 +102,7 @@ struct Game {
     bool       run        = false;
     int        state      = 0;
     SDL_Event  event;
-    KeysStatus keysStatus;
+    Keys       keys;
 
     Texture    background;
     Texture    particles[PARTICLES_FILENAMES_NUM];

@@ -25,7 +25,7 @@ void EngineInit(Engine& self)
 	self.frame = 0;
 }
 
-void EngineUpdate(Engine& self, KeysStatus& keys)
+void EngineUpdate(Engine& self, Keys& keys)
 {
 	int ticks = SDL_GetTicks();
 	if (!(ticks - self.ticks >= ENGINE_DELAY)) return;
@@ -62,7 +62,7 @@ void ShipInit(Ship& self)
 	EngineInit(self.engine);
 }
 
-void ShipUpdateVelocity(Ship& self, KeysStatus& keys)
+void ShipUpdateVelocity(Ship& self, Keys& keys)
 {
 	if (fabs(self.vel.x) > self.maxSpeed)
 		self.vel.x = self.vel.x > 0 ? self.maxSpeed : -self.maxSpeed;
@@ -73,7 +73,7 @@ void ShipUpdateVelocity(Ship& self, KeysStatus& keys)
 	self.tex.dstrect.y -= self.vel.y;
 }
 
-void ShipUpdatAcceleration(Ship& self, KeysStatus& keys)
+void ShipUpdatAcceleration(Ship& self, Keys& keys)
 {
 	if (keys.up)
 	{
@@ -83,7 +83,7 @@ void ShipUpdatAcceleration(Ship& self, KeysStatus& keys)
 	}
 }
 
-void ShipUpdateTicks(Ship& self, KeysStatus& keys)
+void ShipUpdateTicks(Ship& self, Keys& keys)
 {
 	int ticks = SDL_GetTicks();
 	if (ticks - self.ticks >= 1000)
@@ -135,7 +135,7 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 	}
 }
 
-void ShipUpdate(Ship& self, Asteroids& asters, KeysStatus& keys)
+void ShipUpdate(Ship& self, Asteroids& asters, Keys& keys)
 {
     int sign = 0;
     if (keys.left)  sign = -1;
@@ -158,7 +158,7 @@ void ShipUpdate(Ship& self, Asteroids& asters, KeysStatus& keys)
 	boundScreen(self.tex.dstrect);
 }
 
-void ShipDraw(Ship& self, KeysStatus& keys)
+void ShipDraw(Ship& self, Keys& keys)
 {
 	SDL_RenderCopyEx(ren, self.tex.tex, NULL, &self.tex.dstrect, self.tex.angle, NULL, SDL_FLIP_NONE);
 	EngineDraw(self.engine, self, keys.up);

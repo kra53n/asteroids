@@ -40,7 +40,7 @@ void GameDraw(Game& game)
     case GAME_STATE_PLAY:
         AsteroidsDraw(game.asteroids);
         BulletsDraw(game.bullets);
-        ShipDraw(game.ship, game.keysStatus);
+        ShipDraw(game.ship, game.keys);
 		TextureDrawAsInfiniteImage(game.particles[1]);
 		TextureDrawAsInfiniteImage(game.particles[2]);
         break;
@@ -51,9 +51,9 @@ void GameDraw(Game& game)
 
 void processKeys(Game& game)
 {
-    if (game.keysStatus.escape)
+    if (game.keys.escape)
     {
-        game.keysStatus.enter = false;
+        game.keys.enter = false;
         game.state = 0;
     }
 }
@@ -68,13 +68,13 @@ void GameUpdate(Game& game)
             game.run = false;
             break;
         case SDL_MOUSEMOTION:
-            SDL_GetMouseState(&game.keysStatus.mouse_x, &game.keysStatus.mouse_y);
+            SDL_GetMouseState(&game.keys.mouse_x, &game.keys.mouse_y);
             break;
         case SDL_MOUSEBUTTONDOWN:
             switch (game.event.button.button)
             {
             case SDL_BUTTON_LEFT:
-                game.keysStatus.btnLeft = true;
+                game.keys.btnLeft = true;
                 break;
             }
             break;
@@ -82,44 +82,44 @@ void GameUpdate(Game& game)
             switch (game.event.button.button)
             {
             case SDL_BUTTON_LEFT:
-                game.keysStatus.btnLeft = false;
+                game.keys.btnLeft = false;
                 break;
             }
             break;
         case SDL_KEYDOWN:
             switch (game.event.key.keysym.scancode)
             {
-            case SDL_SCANCODE_UP:     game.keysStatus.up     = true; break;
-            case SDL_SCANCODE_DOWN:   game.keysStatus.down   = true; break;
-            case SDL_SCANCODE_LEFT:   game.keysStatus.left   = true; break;
-            case SDL_SCANCODE_RIGHT:  game.keysStatus.right  = true; break;
+            case SDL_SCANCODE_UP:     game.keys.up     = true; break;
+            case SDL_SCANCODE_DOWN:   game.keys.down   = true; break;
+            case SDL_SCANCODE_LEFT:   game.keys.left   = true; break;
+            case SDL_SCANCODE_RIGHT:  game.keys.right  = true; break;
 
-            case SDL_SCANCODE_W:      game.keysStatus.up     = true; break;
-            case SDL_SCANCODE_S:      game.keysStatus.down   = true; break;
-            case SDL_SCANCODE_A:      game.keysStatus.left   = true; break;
-            case SDL_SCANCODE_D:      game.keysStatus.right  = true; break;
+            case SDL_SCANCODE_W:      game.keys.up     = true; break;
+            case SDL_SCANCODE_S:      game.keys.down   = true; break;
+            case SDL_SCANCODE_A:      game.keys.left   = true; break;
+            case SDL_SCANCODE_D:      game.keys.right  = true; break;
 
-            case SDL_SCANCODE_RETURN: game.keysStatus.enter  = true; break;
-            case SDL_SCANCODE_SPACE:  game.keysStatus.space  = true; break;
-            case SDL_SCANCODE_ESCAPE: game.keysStatus.escape = true; break;
+            case SDL_SCANCODE_RETURN: game.keys.enter  = true; break;
+            case SDL_SCANCODE_SPACE:  game.keys.space  = true; break;
+            case SDL_SCANCODE_ESCAPE: game.keys.escape = true; break;
             }
             break;
         case SDL_KEYUP:
             switch (game.event.key.keysym.scancode)
             {
-            case SDL_SCANCODE_UP:     game.keysStatus.up     = false; break;
-            case SDL_SCANCODE_DOWN:   game.keysStatus.down   = false; break;
-            case SDL_SCANCODE_LEFT:   game.keysStatus.left   = false; break;
-            case SDL_SCANCODE_RIGHT:  game.keysStatus.right  = false; break;
+            case SDL_SCANCODE_UP:     game.keys.up     = false; break;
+            case SDL_SCANCODE_DOWN:   game.keys.down   = false; break;
+            case SDL_SCANCODE_LEFT:   game.keys.left   = false; break;
+            case SDL_SCANCODE_RIGHT:  game.keys.right  = false; break;
 
-            case SDL_SCANCODE_W:      game.keysStatus.up     = false; break;
-            case SDL_SCANCODE_S:      game.keysStatus.down   = false; break;
-            case SDL_SCANCODE_A:      game.keysStatus.left   = false; break;
-            case SDL_SCANCODE_D:      game.keysStatus.right  = false; break;
+            case SDL_SCANCODE_W:      game.keys.up     = false; break;
+            case SDL_SCANCODE_S:      game.keys.down   = false; break;
+            case SDL_SCANCODE_A:      game.keys.left   = false; break;
+            case SDL_SCANCODE_D:      game.keys.right  = false; break;
 
-            case SDL_SCANCODE_RETURN: game.keysStatus.right  = false; break;
-            case SDL_SCANCODE_SPACE:  game.keysStatus.space  = false; break;
-            case SDL_SCANCODE_ESCAPE: game.keysStatus.escape = false; break;
+            case SDL_SCANCODE_RETURN: game.keys.right  = false; break;
+            case SDL_SCANCODE_SPACE:  game.keys.space  = false; break;
+            case SDL_SCANCODE_ESCAPE: game.keys.escape = false; break;
             }
             break;
         }
@@ -130,8 +130,8 @@ void GameUpdate(Game& game)
     case GAME_STATE_MENU: MenuUpdate(game); break;
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game.asteroids);
-        BulletsUpdate(game.bullets, game.ship, game.asteroids, game.keysStatus);
-        ShipUpdate(game.ship, game.asteroids, game.keysStatus);
+        BulletsUpdate(game.bullets, game.ship, game.asteroids, game.keys);
+        ShipUpdate(game.ship, game.asteroids, game.keys);
         TextureUpdateAsInfiniteImage(
             game.background,
             { -game.ship.vel.x * game.ship.speedMovement, game.ship.vel.y * game.ship.speedMovement },

@@ -1,8 +1,11 @@
 ## tasks
 
+- [ ] record file
+- [ ] level loading
 - [ ] menu
 - [x] base controlling
-- [ ] shooting
+- [x] shooting
+- [ ] shooting enemy
 - [x] asteroids
 - [ ] 4 type of guns
     - [x] 1
@@ -12,14 +15,11 @@
 - [x] 2 type of asteroids
     - [x] 1
     - [x] 2
-- [ ] record file
-- [ ] level loading
 - [x] parallax effect
-- [ ] shooting enemy
 - [ ] animations
     - [ ] explosions
     - [x] asteroids
-    - [ ] engines
+    - [x] engine
 - [ ] hot-seat mode
 - [ ] music
 
@@ -29,21 +29,10 @@
 
 ## todo
 
-- [ ] change name of `MenuProcess` to `MenuUpdate`
+- [x] change name of `MenuProcess` to `MenuUpdate`
 - [ ] remove funcs of `background.cpp` to `texture.cpp`
 - [ ] look at interesting thgins in LazyFoo.net
 - [ ] camera
-- [ ] blasters
-- [ ] sound
-
-### ship
-
-- how to detect ship intersection?
-- how to make fire animation in flight?
-
-### background
-
-- how to make parallax effect?
 
 ## completed
 
