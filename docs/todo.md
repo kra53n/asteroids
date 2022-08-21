@@ -16,8 +16,8 @@
     - [x] 1
     - [x] 2
 - [x] parallax effect
-- [ ] animations
-    - [ ] explosions
+- [x] animations
+    - [x] explosions
     - [x] asteroids
     - [x] engine
 - [ ] hot-seat mode

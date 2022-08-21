@@ -10,6 +10,28 @@
 #include "asteroid.h"
 #include "animation.h"
 
+void ExplosionUpdate(Asteroids& self)
+{
+	if (!self.explosion.frame) return;
+
+	int ticks = SDL_GetTicks();
+	if (!(ticks- self.explosion.ticks >= EXPLOSION_DELAY)) return;
+	self.explosion.ticks = ticks;
+
+	self.explosion.frame = self.explosion.frame < EXPLOSION_FRAMES - 1 ? ++self.explosion.frame : 0;
+}
+
+void ExplosionDraw(Asteroids& self)
+{
+	if (!self.explosion.frame) return;
+
+	SDL_Rect dstrect = self.explosion.textures[self.explosion.frame].dstrect;
+	dstrect.x = self.explosionPos.x;
+	dstrect.y = self.explosionPos.y;
+
+	SDL_RenderCopy(ren, self.explosion.textures[self.explosion.frame].tex, 0, &dstrect);
+}
+
 int AsteroidsGetNum(int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 {
 	int num = 0;
@@ -81,6 +103,8 @@ void AsteroidsDelAsteroid(Asteroids& self, Asteroid* aster)
 		aster->next->prev = aster->prev;
 	}
 
+	self.explosionPos = { aster->pos.x, aster->pos.y };
+	self.explosion.frame = 1;
 	free(aster);
 }
 
@@ -147,6 +171,8 @@ void AsteroidsUpdate(Asteroids& self)
 		aster->pos.x = rect.x;
 		aster->pos.y = rect.y;
 	}
+
+	ExplosionUpdate(self);
 }
 
 void AsteroidsDraw(Asteroids& self)
@@ -161,4 +187,6 @@ void AsteroidsDraw(Asteroids& self)
 
 		SDL_RenderCopyEx(ren, self.texture[aster->type].tex, &srcrect, &dstrect, 0, 0, SDL_FLIP_NONE);
     }
+
+	ExplosionDraw(self);
  }

@@ -59,6 +59,7 @@ struct Animation
 struct Asteroids
 {
     Animation explosion;
+    SDL_Point explosionPos;
     Texture   texture[ASTEROIDS_TYPE_NUM];
     int       frames[ASTEROIDS_TYPE_NUM];
     Asteroid* head                        = 0;

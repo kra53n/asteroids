@@ -74,7 +74,7 @@ const char SHIP_FILENAMES_TEXTURES[][40] = {
 #define EXPLOSION_FILENAME_TYPE "png"
 #define EXPLOSION_FRAMES         9
 #define EXPLOSION_DELAY          100
-#define EXPLOSION_SCALE_COEFF    8
+#define EXPLOSION_SCALE_COEFF    4
 
 const char ASTEROIDS_FILENAMES[ASTEROIDS_TYPE_NUM][40] = {
 	"assets/images/asteroids/iron.png",
