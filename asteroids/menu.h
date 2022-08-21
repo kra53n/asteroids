@@ -3,5 +3,5 @@
 
 void MenuInit(Menu& menu);
 void MenuDestroy(Menu& menu);
-void MenuProcess(Game& game);
+void MenuUpdate(Game& game);
 void MenuDraw(Menu& menu);

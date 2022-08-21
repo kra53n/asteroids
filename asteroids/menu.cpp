@@ -37,7 +37,7 @@ void MenuDestroy(Menu& menu)
 	}
 }
 
-void MenuProcess(Game& game)
+void MenuUpdate(Game& game)
 {
 	int ticks = SDL_GetTicks();
 

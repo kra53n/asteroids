@@ -54,8 +54,16 @@ const unsigned BULLETS_DELAY[] = {
 
 // SHIP CONFIGURATION
 
+#define ENGINE_FRAMES_NUM 4
+#define SHIP_SCALE_COEFF  3
+
+#define ENGINE_FILENAME      "assets/images/engine/engine_fire"
+#define ENGINE_FILENAME_TYPE "png"
+#define ENGINE_FRAMES         15
+#define ENGINE_DELAY          100
+
 const char SHIP_FILENAMES_TEXTURES[][40] = {
-	"assets/images/ships/aurora.png",
+	"assets/images/ships/ship.png",
 };
 
 

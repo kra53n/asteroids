@@ -73,15 +73,23 @@ struct Bullets
     unsigned ticks                   = 0;
 };
 
+struct Engine
+{
+    Texture texture[ENGINE_FRAMES];
+    int     ticks;
+    int     frame;
+};
+
 struct Ship
 {
+    Engine  engine;
     Texture tex;
     float   speedMovement = 0.5;
     float   rotationSpeed = 2.7;
     float   rotationCoeff = 0.1;
     int     rotationPower = 0;
     int     wdt           = 121;
-    int     lastTicks     = 0;
+    int     ticks         = 0;
     int     maxSpeed      = 10;
     Vec     vel           = { 0, 0 };
     Vec     acc           = { 0, 0 };

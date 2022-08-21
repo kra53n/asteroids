@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <math.h>
+#include <stdio.h>
 
 #include "ship.h"
 #include "funcs.h"
@@ -9,18 +10,56 @@
 #include "texture.h"
 #include "structs.h"
 
-/* wdt - width of ship in the game */
-void ShipInit(Ship& self, int wdt)
+void EngineInit(Engine& self)
 {
-	self.lastTicks = SDL_GetTicks();
+	char filename[200];
+	for (int i = 0; i < ENGINE_FRAMES; i++)
+	{
+		sprintf_s(filename, 200, "%s%d.%s", ENGINE_FILENAME, i + 1, ENGINE_FILENAME_TYPE);
+		self.texture[i] = loadTexture(filename);
+		self.texture[i].dstrect.w *= SHIP_SCALE_COEFF;
+		self.texture[i].dstrect.h *= SHIP_SCALE_COEFF;
+	}
+
+	self.ticks = SDL_GetTicks();
+	self.frame = 0;
+}
+
+void EngineUpdate(Engine& self, KeysStatus& keys)
+{
+	int ticks = SDL_GetTicks();
+	if (!(ticks - self.ticks >= ENGINE_DELAY)) return;
+
+	self.frame = self.frame < ENGINE_FRAMES - 1 ? ++self.frame : 0;
+}
+
+void EngineDraw(Engine& self, Ship& ship, bool cond)
+{
+	if (!cond) return;
+
+	Vec pos;
+	VecSetLen(pos, (ship.tex.dstrect.w + self.texture->dstrect.w) / 2);
+	VecSetDirection(pos, -ship.tex.angle);
+
+	SDL_Rect dstrect = self.texture->dstrect;
+	dstrect.x = ship.tex.dstrect.x + (ship.tex.dstrect.w - self.texture->dstrect.w) / 2 - pos.x;
+	dstrect.y = ship.tex.dstrect.y + (ship.tex.dstrect.h - self.texture->dstrect.h) / 2 - pos.y;
+
+	SDL_RenderCopyEx(ren, self.texture[self.frame].tex, 0, &dstrect, ship.tex.angle, 0, SDL_FLIP_NONE);
+}
+
+void ShipInit(Ship& self)
+{
+	self.ticks = SDL_GetTicks();
 	self.tex = loadTexture(SHIP_FILENAMES_TEXTURES[0]);
 
-	self.tex.dstrect.x = winWdt / 2;
-	self.tex.dstrect.y = winHgt / 2;
+	self.tex.dstrect.w *= SHIP_SCALE_COEFF;
+	self.tex.dstrect.h *= SHIP_SCALE_COEFF;
 
-	float coeff = self.tex.dstrect.w / self.wdt;
-	self.tex.dstrect.w /= coeff;
-	self.tex.dstrect.h /= coeff;
+	self.tex.dstrect.x = (winWdt - self.tex.dstrect.w) / 2;
+	self.tex.dstrect.y = (winHgt - self.tex.dstrect.h) / 2;
+
+	EngineInit(self.engine);
 }
 
 void ShipUpdateVelocity(Ship& self, KeysStatus& keys)
@@ -47,9 +86,9 @@ void ShipUpdatAcceleration(Ship& self, KeysStatus& keys)
 void ShipUpdateTicks(Ship& self, KeysStatus& keys)
 {
 	int ticks = SDL_GetTicks();
-	if (ticks - self.lastTicks >= 1000)
+	if (ticks - self.ticks >= 1000)
 	{
-		self.lastTicks = ticks;
+		self.ticks = ticks;
 
 		if (keys.up)
 		{
@@ -113,13 +152,16 @@ void ShipUpdate(Ship& self, Asteroids& asters, KeysStatus& keys)
 	ShipUpdatAcceleration(self, keys);
     ShipUpdateTicks(self, keys);
 	ShipUpdateCollisionWithAstroids(self, asters);
+	
+	EngineUpdate(self.engine, keys);
 
 	boundScreen(self.tex.dstrect);
 }
 
-void ShipDraw(Ship& self)
+void ShipDraw(Ship& self, KeysStatus& keys)
 {
 	SDL_RenderCopyEx(ren, self.tex.tex, NULL, &self.tex.dstrect, self.tex.angle, NULL, SDL_FLIP_NONE);
+	EngineDraw(self.engine, self, keys.up);
 
      // int side = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
      // Vec line = { side / 2, 0 };
