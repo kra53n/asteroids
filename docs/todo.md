@@ -29,6 +29,9 @@
 
 ## todo
 
+- [x] make struct for initialazing explosion and engine
+- [x] make function for initialazing explosion and engine
+- [ ] health
 - [x] change name of `MenuProcess` to `MenuUpdate`
 - [ ] remove funcs of `background.cpp` to `texture.cpp`
 - [ ] look at interesting thgins in LazyFoo.net

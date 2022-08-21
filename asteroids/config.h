@@ -70,7 +70,11 @@ const char SHIP_FILENAMES_TEXTURES[][40] = {
 // ASTEROIDS CONFIGURATION
 
 #define ASTEROIDS_TYPE_NUM      9
-#define ASTEROIDS_FILENAME      "assets/images/asteroids/iron.png"
+#define EXPLOSION_FILENAME      "assets/images/explosion/explosion"
+#define EXPLOSION_FILENAME_TYPE "png"
+#define EXPLOSION_FRAMES         9
+#define EXPLOSION_DELAY          100
+#define EXPLOSION_SCALE_COEFF    8
 
 const char ASTEROIDS_FILENAMES[ASTEROIDS_TYPE_NUM][40] = {
 	"assets/images/asteroids/iron.png",

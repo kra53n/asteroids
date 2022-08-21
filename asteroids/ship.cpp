@@ -9,23 +9,9 @@
 #include "config.h"
 #include "texture.h"
 #include "structs.h"
+#include "animation.h"
 
-void EngineInit(Engine& self)
-{
-	char filename[200];
-	for (int i = 0; i < ENGINE_FRAMES; i++)
-	{
-		sprintf_s(filename, 200, "%s%d.%s", ENGINE_FILENAME, i + 1, ENGINE_FILENAME_TYPE);
-		self.texture[i] = loadTexture(filename);
-		self.texture[i].dstrect.w *= SHIP_SCALE_COEFF;
-		self.texture[i].dstrect.h *= SHIP_SCALE_COEFF;
-	}
-
-	self.ticks = SDL_GetTicks();
-	self.frame = 0;
-}
-
-void EngineUpdate(Engine& self, Keys& keys)
+void EngineUpdate(Animation& self, Keys& keys)
 {
 	int ticks = SDL_GetTicks();
 	if (!(ticks - self.ticks >= ENGINE_DELAY)) return;
@@ -33,19 +19,19 @@ void EngineUpdate(Engine& self, Keys& keys)
 	self.frame = self.frame < ENGINE_FRAMES - 1 ? ++self.frame : 0;
 }
 
-void EngineDraw(Engine& self, Ship& ship, bool cond)
+void EngineDraw(Animation& self, Ship& ship, bool cond)
 {
 	if (!cond) return;
 
 	Vec pos;
-	VecSetLen(pos, (ship.tex.dstrect.w + self.texture->dstrect.w) / 2);
+	VecSetLen(pos, (ship.tex.dstrect.w + self.textures->dstrect.w) / 2);
 	VecSetDirection(pos, -ship.tex.angle);
 
-	SDL_Rect dstrect = self.texture->dstrect;
-	dstrect.x = ship.tex.dstrect.x + (ship.tex.dstrect.w - self.texture->dstrect.w) / 2 - pos.x;
-	dstrect.y = ship.tex.dstrect.y + (ship.tex.dstrect.h - self.texture->dstrect.h) / 2 - pos.y;
+	SDL_Rect dstrect = self.textures->dstrect;
+	dstrect.x = ship.tex.dstrect.x + (ship.tex.dstrect.w - self.textures->dstrect.w) / 2 - pos.x;
+	dstrect.y = ship.tex.dstrect.y + (ship.tex.dstrect.h - self.textures->dstrect.h) / 2 - pos.y;
 
-	SDL_RenderCopyEx(ren, self.texture[self.frame].tex, 0, &dstrect, ship.tex.angle, 0, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(ren, self.textures[self.frame].tex, 0, &dstrect, ship.tex.angle, 0, SDL_FLIP_NONE);
 }
 
 void ShipInit(Ship& self)
@@ -59,7 +45,7 @@ void ShipInit(Ship& self)
 	self.tex.dstrect.x = (winWdt - self.tex.dstrect.w) / 2;
 	self.tex.dstrect.y = (winHgt - self.tex.dstrect.h) / 2;
 
-	EngineInit(self.engine);
+	AnimationInit(self.engine, ENGINE_FRAMES, ENGINE_FILENAME, ENGINE_FILENAME_TYPE, SHIP_SCALE_COEFF);
 }
 
 void ShipUpdateVelocity(Ship& self, Keys& keys)

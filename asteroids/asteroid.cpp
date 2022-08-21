@@ -8,6 +8,7 @@
 #include "structs.h"
 #include "texture.h"
 #include "asteroid.h"
+#include "animation.h"
 
 int AsteroidsGetNum(int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 {
@@ -106,6 +107,8 @@ void AsteroidsInit(Asteroids& self, int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
             asterType++;
         }
     }
+
+	AnimationInit(self.explosion, EXPLOSION_FRAMES, EXPLOSION_FILENAME, EXPLOSION_FILENAME_TYPE, EXPLOSION_SCALE_COEFF);
 }
 
 void AsteroidsDestroy(Asteroids& self)
