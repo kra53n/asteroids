@@ -13,9 +13,8 @@ void BulletsInit(Bullets& self)
 	for (int i = 0; i < BULLETS_TYPE_NUM; i++)
 	{
 		self.texs[i] = loadTexture(BULLETS_FILENAMES[i]);
-		int coeff = 4;
-		self.texs[i].dstrect.w /= coeff;
-		self.texs[i].dstrect.h /= coeff;
+		self.texs[i].dstrect.w *= SHIP_SCALE_COEFF;
+		self.texs[i].dstrect.h *= SHIP_SCALE_COEFF;
 	}
 }
 
@@ -41,9 +40,9 @@ Bullet* BulletsGetNewBullet(Bullets& self, Ship& ship, int type)
 	Bullet* elem = (Bullet*)malloc(sizeof(Bullet));
 
 	VecSetLen(elem->vel, BULLETS_SPEED[type]);
-	VecSetDirection(elem->vel, ship.tex.angle);
+	VecSetDirection(elem->vel, -ship.tex.angle);
 
-	Vec pos = { ship.tex.dstrect.w / 2, ship.tex.dstrect.h / 2 };
+	Vec pos;
 	VecSetLen(pos, ship.tex.dstrect.w / 2);
 	VecSetDirection(pos, -ship.tex.angle);
 
@@ -59,7 +58,7 @@ Bullet* BulletsGetNewBullet(Bullets& self, Ship& ship, int type)
 	return elem;
 }
 
-void BulletsPush(Bullets& self, Ship& ship, int type)
+Bullet* BulletsPush(Bullets& self, Ship& ship, int type)
 {
 	Bullet* elem = BulletsGetNewBullet(self, ship, type);
 
@@ -78,13 +77,18 @@ void BulletsPush(Bullets& self, Ship& ship, int type)
 		elem->prev = NULL;
 		self.head = elem;
 	}
+
+	return elem;
 }
 
 void BulletsDelBullet(Bullets& self, Bullet* bullet)
 {
 	if (bullet->next == NULL)
 	{
-		self.head = NULL;
+		if (bullet->prev == NULL)
+			self.head = NULL;
+		else
+			bullet->prev->next = NULL;
 	}
 	else if (self.head == bullet)
 	{
@@ -105,7 +109,7 @@ bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids
 {
 	for (Asteroid* aster = asters.head; aster != NULL; aster = aster->next)
 	{
-		int asterR = asters.texture[aster->type].h / 2;
+		int asterR = asters.texture[aster->type].dstrect.h / 2;
 
         bool cond = isPointInCirc(
             { aster->pos.x + asterR, aster->pos.y + asterR },
@@ -118,6 +122,58 @@ bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids
         BulletsDelBullet(self, bullet);
 
 		return true;
+	}
+}
+
+void BulletsAddByType(Bullets& self, Ship& ship, int type)
+{
+	int ticks = SDL_GetTicks();
+	if (!(ticks - self.ticks >= BULLETS_DELAY[type])) return;
+	self.ticks = ticks;
+
+	switch (type)
+	{
+	case 0:
+		BulletsPush(self, ship, type);
+		break;
+
+	case 1:
+		for (int i = 0; i < 350; i++)
+		{
+			Bullet* bullet = BulletsPush(self, ship, type);
+
+			Vec pos;
+			VecSetLen(pos, VecGetLen(bullet->vel) * i);
+			VecSetDirection(pos, VecGetAngle(bullet->vel));
+
+			bullet->pos.x += pos.x;
+			bullet->pos.y += pos.y;
+		}
+		break;
+
+	case 2:
+		for (int angle = -45; angle < 45; angle += 15)
+		{
+			Bullet* bullet = BulletsPush(self, ship, type);
+			VecSetDirection(bullet->vel, -VecGetAngle(bullet->vel) + angle);
+		}
+		break;
+
+	case 3:
+		for (int angle = -180; angle < 180; angle += 30)
+		{
+			Bullet* bullet = BulletsPush(self, ship, type);
+
+			Vec pos;
+			VecSetLen(pos, ship.tex.dstrect.w);
+			VecSetDirection(pos, VecGetAngle(bullet->vel) - angle);
+
+			bullet->pos.x = ship.tex.dstrect.x + ship.tex.dstrect.w / 2 + pos.x;
+			bullet->pos.y = ship.tex.dstrect.y + ship.tex.dstrect.h / 2 + pos.y;
+
+			VecSetDirection(bullet->vel, VecGetAngle(bullet->vel) + angle);
+		}
+		break;
 	}
 }
 
@@ -147,13 +203,7 @@ void BulletsUpdate(Bullets& self, Ship& ship, Asteroids& asters, Keys& keys)
 
 	if (!keys.space) return;
 
-	int type = 0;
-
-	int ticks = SDL_GetTicks();
-	if (!(ticks - self.ticks >= BULLETS_DELAY[type])) return;
-	self.ticks = ticks;
-
-	BulletsPush(self, ship, type);
+	BulletsAddByType(self, ship, 3);
 }
 
 void BulletsDraw(Bullets& self)
@@ -164,6 +214,6 @@ void BulletsDraw(Bullets& self)
 	{
 		Texture tex = self.texs[cur->type];
 		SDL_Rect rect = { cur->pos.x, cur->pos.y, tex.dstrect.w, tex.dstrect.h };
-		SDL_RenderCopyEx(ren, tex.tex, 0, &rect, VecGetAngle(cur->vel), &nullPoint, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(ren, tex.tex, 0, &rect, VecGetAngle(cur->vel), 0, SDL_FLIP_NONE);
 	}
 }

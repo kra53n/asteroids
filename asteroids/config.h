@@ -37,18 +37,27 @@ const char PARTICLES_FILENAMES[PARTICLES_FILENAMES_NUM][41] = {
 
 // BULLET CONFIGURATION
 
-#define BULLETS_TYPE_NUM 1
+#define BULLETS_TYPE_NUM 4
 
 const char BULLETS_FILENAMES[][40] = {
     "assets/images/bullets/bullet1.png",
+    "assets/images/bullets/bullet1.png",
+    "assets/images/bullets/bullet2.png",
+    "assets/images/bullets/bullet2.png",
 };
 
 const unsigned BULLETS_SPEED[] = {
 	80,
+	10,
+	10,
+	10,
 };
 
 const unsigned BULLETS_DELAY[] = {
 	200,
+	800,
+	1000,
+	1000,
 };
 
 
