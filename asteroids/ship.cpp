@@ -111,7 +111,7 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 		VecSetDirectionByCoords(self.vel, asterPoint, shipPoint);
 		VecSetDirectionByCoords(aster->vel, shipPoint, asterPoint);
 
-		float asterRebound = 60 / ASTEROIDS_DENSITY[aster->type];
+		float asterRebound = 60 / ASTEROIDS[aster->type].mass;
 		float shipRebound = 70 / asterRebound;
 		asterRebound /= shipR / 10;
 		asterRebound *= shipR / 10;

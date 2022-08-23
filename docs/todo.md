@@ -3,9 +3,11 @@
 - [ ] record file
 - [ ] level loading
 - [ ] menu
+- [ ] shooting enemy
+- [ ] hot-seat mode
+- [ ] music
 - [x] base controlling
 - [x] shooting
-- [ ] shooting enemy
 - [x] asteroids
 - [x] 4 type of guns
     - [x] 1
@@ -20,8 +22,6 @@
     - [x] explosions
     - [x] asteroids
     - [x] engine
-- [ ] hot-seat mode
-- [ ] music
 
 ## bugs
 

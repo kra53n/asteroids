@@ -37,27 +37,20 @@ const char PARTICLES_FILENAMES[PARTICLES_FILENAMES_NUM][41] = {
 
 // BULLET CONFIGURATION
 
+struct BULLET_INFO
+{
+	char     filename[40];
+	unsigned speed;
+	unsigned delay;
+};
+
 #define BULLETS_TYPE_NUM 4
 
-const char BULLETS_FILENAMES[][40] = {
-    "assets/images/bullets/bullet1.png",
-    "assets/images/bullets/bullet1.png",
-    "assets/images/bullets/bullet2.png",
-    "assets/images/bullets/bullet2.png",
-};
-
-const unsigned BULLETS_SPEED[] = {
-	80,
-	10,
-	10,
-	10,
-};
-
-const unsigned BULLETS_DELAY[] = {
-	200,
-	800,
-	1000,
-	1000,
+const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
+	{ "assets/images/bullets/bullet1.png", 80, 200  },
+	{ "assets/images/bullets/bullet1.png", 10, 800  },
+	{ "assets/images/bullets/bullet2.png", 10, 1000 },
+	{ "assets/images/bullets/bullet2.png", 10, 1000 },
 };
 
 
@@ -76,35 +69,34 @@ const char SHIP_FILENAMES_TEXTURES[][40] = {
 };
 
 
-// ASTEROIDS CONFIGURATION
+// EXPLOSION CONFIGURATION
 
-#define ASTEROIDS_TYPE_NUM      9
 #define EXPLOSION_FILENAME      "assets/images/explosion/explosion"
 #define EXPLOSION_FILENAME_TYPE "png"
 #define EXPLOSION_FRAMES         9
 #define EXPLOSION_DELAY          100
 #define EXPLOSION_SCALE_COEFF    4
 
-const char ASTEROIDS_FILENAMES[ASTEROIDS_TYPE_NUM][40] = {
-	"assets/images/asteroids/iron.png",
-	"assets/images/asteroids/large metal.png",
-	"assets/images/asteroids/large rock.png",
-	"assets/images/asteroids/medium rock.png",
-	"assets/images/asteroids/rock.png",
-	"assets/images/asteroids/silicon.png",
-	"assets/images/asteroids/silver.png",
-	"assets/images/asteroids/small rock.png",
-	"assets/images/asteroids/titanium.png",
+
+// ASTEROIDS CONFIGURATION
+
+struct ASTEROID_INFO
+{
+	char  filename[40];
+	float mass;
+	float health;
 };
 
-const float ASTEROIDS_DENSITY[ASTEROIDS_TYPE_NUM] = {
-    7.874      ,
-    10.3  * 2  ,
-    4.34  * 2  ,
-    4.34  * 0.9,
-    4.34       ,
-    4.6        ,
-    10.49      ,
-    4.34  * 0.8,
-    6.505      ,
+#define ASTEROIDS_TYPE_NUM      9
+
+const ASTEROID_INFO ASTEROIDS[ASTEROIDS_TYPE_NUM] = {
+	{ "assets/images/asteroids/iron.png",        7.874,      100 },
+	{ "assets/images/asteroids/large metal.png", 10.3 * 2,   100 },
+	{ "assets/images/asteroids/large rock.png",  4.34 * 2,   100 },
+	{ "assets/images/asteroids/medium rock.png", 4.34 * 0.9, 100 },
+	{ "assets/images/asteroids/rock.png",        4.34,       100 },
+	{ "assets/images/asteroids/silicon.png",     4.6,        100 },
+	{ "assets/images/asteroids/silver.png",      10.49,      100 },
+	{ "assets/images/asteroids/small rock.png",  4.34 * 0.8, 100 },
+	{ "assets/images/asteroids/titanium.png",    6.505,      100 },
 };

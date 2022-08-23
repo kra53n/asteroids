@@ -12,7 +12,7 @@ void BulletsInit(Bullets& self)
 {
 	for (int i = 0; i < BULLETS_TYPE_NUM; i++)
 	{
-		self.texs[i] = loadTexture(BULLETS_FILENAMES[i]);
+		self.texs[i] = loadTexture(BULLETS[i].filename);
 		self.texs[i].dstrect.w *= SHIP_SCALE_COEFF;
 		self.texs[i].dstrect.h *= SHIP_SCALE_COEFF;
 	}
@@ -39,7 +39,7 @@ Bullet* BulletsGetNewBullet(Bullets& self, Ship& ship, int type)
 {
 	Bullet* elem = (Bullet*)malloc(sizeof(Bullet));
 
-	VecSetLen(elem->vel, BULLETS_SPEED[type]);
+	VecSetLen(elem->vel, BULLETS[type].speed);
 	VecSetDirection(elem->vel, -ship.tex.angle);
 
 	Vec pos;
@@ -128,7 +128,7 @@ bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids
 void BulletsAddByType(Bullets& self, Ship& ship, int type)
 {
 	int ticks = SDL_GetTicks();
-	if (!(ticks - self.ticks >= BULLETS_DELAY[type])) return;
+	if (!(ticks - self.ticks >= BULLETS[type].delay)) return;
 	self.ticks = ticks;
 
 	switch (type)

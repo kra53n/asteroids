@@ -114,7 +114,7 @@ void AsteroidsInit(Asteroids& self, int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 
 	for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
 	{
-		self.texture[i] = loadTexture(ASTEROIDS_FILENAMES[i]);
+		self.texture[i] = loadTexture(ASTEROIDS[i].filename);
 		self.frames[i] = self.texture[i].dstrect.w / self.texture[i].dstrect.h;
 	}
 
