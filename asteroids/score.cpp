@@ -5,7 +5,7 @@
 #include "window.h"
 #include "texture.h"
 
-void ScoreInit(Score& self, SDL_Rect pos, int point, char title[])
+void ScoreInit(Score& self, SDL_Point pos, int point, char title[])
 {
     self.point = point;
     self.title = title;
@@ -25,7 +25,10 @@ void ScoreUpdate(Score& self, int point)
     if (self.tex.tex)
         SDL_DestroyTexture(self.tex.tex);
 
-    self.tex = loadFont(message, SCORE_FONTNAME, COLOR_OF_NON_ACTIVE_OPTION, SCORE_FONT_SIZE);
+    SDL_Rect rect = self.tex.dstrect;
+    self.tex = loadFont(message, SCORE_FONTNAME, COLOR_OF_ACTIVE_OPTION, SCORE_FONT_SIZE);
+    self.tex.dstrect.x = rect.x;
+    self.tex.dstrect.y = rect.y;
 }
 
 void ScoreDraw(Score& self)

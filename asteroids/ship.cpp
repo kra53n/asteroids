@@ -7,6 +7,7 @@
 #include "funcs.h"
 #include "vector.h"
 #include "window.h"
+#include "health.h"
 #include "config.h"
 #include "texture.h"
 #include "structs.h"
@@ -47,7 +48,8 @@ void ShipInit(Ship& self)
 	self.tex.dstrect.y = (winHgt - self.tex.dstrect.h) / 2;
 
 	AnimationInit(self.engine, ENGINE_FRAMES, ENGINE_FILENAME, ENGINE_FILENAME_TYPE, SHIP_SCALE_COEFF);
-	ScoreInit(self.score, { 25, 25 }, 0, (char*)"Score: ");
+	ScoreInit(self.score, { 10, 3 }, 0, (char*)"Score: ");
+	HealthInit(self.health, { 10, 50, 250, 25 });
 }
 
 void ShipUpdateVelocity(Ship& self, Keys& keys)
@@ -151,6 +153,7 @@ void ShipDraw(Ship& self, Keys& keys)
 	SDL_RenderCopyEx(ren, self.tex.tex, NULL, &self.tex.dstrect, self.tex.angle, NULL, SDL_FLIP_NONE);
 	EngineDraw(self.engine, self, keys.up);
 	ScoreDraw(self.score);
+	HealthDraw(self.health);
 
      // int side = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
      // Vec line = { side / 2, 0 };

@@ -10,6 +10,6 @@ struct Score
 	char*     title;
 };
 
-void ScoreInit(Score& self, SDL_Rect pos, int point, char* title);
+void ScoreInit(Score& self, SDL_Point pos, int point, char* title);
 void ScoreUpdate(Score& self, int point = 0);
 void ScoreDraw(Score& self);
