@@ -1,4 +1,5 @@
 #pragma once
+#include "score.h"
 #include "vector.h"
 #include "config.h"
 #include "texture.h"
@@ -86,11 +87,11 @@ struct Ship
 {
     Animation engine;
     Texture   tex;
+    Score     score;
     float     speedMovement = 0.5;
     float     rotationSpeed = 2.7;
     float     rotationCoeff = 0.1;
     int       rotationPower = 0;
-    int       wdt           = 121;
     int       ticks         = 0;
     int       maxSpeed      = 10;
     Vec       vel           = { 0, 0 };

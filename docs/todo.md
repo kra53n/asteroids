@@ -29,12 +29,19 @@
 
 ## todo
 
-- [ ] make bg of menu blured
-- [ ] health
+- [ ] bars
+    - [ ] health
+    - [ ] bullet delay
+- [ ] detele `structs.h`
 - [x] change name of `MenuProcess` to `MenuUpdate`
 - [ ] remove funcs of `background.cpp` to `texture.cpp`
-- [ ] look at interesting thgins in LazyFoo.net
+
+
+## extra features
+
+- [ ] make bg of menu blured
 - [ ] camera
+- [ ] look at interesting thgins in LazyFoo.net
 
 ## completed
 

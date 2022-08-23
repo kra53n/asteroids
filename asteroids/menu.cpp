@@ -12,7 +12,7 @@ void changeTextureOptionColor(Menu& menu)
 	{
 		SDL_DestroyTexture(menu.textures[i].tex);
 		SDL_Color color = i == menu.choice ? COLOR_OF_ACTIVE_OPTION : COLOR_OF_NON_ACTIVE_OPTION;
-		menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, color, MENU_FONT_HGT);
+		menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, color, MENU_FONT_SIZE);
 	}
 }
 
@@ -22,10 +22,10 @@ void MenuInit(Menu& menu)
 
 	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
 	{
-		menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_HGT);
+		menu.textures[i] = loadFont(MENU_OPTIONS[i], MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_SIZE);
 	}
 
-	menu.textBlockY = (winHgt - ((MENU_FONT_HGT + MENU_FONT_VERTICAL_DISTANCE) * MENU_OPTIONS_NUM - MENU_FONT_VERTICAL_DISTANCE)) / 2;
+	menu.textBlockY = (winHgt - ((MENU_FONT_SIZE + MENU_FONT_VERTICAL_DISTANCE) * MENU_OPTIONS_NUM - MENU_FONT_VERTICAL_DISTANCE)) / 2;
 	changeTextureOptionColor(menu);
 }
 
