@@ -4,10 +4,10 @@
 
 #include "score.h"
 #include "funcs.h"
+#include "vector.h"
 #include "window.h"
 #include "config.h"
 #include "bullet.h"
-#include "structs.h"
 #include "asteroid.h"
 
 void BulletsInit(Bullets& self)

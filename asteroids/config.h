@@ -1,6 +1,8 @@
 #pragma once
 #include <SDL.h>
 
+// GAME CONFIGURATION
+
 enum gameStates
 {
     GAME_STATE_MENU,
@@ -9,6 +11,20 @@ enum gameStates
     GAME_STATE_EXIT,
 
     GAME_STATE_RESTART,
+};
+
+struct Keys
+{
+    bool left     = false;
+    bool right    = false;
+    bool up       = false;
+    bool down     = false;
+    bool btnLeft  = false;
+    bool space    = false;
+    bool enter    = false;
+    bool escape   = false;
+    int  mouse_x;
+    int  mouse_y;
 };
 
 

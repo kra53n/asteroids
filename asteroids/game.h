@@ -1,5 +1,28 @@
 #pragma once
-#include "structs.h"
+#include "menu.h"
+#include "ship.h"
+#include "config.h"
+#include "bullet.h"
+#include "texture.h"
+#include "asteroid.h"
+
+struct Game {
+    int        wdt        = winWdt;
+    int        hgt        = winHgt;
+                          
+    bool       run        = false;
+    int        state      = 0;
+    SDL_Event  event;
+    Keys       keys;
+
+    Texture    background;
+    Texture    particles[PARTICLES_FILENAMES_NUM];
+    Asteroids  asteroids;
+    Ship       ship;
+    Bullets    bullets;
+
+    Menu       menu;
+};
 
 void processKeys(Game& game);
 

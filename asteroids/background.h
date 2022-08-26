@@ -1,4 +1,5 @@
 #pragma once
+#include "ship.h"
 #include "config.h"
 #include "texture.h"
 

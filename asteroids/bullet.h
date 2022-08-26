@@ -1,5 +1,26 @@
 #pragma once
-#include "structs.h"
+#include "ship.h"
+#include "bullet.h"
+#include "config.h"
+#include "vector.h"
+#include "asteroid.h"
+
+struct Bullet
+{
+    Vec       vel;
+    SDL_Point pos;
+    unsigned  type;
+    unsigned  ticks;
+    Bullet*   next;
+    Bullet*   prev;
+};
+
+struct Bullets
+{
+    Bullet*  head                    = 0;
+    Texture  texs[BULLETS_TYPE_NUM];
+    unsigned ticks                   = 0;
+};
 
 void BulletsInit(Bullets& self);
 void BulletsDestroy(Bullets& self);
