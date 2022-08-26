@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
+#include "score.h"
 #include "funcs.h"
 #include "window.h"
 #include "config.h"
@@ -112,7 +113,7 @@ void BulletsDelBullet(Bullets& self, Bullet* bullet)
 }
 
 // return status of collision
-bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids& asters)
+bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids& asters, Score& score)
 {
 	for (Asteroid* aster = asters.head; aster != NULL; aster = aster->next)
 	{
@@ -127,7 +128,10 @@ bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids
 		
 		aster->health -= BULLETS[bullet->type].damage;
 		if (aster->health <= 0)
+		{
+			ScoreUpdate(score, ASTEROIDS[aster->type].health);
 			AsteroidsDelAsteroid(asters, aster);
+		}
         BulletsDelBullet(self, bullet);
 
 		return true;
@@ -195,7 +199,7 @@ void BulletsUpdate(Bullets& self, Ship& ship, Asteroids& asters, Keys& keys)
 		cur->pos.x += cur->vel.x;
 		cur->pos.y -= cur->vel.y;
 
-		if (BulletsUpdateCollisionWithAstroids(self, cur, asters))
+		if (BulletsUpdateCollisionWithAstroids(self, cur, asters, ship.score))
 		{
 			cur = curNext;
 			continue;
