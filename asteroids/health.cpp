@@ -4,13 +4,13 @@
 #include "health.h"
 #include "config.h"
 
-void HealthInit(Health& self, SDL_Rect rect, unsigned point)
+void HealthInit(Health& self, SDL_Rect rect, int point)
 {
 	self.point = point > 100 ? 100 : point;
 	self.rect = rect;
 }
 
-void HealthUpdate(Health& self, unsigned point)
+void HealthUpdate(Health& self, int point)
 {
 	self.point -= point;
 }

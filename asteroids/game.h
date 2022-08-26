@@ -6,7 +6,8 @@
 #include "texture.h"
 #include "asteroid.h"
 
-struct Game {
+struct Game
+{
     int        wdt        = winWdt;
     int        hgt        = winHgt;
                           
