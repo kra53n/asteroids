@@ -1,4 +1,8 @@
-# ***Asteroids!*** clone game
+<div align='center'>
+
+# ***`Asteroids!`*** clone game
+
+</div>
 
 ### Sources
 
