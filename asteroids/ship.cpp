@@ -129,7 +129,7 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 	}
 }
 
-void ShipUpdate(Ship& self, Asteroids& asters, Keys& keys)
+void ShipUpdate(Ship& self, Asteroids& asters, Keys& keys, int& gameState)
 {
     int sign = 0;
     if (keys.left)  sign = -1;
@@ -150,6 +150,9 @@ void ShipUpdate(Ship& self, Asteroids& asters, Keys& keys)
 	EngineUpdate(self.engine, keys);
 
 	boundScreen(self.tex.dstrect);
+
+	if (self.health.point <= 0)
+		gameState = GAME_STATE_RESTART;
 }
 
 void ShipDraw(Ship& self, Keys& keys)

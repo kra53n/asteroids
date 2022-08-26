@@ -124,8 +124,10 @@ bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids
             { bullet->pos.x, bullet->pos.y }
         );
         if (!cond) continue;
-
-        AsteroidsDelAsteroid(asters, aster);
+		
+		aster->health -= BULLETS[bullet->type].damage;
+		if (aster->health <= 0)
+			AsteroidsDelAsteroid(asters, aster);
         BulletsDelBullet(self, bullet);
 
 		return true;

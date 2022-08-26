@@ -1,4 +1,5 @@
 #include <time.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "game.h"
@@ -143,7 +144,7 @@ void GameUpdate(Game& game)
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game.asteroids);
         BulletsUpdate(game.bullets, game.ship, game.asteroids, game.keys);
-        ShipUpdate(game.ship, game.asteroids, game.keys);
+        ShipUpdate(game.ship, game.asteroids, game.keys, game.state);
         TextureUpdateAsInfiniteImage(
             game.background,
             { -game.ship.vel.x * game.ship.speedMovement, game.ship.vel.y * game.ship.speedMovement },
@@ -154,6 +155,7 @@ void GameUpdate(Game& game)
 
     case GAME_STATE_EXIT:
         game.run = false;
+        printf("\nim here");
         break;
     }
 }

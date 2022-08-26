@@ -5,14 +5,6 @@
 #include "config.h"
 #include "texture.h"
 
-enum gameStates
-{
-    GAME_STATE_MENU     = 0,
-    GAME_STATE_PLAY     = 1,
-    GAME_STATE_SETTINGS = 2,
-    GAME_STATE_EXIT     = 3,
-};
-
 struct Keys
 {
     bool left     = false;
@@ -47,7 +39,7 @@ struct Asteroid
     int       type;
     int       frame;
     int       ticks;
-    unsigned  health;
+    int       health;
     Asteroid* next;
     Asteroid* prev;
 };

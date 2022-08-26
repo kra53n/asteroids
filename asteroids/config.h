@@ -1,14 +1,27 @@
 #pragma once
 #include <SDL.h>
 
+enum gameStates
+{
+    GAME_STATE_MENU,
+    GAME_STATE_PLAY,
+    GAME_STATE_SETTINGS,
+    GAME_STATE_EXIT,
+
+    GAME_STATE_RESTART,
+};
+
+
 // MENU CONFIGURATION
 
 #define         MENU_FONTNAME                 "assets/fonts/Voyager Heavy.otf"
 #define         MENU_FONT_SIZE                50
 #define         MENU_FONT_VERTICAL_DISTANCE   80
-#define         MENU_OPTIONS_NUM              3
 #define         MENU_DELAY_BUTTONS            200
+
+#define         MENU_OPTIONS_NUM              3
 const char      MENU_OPTIONS[][9]           = { "start", "settings", "exit" };
+
 const SDL_Color COLOR_OF_ACTIVE_OPTION      = { 255, 0, 0, 255 };
 const SDL_Color COLOR_OF_NON_ACTIVE_OPTION  = { 150, 150, 220, 255 };
 
@@ -100,13 +113,13 @@ struct ASTEROID_INFO
 #define ASTEROIDS_TYPE_NUM 9
 
 const ASTEROID_INFO ASTEROIDS[ASTEROIDS_TYPE_NUM] = {
-	{ "assets/images/asteroids/iron.png",        7.874,      100, 2 },
-	{ "assets/images/asteroids/large metal.png", 10.3 * 2,   100, 2 },
-	{ "assets/images/asteroids/large rock.png",  4.34 * 2,   100, 2 },
-	{ "assets/images/asteroids/medium rock.png", 4.34 * 0.9, 100, 2 },
-	{ "assets/images/asteroids/rock.png",        4.34,       100, 2 },
-	{ "assets/images/asteroids/silicon.png",     4.6,        100, 2 },
-	{ "assets/images/asteroids/silver.png",      10.49,      100, 2 },
-	{ "assets/images/asteroids/small rock.png",  4.34 * 0.8, 100, 2 },
-	{ "assets/images/asteroids/titanium.png",    6.505,      100, 2 },
+	{ "assets/images/asteroids/iron.png",        7.874,      10, 2 },
+	{ "assets/images/asteroids/large metal.png", 10.3 * 2,   10, 2 },
+	{ "assets/images/asteroids/large rock.png",  4.34 * 2,   10, 2 },
+	{ "assets/images/asteroids/medium rock.png", 4.34 * 0.9, 10, 2 },
+	{ "assets/images/asteroids/rock.png",        4.34,       10, 2 },
+	{ "assets/images/asteroids/silicon.png",     4.6,        10, 2 },
+	{ "assets/images/asteroids/silver.png",      10.49,      10, 2 },
+	{ "assets/images/asteroids/small rock.png",  4.34 * 0.8, 10, 2 },
+	{ "assets/images/asteroids/titanium.png",    6.505,      10, 2 },
 };
