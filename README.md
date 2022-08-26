@@ -1,6 +1,6 @@
 # ***Asteroids!*** clone game
 
-## Sources
+### Sources
 
-- game: [game source](asteroids)
-- level editor: [level editor](level_editor)
+- [game](asteroids)
+- [level editor](level_editor)
