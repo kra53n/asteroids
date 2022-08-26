@@ -1,1 +1,1 @@
-# Level editor for ***Asteroids!*** game.
+### Level editor for ***Asteroids!*** game.
