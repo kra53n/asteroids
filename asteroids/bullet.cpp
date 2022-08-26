@@ -147,13 +147,13 @@ void BulletsAddByType(Bullets& self, Ship& ship, int type)
 		break;
 
 	case 1:
-		for (int i = 0; i < 350; i++)
+		for (float i = 0; i < 350; i += 0.1)
 		{
 			Bullet* bullet = BulletsPush(self, ship, type);
 
 			Vec pos;
 			VecSetLen(pos, VecGetLen(bullet->vel) * i);
-			VecSetDirection(pos, VecGetAngle(bullet->vel));
+			VecSetDirection(pos, -VecGetAngle(bullet->vel));
 
 			bullet->pos.x += pos.x;
 			bullet->pos.y += pos.y;
@@ -212,7 +212,7 @@ void BulletsUpdate(Bullets& self, Ship& ship, Asteroids& asters, Keys& keys)
 
 	if (!keys.space) return;
 
-	BulletsAddByType(self, ship, 3);
+	BulletsAddByType(self, ship, 1);
 }
 
 void BulletsDraw(Bullets& self)

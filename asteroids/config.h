@@ -18,10 +18,8 @@ enum gameStates
 #define         MENU_FONT_SIZE                50
 #define         MENU_FONT_VERTICAL_DISTANCE   80
 #define         MENU_DELAY_BUTTONS            200
-
 #define         MENU_OPTIONS_NUM              3
 const char      MENU_OPTIONS[][9]           = { "start", "settings", "exit" };
-
 const SDL_Color COLOR_OF_ACTIVE_OPTION      = { 255, 0, 0, 255 };
 const SDL_Color COLOR_OF_NON_ACTIVE_OPTION  = { 150, 150, 220, 255 };
 
@@ -63,10 +61,10 @@ struct BULLET_INFO
 #define BULLETS_TYPE_NUM 4
 
 const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
-	{ "assets/images/bullets/bullet1.png", 80, 200,  1 },
-	{ "assets/images/bullets/bullet1.png", 10, 800,  2 },
-	{ "assets/images/bullets/bullet2.png", 10, 1000, 3 },
-	{ "assets/images/bullets/bullet2.png", 10, 1000, 4 },
+	{ "assets/images/bullets/bullet1.png", 80,  200,  1 },
+	{ "assets/images/bullets/bullet1.png", 100, 800,  2 },
+	{ "assets/images/bullets/bullet2.png", 10,  1000, 3 },
+	{ "assets/images/bullets/bullet2.png", 10,  1000, 4 },
 };
 
 

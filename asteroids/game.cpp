@@ -155,7 +155,6 @@ void GameUpdate(Game& game)
 
     case GAME_STATE_EXIT:
         game.run = false;
-        printf("\nim here");
         break;
     }
 }
