@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <stdio.h>
 #include <malloc.h>
 
 #include "funcs.h"
@@ -39,8 +40,14 @@ Bullet* BulletsGetNewBullet(Bullets& self, Ship& ship, int type)
 {
 	Bullet* elem = (Bullet*)malloc(sizeof(Bullet));
 
+	if (!elem)
+	{
+		printf("\nMemory allocation error in BulletsGetNewBullet");
+		deInit(1);
+	}
+
 	VecSetLen(elem->vel, BULLETS[type].speed);
-	VecSetDirection(elem->vel, -ship.tex.angle);
+	VecSetDirection(elem->vel, ship.tex.angle);
 
 	Vec pos;
 	VecSetLen(pos, ship.tex.dstrect.w / 2);
@@ -155,7 +162,7 @@ void BulletsAddByType(Bullets& self, Ship& ship, int type)
 		for (int angle = -45; angle < 45; angle += 15)
 		{
 			Bullet* bullet = BulletsPush(self, ship, type);
-			VecSetDirection(bullet->vel, -VecGetAngle(bullet->vel) + angle);
+			VecSetDirection(bullet->vel, VecGetAngle(bullet->vel) - angle);
 		}
 		break;
 

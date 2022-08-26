@@ -44,15 +44,16 @@ struct BULLET_INFO
 	char     filename[40];
 	unsigned speed;
 	unsigned delay;
+	unsigned damage;
 };
 
 #define BULLETS_TYPE_NUM 4
 
 const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
-	{ "assets/images/bullets/bullet1.png", 80, 200  },
-	{ "assets/images/bullets/bullet1.png", 10, 800  },
-	{ "assets/images/bullets/bullet2.png", 10, 1000 },
-	{ "assets/images/bullets/bullet2.png", 10, 1000 },
+	{ "assets/images/bullets/bullet1.png", 80, 200,  1 },
+	{ "assets/images/bullets/bullet1.png", 10, 800,  2 },
+	{ "assets/images/bullets/bullet2.png", 10, 1000, 3 },
+	{ "assets/images/bullets/bullet2.png", 10, 1000, 4 },
 };
 
 
@@ -90,21 +91,22 @@ const char SHIP_FILENAMES_TEXTURES[][40] = {
 
 struct ASTEROID_INFO
 {
-	char  filename[40];
-	float mass;
-	float health;
+	char     filename[40];
+	float    mass;
+	unsigned health;
+	unsigned damage;
 };
 
 #define ASTEROIDS_TYPE_NUM 9
 
 const ASTEROID_INFO ASTEROIDS[ASTEROIDS_TYPE_NUM] = {
-	{ "assets/images/asteroids/iron.png",        7.874,      100 },
-	{ "assets/images/asteroids/large metal.png", 10.3 * 2,   100 },
-	{ "assets/images/asteroids/large rock.png",  4.34 * 2,   100 },
-	{ "assets/images/asteroids/medium rock.png", 4.34 * 0.9, 100 },
-	{ "assets/images/asteroids/rock.png",        4.34,       100 },
-	{ "assets/images/asteroids/silicon.png",     4.6,        100 },
-	{ "assets/images/asteroids/silver.png",      10.49,      100 },
-	{ "assets/images/asteroids/small rock.png",  4.34 * 0.8, 100 },
-	{ "assets/images/asteroids/titanium.png",    6.505,      100 },
+	{ "assets/images/asteroids/iron.png",        7.874,      100, 2 },
+	{ "assets/images/asteroids/large metal.png", 10.3 * 2,   100, 2 },
+	{ "assets/images/asteroids/large rock.png",  4.34 * 2,   100, 2 },
+	{ "assets/images/asteroids/medium rock.png", 4.34 * 0.9, 100, 2 },
+	{ "assets/images/asteroids/rock.png",        4.34,       100, 2 },
+	{ "assets/images/asteroids/silicon.png",     4.6,        100, 2 },
+	{ "assets/images/asteroids/silver.png",      10.49,      100, 2 },
+	{ "assets/images/asteroids/small rock.png",  4.34 * 0.8, 100, 2 },
+	{ "assets/images/asteroids/titanium.png",    6.505,      100, 2 },
 };

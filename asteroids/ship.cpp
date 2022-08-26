@@ -5,6 +5,7 @@
 #include "ship.h"
 #include "score.h"
 #include "funcs.h"
+#include "health.h"
 #include "vector.h"
 #include "window.h"
 #include "health.h"
@@ -122,6 +123,9 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 
 		VecSetLen(self.vel, 70 / asterRebound);
 		VecSetLen(aster->vel, asterRebound);
+		
+		HealthUpdate(self.health, ASTEROIDS[aster->type].damage);
+		aster->health -= 10;
 	}
 }
 

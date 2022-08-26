@@ -47,6 +47,7 @@ struct Asteroid
     int       type;
     int       frame;
     int       ticks;
+    unsigned  health;
     Asteroid* next;
     Asteroid* prev;
 };

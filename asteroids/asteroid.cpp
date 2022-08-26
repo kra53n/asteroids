@@ -4,6 +4,7 @@
 
 #include "config.h"
 #include "window.h"
+#include "health.h"
 #include "vector.h"
 #include "structs.h"
 #include "texture.h"
@@ -55,8 +56,9 @@ Asteroid* AsteroidsGetNewAsteroid(Asteroids& self, int type, int ticks)
     elem->pos = { winWdt2 + (int)pos.x, winHgt2 + (int)pos.y };
     elem->frame = 0;
     elem->ticks = ticks;
-
 	elem->type = type;
+	elem->health = ASTEROIDS[type].health;
+
 	elem->next = NULL;
 
 	return elem;

@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <stdio.h>
 
 #include "menu.h"
 #include "funcs.h"
@@ -37,43 +38,58 @@ void MenuDestroy(Menu& menu)
 	}
 }
 
-void MenuUpdate(Game& game)
+void MenuChooseOptionByMouse(Menu& self, Keys& keys, bool& cursorUnderTexture)
 {
-	int ticks = SDL_GetTicks();
-
-	// change choice for keyboard buttons
-	if ((game.keys.up || game.keys.down) && ticks - game.menu.ticks >= MENU_DELAY_BUTTONS)
+	for (int opt = 0; opt < MENU_OPTIONS_NUM; opt++)
 	{
-		game.menu.ticks = ticks;
-		if (game.keys.up)
-		{
-			game.menu.choice = game.menu.choice ? game.menu.choice - 1 : MENU_OPTIONS_NUM - 1;
-		}
-		if (game.keys.down)
-		{
-			game.menu.choice = (game.menu.choice + 1) % MENU_OPTIONS_NUM;
-		}
-		changeTextureOptionColor(game.menu);
-	}
-
-	for (int i = 0; i < MENU_OPTIONS_NUM; i++)
-	{
-		// change choice for option under mouse
-		SDL_Point point = { game.keys.mouse_x, game.keys.mouse_y };
-		bool cursorUnderTexture = isPointInRect(game.menu.textures[i].dstrect, point);
+		SDL_Point point = { keys.mouse_x, keys.mouse_y };
+		cursorUnderTexture = SDL_PointInRect(&point, &self.textures[opt].dstrect);
 		if (cursorUnderTexture)
 		{
-			game.menu.choice = i;
-			changeTextureOptionColor(game.menu);
-		}
-		
-		bool oneOfBtns = game.keys.enter || game.keys.space || (game.keys.btnLeft && cursorUnderTexture);
-		if (oneOfBtns && ticks - game.menu.ticks >= MENU_DELAY_BUTTONS)
-		{
-			game.menu.ticks = ticks;
-			game.state = game.menu.choice + 1;
+			self.choice = opt;
+			changeTextureOptionColor(self);
+			break;
 		}
 	}
+}
+
+void MenuChooseOptionByKbd(Menu& self, Keys& keys, int& ticks)
+{
+	if ((keys.up || keys.down) && ticks - self.ticks >= MENU_DELAY_BUTTONS)
+	{
+		self.ticks = ticks;
+		if (keys.up)
+		{
+			self.choice = self.choice ? self.choice - 1 : MENU_OPTIONS_NUM - 1;
+		}
+		if (keys.down)
+		{
+			self.choice = (self.choice + 1) % MENU_OPTIONS_NUM;
+		}
+		changeTextureOptionColor(self);
+	}
+}
+
+void MenuChangeOption(Menu& self, Keys& keys, int& gameState, int& ticks, bool& cursorUnderTexture)
+{
+	bool oneOfBtns = keys.enter || keys.space || (keys.btnLeft && cursorUnderTexture);
+	if (oneOfBtns && ticks - self.ticks >= MENU_DELAY_BUTTONS)
+	{
+		self.ticks = ticks;
+		gameState = self.choice + 1;
+	}
+}
+
+void MenuUpdate(Menu& self, Keys& keys, int& gameState)
+{
+	int ticks = SDL_GetTicks();
+	bool cursorUnderTexture = false;
+
+	MenuChooseOptionByMouse(self, keys, cursorUnderTexture);
+	if (!cursorUnderTexture)
+		MenuChooseOptionByKbd(self, keys, ticks);
+	
+	MenuChangeOption(self, keys, gameState, ticks, cursorUnderTexture);
 }
 
 void MenuDraw(Menu& menu)

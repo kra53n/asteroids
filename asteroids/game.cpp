@@ -34,9 +34,13 @@ void GameDraw(Game& game)
 
     TextureDrawAsInfiniteImage(game.background);
     TextureDrawAsInfiniteImage(game.particles[0]);
+
     switch (game.state)
     {
-    case GAME_STATE_MENU: MenuDraw(game.menu); break;
+    case GAME_STATE_MENU:
+        MenuDraw(game.menu);
+        break;
+
     case GAME_STATE_PLAY:
         AsteroidsDraw(game.asteroids);
         BulletsDraw(game.bullets);
@@ -67,9 +71,11 @@ void GameUpdate(Game& game)
         case SDL_QUIT:
             game.run = false;
             break;
+
         case SDL_MOUSEMOTION:
             SDL_GetMouseState(&game.keys.mouse_x, &game.keys.mouse_y);
             break;
+
         case SDL_MOUSEBUTTONDOWN:
             switch (game.event.button.button)
             {
@@ -78,6 +84,7 @@ void GameUpdate(Game& game)
                 break;
             }
             break;
+
         case SDL_MOUSEBUTTONUP:
             switch (game.event.button.button)
             {
@@ -86,6 +93,7 @@ void GameUpdate(Game& game)
                 break;
             }
             break;
+
         case SDL_KEYDOWN:
             switch (game.event.key.keysym.scancode)
             {
@@ -104,6 +112,7 @@ void GameUpdate(Game& game)
             case SDL_SCANCODE_ESCAPE: game.keys.escape = true; break;
             }
             break;
+
         case SDL_KEYUP:
             switch (game.event.key.keysym.scancode)
             {
@@ -127,7 +136,10 @@ void GameUpdate(Game& game)
     processKeys(game);
     switch (game.state)
     {
-    case GAME_STATE_MENU: MenuUpdate(game); break;
+    case GAME_STATE_MENU:
+        MenuUpdate(game.menu, game.keys, game.state);
+        break;
+
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game.asteroids);
         BulletsUpdate(game.bullets, game.ship, game.asteroids, game.keys);
@@ -139,7 +151,10 @@ void GameUpdate(Game& game)
         );
         ParticlesUpdate(game.particles, game.ship);
         break;
-    case GAME_STATE_EXIT: game.run = false;  break;
+
+    case GAME_STATE_EXIT:
+        game.run = false;
+        break;
     }
 }
 

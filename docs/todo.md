@@ -26,6 +26,7 @@
 ## bugs
 
 - [x] memory leak menu
+- [ ] fix 2nd bullet
 
 ## todo
 
