@@ -2,11 +2,11 @@
 
 #include "cli.h"
 
-void printGreeting() {
+void print_greeting() {
 	printf("\tAsteroids! level editor");
 }
 
-void printOptions() {
+void print_options() {
 	char option[20];
 	printf("\n\nChoose option:");
 	for (int i = 0; i < OPTION_NUM; i++) {
@@ -15,7 +15,7 @@ void printOptions() {
 	}
 }
 
-int getOptionFromUser() {
+int get_option_from_user() {
 	int option;
 	bool cond;
 
@@ -34,8 +34,8 @@ int getOptionFromUser() {
 
 void loop() {
 	while (true) {
-		printOptions();
-		int option = getOptionFromUser();
+		print_options();
+		int option = get_option_from_user();
 
 		switch (option)
 		{

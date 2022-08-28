@@ -21,7 +21,6 @@ const OPTION_INFO OPTIONS[OPTION_NUM] = {
 	{ QUIT,         "Quit"},
 };
 
-void printGreeting();
-void printGreeting();
-int getOptionFromUser();
+void print_greeting();
+int get_option_from_user();
 void loop();

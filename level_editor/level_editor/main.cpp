@@ -1,6 +1,7 @@
+#include "level.h"
 #include "cli.h"
 
 int main() {
-	printGreeting();
+	print_greeting();
 	loop();
 }
