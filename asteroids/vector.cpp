@@ -52,6 +52,13 @@ void VecSetDirectionByCoords(Vec& vec, SDL_Point p1, SDL_Point p2)
 	vec.y = p1.y - p2.y;
 }
 
+void VecSetLenByCoords(Vec& vec, SDL_Point p1, SDL_Point p2)
+{
+	int x = p2.x - p1.x;
+	int y = p2.y - p1.y;
+	VecSetLen(vec, sqrt(x*x + y*y));
+}
+
 void VecSumCoords(Vec& vec1, Vec& vec2)
 {
 	vec1.x += vec2.x;

@@ -1,6 +1,7 @@
 #pragma once
 #include "menu.h"
 #include "ship.h"
+#include "enemy.h"
 #include "config.h"
 #include "bullet.h"
 #include "texture.h"
@@ -20,6 +21,7 @@ struct Game
     Texture    particles[PARTICLES_FILENAMES_NUM];
     Asteroids  asteroids;
     Ship       ship;
+    Enemy      enemy;
     Bullets    bullets;
 
     Menu       menu;

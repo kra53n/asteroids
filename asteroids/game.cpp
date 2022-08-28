@@ -5,6 +5,7 @@
 #include "game.h"
 #include "menu.h"
 #include "ship.h"
+#include "enemy.h"
 #include "bullet.h"
 #include "texture.h"
 #include "asteroid.h"
@@ -19,13 +20,14 @@ void GameInit(Game& game)
     ParticlesInit(game.particles);
     BulletsInit(game.bullets);
 
-    int asters[ASTEROIDS_TYPE_NUM] = { 9, 2, 1, 1, 1, 1, 1, 1, 1 };
+    //int asters[ASTEROIDS_TYPE_NUM] = { 9, 2, 1, 1, 1, 1, 1, 1, 1 };
     //int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-    //int asteroidsTypes[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    int asters[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     AsteroidsInit(game.asteroids, asters);
     
     MenuInit(game.menu);
     ShipInit(game.ship);
+    EnemyInit(game.enemy);
 }
 
 void GameDraw(Game& game)
@@ -46,6 +48,7 @@ void GameDraw(Game& game)
         AsteroidsDraw(game.asteroids);
         BulletsDraw(game.bullets);
         ShipDraw(game.ship, game.keys);
+        EnemyDraw(game.enemy);
 		TextureDrawAsInfiniteImage(game.particles[1]);
 		TextureDrawAsInfiniteImage(game.particles[2]);
         break;
@@ -145,6 +148,7 @@ void GameUpdate(Game& game)
         AsteroidsUpdate(game.asteroids);
         BulletsUpdate(game.bullets, game.ship, game.asteroids, game.keys);
         ShipUpdate(game.ship, game.asteroids, game.keys, game.state);
+        EnemyUpdate(game.enemy, game.ship);
         TextureUpdateAsInfiniteImage(
             game.background,
             { -game.ship.vel.x * game.ship.speedMovement, game.ship.vel.y * game.ship.speedMovement },
