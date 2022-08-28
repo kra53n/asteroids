@@ -94,9 +94,12 @@ const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
 #define ENGINE_FRAMES         15
 #define ENGINE_DELAY          100
 
-const char SHIP_FILENAMES_TEXTURES[][40] = {
-	"assets/images/ships/ship.png",
-};
+#define SHIP_FILENAME "assets/images/ships/ship.png"
+
+
+// ENEMY CONFIGURATION
+
+#define ENEMY_FILENAME      "assets/images/enemy/enemy.png"
 
 
 // SCORE CONFIGURATION

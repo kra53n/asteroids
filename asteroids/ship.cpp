@@ -40,7 +40,7 @@ void EngineDraw(Animation& self, Ship& ship, bool cond)
 void ShipInit(Ship& self)
 {
 	self.ticks = SDL_GetTicks();
-	self.tex = loadTexture(SHIP_FILENAMES_TEXTURES[0]);
+	self.tex = loadTexture(SHIP_FILENAME);
 
 	self.tex.dstrect.w *= SHIP_SCALE_COEFF;
 	self.tex.dstrect.h *= SHIP_SCALE_COEFF;
