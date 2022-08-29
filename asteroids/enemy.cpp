@@ -1,5 +1,6 @@
 #include <SDL.h>
 
+#include "funcs.h"
 #include "enemy.h"
 #include "bullet.h"
 #include "window.h"
@@ -20,8 +21,25 @@ void EnemyDestroy(Enemy& self)
 	BulletsDestroy(self.bullets);
 }
 
-void EnemyUpdateMovement(Enemy& self)
+bool EnemyIsCloseWithShip(Enemy& self, Ship& ship)
 {
+	return isCircsColliding(
+		getRectCenter(self.tex.dstrect),
+		getRadius(self.tex.dstrect),
+		getRectCenter(ship.tex.dstrect),
+		getRadius(ship.tex.dstrect)
+	);
+}
+
+void EnemyUpdateMovement(Enemy& self, Ship& ship)
+{
+	if (EnemyIsCloseWithShip(self, ship))
+	{
+		self.vel.x += self.acc.x / 0.7;
+		self.vel.y += self.acc.y / 0.7;
+		VecSetDirection(self.vel, VecGetAngle(self.vel) + 15);
+	}
+
 	self.vel.x += self.acc.x;
 	self.vel.y += self.acc.y;
 	VecSetLen(self.acc, VecGetLen(self.acc) + 0.1);
@@ -44,14 +62,10 @@ void EnemySetDirectoin(Enemy& self, Ship& ship)
 	VecSetDirection(self.acc, -VecGetAngle(self.vel));
 }
 
-void EnemyIsCloseWithShip(Enemy& self, Ship& ship)
-{
-
-}
 
 void EnemyUpdate(Enemy& self, Ship& ship)
 {
-	EnemyUpdateMovement(self);
+	EnemyUpdateMovement(self, ship);
 	boundScreen(self.tex.dstrect);
 
 	int ticks = SDL_GetTicks();
