@@ -30,22 +30,22 @@
 
 ## todo
 
-- [ ] bars
-    - [ ] health
-    - [ ] bullet delay
-- [ ] detele `structs.h`
-- [x] change name of `MenuProcess` to `MenuUpdate`
+- [ ] add player nickname feature
 - [ ] remove funcs of `background.cpp` to `texture.cpp`
-
 
 ## extra features
 
-- [ ] make bg of menu blured
+- [ ] blured bg in menu
 - [ ] camera
 - [ ] look at interesting thgins in LazyFoo.net
+- [ ] enemy laugh when heart player
 
 ## completed
 
+- [x] change name of `MenuProcess` to `MenuUpdate`
+- [x] detele `structs.h`
+- [x] bars
+    - [x] health
 - [x] make struct for initialazing explosion and engine
 - [x] make function for initialazing explosion and engine
 - [x] make bound window

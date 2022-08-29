@@ -1,4 +1,5 @@
 #pragma once
+#include "file.h"
 
 #define ASTEROIDS_TYPE_NUM 9
 
@@ -21,3 +22,5 @@ const Level DEFAULT_LEVELS[DEFAULT_LEVELS_NUM] = {
 	{ 6, 1, { 0, 0, 0, 1, 1, 1, 0, 0, 0 }, 1 },
 	{ 7, 3, { 1, 1, 1, 0, 1, 0, 1, 1, 1 }, 1 },
 };
+
+void edit_level(FileData& file_data);

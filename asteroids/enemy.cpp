@@ -1,6 +1,7 @@
 #include <SDL.h>
 
 #include "enemy.h"
+#include "bullet.h"
 #include "window.h"
 #include "texture.h"
 
@@ -15,7 +16,8 @@ void EnemyInit(Enemy& self)
 
 void EnemyDestroy(Enemy& self)
 {
-
+	SDL_DestroyTexture(self.tex.tex);
+	BulletsDestroy(self.bullets);
 }
 
 void EnemyUpdateMovement(Enemy& self)
@@ -40,6 +42,11 @@ void EnemySetDirectoin(Enemy& self, Ship& ship)
 
 	VecSetLen(self.acc, 0.1);
 	VecSetDirection(self.acc, -VecGetAngle(self.vel));
+}
+
+void EnemyIsCloseWithShip(Enemy& self, Ship& ship)
+{
+
 }
 
 void EnemyUpdate(Enemy& self, Ship& ship)

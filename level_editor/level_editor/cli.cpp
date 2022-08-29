@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 #include "cli.h"
+#include "file.h"
+#include "level.h"
 
 void print_greeting() {
 	printf("\tAsteroids! level editor");
@@ -21,7 +23,7 @@ int get_option_from_user() {
 
 	do {
 		printf("\nOption: ");
-		scanf_s("%d", &option);
+		scanf_s("%d%*c", &option);
 		cond = 1 <= option && option <= OPTION_NUM;
 
 		if (!cond) {
@@ -32,26 +34,53 @@ int get_option_from_user() {
 	return OPTIONS[option-1].option;
 }
 
+void set_path(FileData& file_data) {
+	bool cond;
+	char path[120];
+
+	do {
+		printf("Path: ");
+		fgets(path, 120, stdin);
+		cond = load_path(path, file_data);
+
+		if (!cond) {
+			printf("Put path without \\ character and use / instead\n\n");
+		}
+	} while (!cond);
+}
+
+void set_filename(FileData& file_data) {
+	char filename[120];
+
+	printf("Filename: ");
+	fgets(filename, 120, stdin);
+	load_filename(filename, file_data);
+
+	printf("\nFilename that setted: %s", file_data.filename);
+}
+
+void quit(bool& run) {
+	run = false;
+	printf("\nQuiting from level editor!");
+}
+
 void loop() {
-	while (true) {
+	FileData file_data;
+	//const char* filename = "filename_one";
+	bool run = true;
+
+	while (run) {
 		print_options();
 		int option = get_option_from_user();
 
 		switch (option)
 		{
-		case SET_PATH:
-			break;
-
-		case SET_FILENAME:
-			break;
-
-		case EDIT_LEVEL:
-			break;
-
-		case QUIT:
-			break;
+		case SET_PATH:     set_path(file_data);     break;
+		case SET_FILENAME: set_filename(file_data); break;
+		case EDIT_LEVEL:   edit_level(file_data);   break;
+		case QUIT:         quit(run);               break;
 		}
 
-		break;
+		printf("\nFilename in end of the loop: %s", file_data.filename);
 	}
 }

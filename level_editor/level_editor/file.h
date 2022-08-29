@@ -1,9 +1,9 @@
 #pragma once
 
 struct FileData {
-	const char* path;
-	const char* filename;
+	const char* path     = 0;
+	const char* filename = 0;
 };
 
-void load_path(const char* path);
-void load_filename(const char* path);
+bool load_path(const char* path, FileData& file_data);
+bool load_filename(const char* path, FileData& file_data);
