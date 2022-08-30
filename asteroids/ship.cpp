@@ -5,7 +5,7 @@
 #include "ship.h"
 #include "score.h"
 #include "funcs.h"
-#include "health.h"
+#include "bullet.h"
 #include "vector.h"
 #include "window.h"
 #include "health.h"
@@ -40,6 +40,7 @@ void EngineDraw(Animation& self, Ship& ship, bool cond)
 void ShipInit(Ship& self)
 {
 	self.ticks = SDL_GetTicks();
+	self.bulletTicks = self.ticks;
 	self.tex = loadTexture(SHIP_FILENAME);
 
 	self.tex.dstrect.w *= SHIP_SCALE_COEFF;
@@ -129,7 +130,90 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 	}
 }
 
-void ShipUpdate(Ship& self, Asteroids& asters, Keys& keys, int& gameState)
+void ShipShoot(Ship& self, Bullets& bullets, int type)
+{
+	int ticks = SDL_GetTicks();
+	if (!(ticks - self.bulletTicks >= BULLETS[type].delay)) return;
+	self.bulletTicks = ticks;
+
+	switch (type)
+	{
+	case 0:
+		BulletsPush(bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
+		break;
+
+	case 1:
+		for (float i = 0; i < 350; i += 0.1)
+		{
+			Bullet* bullet = BulletsPush(bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
+
+			Vec pos;
+			VecSetLen(pos, VecGetLen(bullet->vel) * i);
+			VecSetDirection(pos, -VecGetAngle(bullet->vel));
+
+			bullet->pos.x += pos.x;
+			bullet->pos.y += pos.y;
+		}
+		break;
+
+	case 2:
+		for (int angle = -45; angle < 45; angle += 15)
+		{
+			Bullet* bullet = BulletsPush(bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
+			VecSetDirection(bullet->vel, VecGetAngle(bullet->vel) - angle);
+		}
+		break;
+
+	case 3:
+		for (int angle = -180; angle < 180; angle += 30)
+		{
+			Bullet* bullet = BulletsPush(bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
+
+			Vec pos;
+			VecSetLen(pos, self.tex.dstrect.w);
+			VecSetDirection(pos, VecGetAngle(bullet->vel) - angle);
+
+			bullet->pos = getRectCenter(self.tex.dstrect);
+			bullet->pos.x += pos.x;
+			bullet->pos.y += pos.y;
+
+			VecSetDirection(bullet->vel, VecGetAngle(bullet->vel) + angle);
+		}
+		break;
+	}
+}
+
+void ShipBulletsUpdate(Ship& self, Bullets& bullets, Asteroids& asters, Keys& keys)
+{
+	for (Bullet* cur = bullets.head; cur != NULL;)
+	{
+		Bullet* curNext = cur->next;
+
+		cur->pos.x += cur->vel.x;
+		cur->pos.y -= cur->vel.y;
+
+		if (BulletsUpdateCollisionWithAstroids(bullets, cur, asters, self.score))
+		{
+			cur = curNext;
+			continue;
+		}
+
+		if (cur->pos.x < 0 || cur->pos.x > winWdt || 
+		    cur->pos.y < 0 || cur->pos.y > winHgt)
+		{
+			BulletsDelBullet(bullets, cur);
+		}
+
+		cur = curNext;
+	}
+
+	if (!keys.space) return;
+
+	ShipShoot(self, bullets, 1);
+}
+
+
+void ShipUpdate(Ship& self, Asteroids& asters, Bullets& bullets, Keys& keys, int& gameState)
 {
     int sign = 0;
     if (keys.left)  sign = -1;
@@ -146,6 +230,7 @@ void ShipUpdate(Ship& self, Asteroids& asters, Keys& keys, int& gameState)
 	ShipUpdatAcceleration(self, keys);
     ShipUpdateTicks(self, keys);
 	ShipUpdateCollisionWithAstroids(self, asters);
+	ShipBulletsUpdate(self, bullets, asters, keys);
 	
 	EngineUpdate(self.engine, keys);
 

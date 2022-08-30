@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <stdio.h>
 
+#include "ship.h"
 #include "funcs.h"
 #include "enemy.h"
 #include "bullet.h"

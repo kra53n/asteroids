@@ -146,8 +146,7 @@ void GameUpdate(Game& game)
 
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game.asteroids);
-        BulletsUpdate(game.bullets, game.ship, game.asteroids, game.keys);
-        ShipUpdate(game.ship, game.asteroids, game.keys, game.state);
+        ShipUpdate(game.ship, game.asteroids, game.bullets, game.keys, game.state);
         EnemyUpdate(game.enemy, game.ship, game.bullets);
         TextureUpdateAsInfiniteImage(
             game.background,

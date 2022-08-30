@@ -1,5 +1,5 @@
 #pragma once
-#include "ship.h"
+#include "score.h"
 #include "bullet.h"
 #include "config.h"
 #include "vector.h"
@@ -34,7 +34,7 @@ void BulletsInit(Bullets& self);
 void BulletsDestroy(Bullets& self);
 
 void BulletsDelBullet(Bullets& self, Bullet* bullet);
+bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids& asters, Score& score);
 Bullet* BulletsPush(Bullets& self, Texture& tex, int type, int affiliation);
 
-void BulletsUpdate(Bullets& self, Ship& ship, Asteroids& asters, Keys& keys);
 void BulletsDraw(Bullets& self);
