@@ -5,12 +5,20 @@
 #include "vector.h"
 #include "asteroid.h"
 
+enum BulletsAffiliation
+{
+    BULLET_PLAYER1_AFFILIATION,
+    BULLET_PLAYER2_AFFILIATION,
+    BULLET_ENEMY_AFFILIATION,
+};
+
 struct Bullet
 {
     Vec       vel;
     SDL_Point pos;
-    unsigned  type;
-    unsigned  ticks;
+    int       type;
+    int       ticks;
+    int       affiliation;
     Bullet*   next;
     Bullet*   prev;
 };
@@ -26,5 +34,7 @@ void BulletsInit(Bullets& self);
 void BulletsDestroy(Bullets& self);
 
 void BulletsDelBullet(Bullets& self, Bullet* bullet);
+Bullet* BulletsPush(Bullets& self, Texture& tex, int type, int affiliation);
+
 void BulletsUpdate(Bullets& self, Ship& ship, Asteroids& asters, Keys& keys);
 void BulletsDraw(Bullets& self);

@@ -37,7 +37,7 @@ void BulletsClear(Bullets& self)
 	self.head = NULL;
 }
 
-Bullet* BulletsGetNewBullet(Bullets& self, Ship& ship, int type)
+Bullet* BulletsGetNewBullet(Bullets& self, Texture& tex, int type, int affiliation)
 {
 	Bullet* elem = (Bullet*)malloc(sizeof(Bullet));
 
@@ -48,27 +48,28 @@ Bullet* BulletsGetNewBullet(Bullets& self, Ship& ship, int type)
 	}
 
 	VecSetLen(elem->vel, BULLETS[type].speed);
-	VecSetDirection(elem->vel, ship.tex.angle);
+	VecSetDirection(elem->vel, tex.angle);
 
 	Vec pos;
-	VecSetLen(pos, ship.tex.dstrect.w / 2);
-	VecSetDirection(pos, -ship.tex.angle);
+	VecSetLen(pos, tex.dstrect.w / 2);
+	VecSetDirection(pos, -tex.angle);
 
 	elem->pos = {
-		(int)(ship.tex.dstrect.x + ship.tex.dstrect.w / 2 + pos.x),
-		(int)(ship.tex.dstrect.y + ship.tex.dstrect.h / 2 + pos.y),
+		(int)(tex.dstrect.x + tex.dstrect.w / 2 + pos.x),
+		(int)(tex.dstrect.y + tex.dstrect.h / 2 + pos.y),
 	};
 
 	elem->ticks = SDL_GetTicks();
+	elem->affiliation = affiliation;
 	elem->type = type;
 	elem->next = NULL;
 
 	return elem;
 }
 
-Bullet* BulletsPush(Bullets& self, Ship& ship, int type)
+Bullet* BulletsPush(Bullets& self, Texture& tex, int type, int affiliation)
 {
-	Bullet* elem = BulletsGetNewBullet(self, ship, type);
+	Bullet* elem = BulletsGetNewBullet(self, tex, type, affiliation);
 
 	for (Bullet* cur = self.head; cur != NULL; cur = cur->next)
 	{
@@ -138,6 +139,7 @@ bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids
 	}
 }
 
+// NOTE: move to ship.cpp
 void BulletsAddByType(Bullets& self, Ship& ship, int type)
 {
 	int ticks = SDL_GetTicks();
@@ -147,13 +149,13 @@ void BulletsAddByType(Bullets& self, Ship& ship, int type)
 	switch (type)
 	{
 	case 0:
-		BulletsPush(self, ship, type);
+		BulletsPush(self, ship.tex, type, BULLET_PLAYER1_AFFILIATION);
 		break;
 
 	case 1:
 		for (float i = 0; i < 350; i += 0.1)
 		{
-			Bullet* bullet = BulletsPush(self, ship, type);
+			Bullet* bullet = BulletsPush(self, ship.tex, type, BULLET_PLAYER1_AFFILIATION);
 
 			Vec pos;
 			VecSetLen(pos, VecGetLen(bullet->vel) * i);
@@ -167,7 +169,7 @@ void BulletsAddByType(Bullets& self, Ship& ship, int type)
 	case 2:
 		for (int angle = -45; angle < 45; angle += 15)
 		{
-			Bullet* bullet = BulletsPush(self, ship, type);
+			Bullet* bullet = BulletsPush(self, ship.tex, type, BULLET_PLAYER1_AFFILIATION);
 			VecSetDirection(bullet->vel, VecGetAngle(bullet->vel) - angle);
 		}
 		break;
@@ -175,7 +177,7 @@ void BulletsAddByType(Bullets& self, Ship& ship, int type)
 	case 3:
 		for (int angle = -180; angle < 180; angle += 30)
 		{
-			Bullet* bullet = BulletsPush(self, ship, type);
+			Bullet* bullet = BulletsPush(self, ship.tex, type, BULLET_PLAYER1_AFFILIATION);
 
 			Vec pos;
 			VecSetLen(pos, ship.tex.dstrect.w);

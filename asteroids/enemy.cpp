@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <stdio.h>
 
 #include "funcs.h"
 #include "enemy.h"
@@ -18,16 +19,13 @@ void EnemyInit(Enemy& self)
 void EnemyDestroy(Enemy& self)
 {
 	SDL_DestroyTexture(self.tex.tex);
-	BulletsDestroy(self.bullets);
 }
 
 bool EnemyIsCloseWithShip(Enemy& self, Ship& ship)
 {
 	return isCircsColliding(
-		getRectCenter(self.tex.dstrect),
-		getRadius(self.tex.dstrect),
-		getRectCenter(ship.tex.dstrect),
-		getRadius(ship.tex.dstrect)
+		getRectCenter(self.tex.dstrect), getRadius(self.tex.dstrect),
+		getRectCenter(ship.tex.dstrect), getRadius(ship.tex.dstrect)
 	);
 }
 
@@ -50,11 +48,7 @@ void EnemyUpdateMovement(Enemy& self, Ship& ship)
 
 void EnemySetDirectoin(Enemy& self, Ship& ship)
 {
-	VecSetDirectionByCoords(
-		self.vel,
-		{ self.tex.dstrect.x + self.tex.dstrect.w / 2, self.tex.dstrect.y + self.tex.dstrect.h / 2 },
-		{ ship.tex.dstrect.x + ship.tex.dstrect.w / 2, ship.tex.dstrect.y + ship.tex.dstrect.h / 2 }
-	);
+	VecSetDirectionByCoords(self.vel, getRectCenter(self.tex.dstrect), getRectCenter(ship.tex.dstrect));
 
 	VecSetLen(self.vel, 5);
 
@@ -62,10 +56,32 @@ void EnemySetDirectoin(Enemy& self, Ship& ship)
 	VecSetDirection(self.acc, -VecGetAngle(self.vel));
 }
 
+void EnemyShoot(Enemy& self, Bullets& bullets)
+{
+	if (SDL_GetTicks() % 50) return;
 
-void EnemyUpdate(Enemy& self, Ship& ship)
+	for (int i = 0; i < 360; i += 45)
+	{
+		Vec pos;
+		Bullet* bullet = BulletsPush(bullets, self.tex, 2, BULLET_ENEMY_AFFILIATION);
+		float angle = VecGetAngle(bullet->vel) + i;
+
+		VecSetLen(pos, getRadius(self.tex.dstrect));
+
+		VecSetDirection(bullet->vel, angle);
+		VecSetDirection(pos, -angle);
+
+		bullet->pos = getRectCenter(self.tex.dstrect);
+		bullet->pos.x += pos.x;
+		bullet->pos.y += pos.y;
+
+	}
+}
+
+void EnemyUpdate(Enemy& self, Ship& ship, Bullets& bullets)
 {
 	EnemyUpdateMovement(self, ship);
+	EnemyShoot(self, bullets);
 	boundScreen(self.tex.dstrect);
 
 	int ticks = SDL_GetTicks();

@@ -30,6 +30,7 @@
 
 ## todo
 
+- [ ] rename some funcs in `vector.h` and `vector.cpp`
 - [ ] add player nickname feature
 - [ ] remove funcs of `background.cpp` to `texture.cpp`
 
