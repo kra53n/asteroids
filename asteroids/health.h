@@ -3,10 +3,10 @@
 
 struct Health
 {
-	int      point;
+	float    point;
 	SDL_Rect rect;
 };
 
-void HealthInit(Health& self, SDL_Rect rect, int point = 100);
-void HealthUpdate(Health& self, int point = 0);
+void HealthInit(Health& self, SDL_Rect rect = { 0, 0, 0, 0 }, float point = 100);
+void HealthUpdate(Health& self, float point = 0);
 void HealthDraw(Health& self);

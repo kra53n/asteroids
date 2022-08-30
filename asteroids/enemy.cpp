@@ -4,6 +4,7 @@
 #include "ship.h"
 #include "funcs.h"
 #include "enemy.h"
+#include "health.h"
 #include "bullet.h"
 #include "window.h"
 #include "texture.h"
@@ -15,6 +16,10 @@ void EnemyInit(Enemy& self)
 	self.tex.dstrect.h *= ENEMY_SCALE_COEFF;
 
 	self.ticks = SDL_GetTicks();
+	self.damageTicks = self.ticks;
+
+	BulletsInit(self.bullets);
+	HealthInit(self.health);
 }
 
 void EnemyDestroy(Enemy& self)
@@ -57,32 +62,53 @@ void EnemySetDirectoin(Enemy& self, Ship& ship)
 	VecSetDirection(self.acc, -VecGetAngle(self.vel));
 }
 
-void EnemyShoot(Enemy& self, Bullets& bullets)
+void EnemyShoot(Enemy& self)
 {
 	if (SDL_GetTicks() % 50) return;
 
 	for (int i = 0; i < 360; i += 45)
 	{
 		Vec pos;
-		Bullet* bullet = BulletsPush(bullets, self.tex, 2, BULLET_ENEMY_AFFILIATION);
+		Bullet* bullet = BulletsPush(self.bullets, self.tex, 2, BULLET_ENEMY_AFFILIATION);
 		float angle = VecGetAngle(bullet->vel) + i;
 
 		VecSetLen(pos, getRadius(self.tex.dstrect));
 
 		VecSetDirection(bullet->vel, angle);
-		VecSetDirection(pos, -angle);
+		VecSetDirection(pos, angle);
 
 		bullet->pos = getRectCenter(self.tex.dstrect);
 		bullet->pos.x += pos.x;
 		bullet->pos.y += pos.y;
-
+		bullet->affiliation = BULLET_ENEMY_AFFILIATION;
 	}
 }
 
-void EnemyUpdate(Enemy& self, Ship& ship, Bullets& bullets)
+void EnemyUpdateCollisionWithShip(Enemy& self, Ship& ship)
+{
+	if (!isCircsColliding(
+		getRectCenter(self.tex.dstrect), getRadius(self.tex.dstrect),
+		getRectCenter(ship.tex.dstrect), getRadius(ship.tex.dstrect)
+	)) return;
+
+	HealthUpdate(ship.health, ENEMY_DAMAGE);
+}
+
+void EnemyUpdateBullets(Enemy& self)
+{
+	for (Bullet* cur = self.bullets.head; cur; cur = cur->next)
+	{
+		cur->pos.x += cur->vel.x;
+		cur->pos.y += cur->vel.y;
+	}
+}
+
+void EnemyUpdate(Enemy& self, Ship& ship)
 {
 	EnemyUpdateMovement(self, ship);
-	EnemyShoot(self, bullets);
+	EnemyShoot(self);
+	EnemyUpdateBullets(self);
+	EnemyUpdateCollisionWithShip(self, ship);
 	boundScreen(self.tex.dstrect);
 
 	int ticks = SDL_GetTicks();
@@ -95,4 +121,5 @@ void EnemyUpdate(Enemy& self, Ship& ship, Bullets& bullets)
 void EnemyDraw(Enemy& self)
 {
 	SDL_RenderCopy(ren, self.tex.tex, 0, &self.tex.dstrect);
+	BulletsDraw(self.bullets);
 }

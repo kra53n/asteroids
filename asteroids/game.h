@@ -22,7 +22,6 @@ struct Game
     Asteroids  asteroids;
     Ship       ship;
     Enemy      enemy;
-    Bullets    bullets;
 
     Menu       menu;
 };

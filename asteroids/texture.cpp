@@ -59,7 +59,7 @@ SDL_Point getRectCenter(SDL_Rect& rect)
 
 float getRadius(SDL_Rect& rect)
 {
-    return rect.w / 2;
+    return rect.h / 2;
 }
 
 // cond - condition for update

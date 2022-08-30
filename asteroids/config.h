@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 
+
 // GAME CONFIGURATION
 
 enum gameStates
@@ -99,12 +100,13 @@ const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
 
 // ENEMY CONFIGURATION
 
-#define ENEMY_FILENAME    "assets/images/enemy/enemy.png"
-#define ENEMY_DAMAGE      20
-#define ENEMY_HEALTH      200
-#define EMEMY_MAX_SPEED   30
-#define ENEMY_DELAY       100
-#define ENEMY_SCALE_COEFF 4
+#define ENEMY_FILENAME      "assets/images/enemy/enemy.png"
+#define ENEMY_DAMAGE        0.25
+#define ENMEY_BULLET_DAMAGE 5
+#define ENEMY_HEALTH        200
+#define EMEMY_MAX_SPEED     30
+#define ENEMY_DELAY         100
+#define ENEMY_SCALE_COEFF   4
 
 
 // SCORE CONFIGURATION

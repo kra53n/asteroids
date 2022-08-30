@@ -18,7 +18,6 @@ void GameInit(Game& game)
     game.run = true;
     BackgroundInit(game.background, 0);
     ParticlesInit(game.particles);
-    BulletsInit(game.bullets);
 
     //int asters[ASTEROIDS_TYPE_NUM] = { 9, 2, 1, 1, 1, 1, 1, 1, 1 };
     int asters[ASTEROIDS_TYPE_NUM] = { 1, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -46,7 +45,6 @@ void GameDraw(Game& game)
 
     case GAME_STATE_PLAY:
         AsteroidsDraw(game.asteroids);
-        BulletsDraw(game.bullets);
         ShipDraw(game.ship, game.keys);
         EnemyDraw(game.enemy);
 		TextureDrawAsInfiniteImage(game.particles[1]);
@@ -146,8 +144,8 @@ void GameUpdate(Game& game)
 
     case GAME_STATE_PLAY:
         AsteroidsUpdate(game.asteroids);
-        ShipUpdate(game.ship, game.asteroids, game.bullets, game.keys, game.state);
-        EnemyUpdate(game.enemy, game.ship, game.bullets);
+        ShipUpdate(game.ship, game.asteroids, game.enemy.tex.dstrect, game.enemy.health, game.keys, game.state);
+        EnemyUpdate(game.enemy, game.ship);
         TextureUpdateAsInfiniteImage(
             game.background,
             { -game.ship.vel.x * game.ship.speedMovement, game.ship.vel.y * game.ship.speedMovement },

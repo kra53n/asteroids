@@ -25,6 +25,7 @@
 
 ## bugs
 
+- [ ] `VecSetDirectionByCoords` function
 - [x] memory leak menu
 - [x] fix 2nd bullet
 
@@ -36,6 +37,7 @@
 
 ## extra features
 
+- [ ] add aggressive enemy mode
 - [ ] blured bg in menu
 - [ ] camera
 - [ ] look at interesting thgins in LazyFoo.net
