@@ -6,14 +6,14 @@
 
 struct Enemy
 {
-	Texture tex;
-	Bullets bullets;
-	Health  health;
-	Vec     vel         = { 0, 0 };
-	Vec     acc         = { 0, 0 };
-	int     damage      = ENEMY_DAMAGE;
-	int     ticks;
-	int     damageTicks;
+    Texture tex;
+    Bullets bullets;
+    Health  health;
+    Vec     vel         = { 0, 0 };
+    Vec     acc         = { 0, 0 };
+    int     damage      = ENEMY_DAMAGE;
+    int     ticks;
+    int     damageTicks;
 };
 
 void EnemyInit(Enemy& self);

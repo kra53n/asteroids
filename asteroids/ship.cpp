@@ -12,7 +12,6 @@
 #include "health.h"
 #include "config.h"
 #include "texture.h"
-#include "structs.h"
 #include "animation.h"
 
 void EngineUpdate(Animation& self, Keys& keys)
@@ -29,7 +28,7 @@ void EngineDraw(Animation& self, Ship& ship, bool cond)
 
     Vec pos;
     VecSetLen(pos, (ship.tex.dstrect.w + self.textures->dstrect.w) / 2);
-    VecSetDirection(pos, -ship.tex.angle);
+    VecSetAngle(pos, -ship.tex.angle);
 
     SDL_Rect dstrect = self.textures->dstrect;
     dstrect.x = ship.tex.dstrect.x + (ship.tex.dstrect.w - self.textures->dstrect.w) / 2 - pos.x;
@@ -72,7 +71,7 @@ void ShipUpdatAcceleration(Ship& self, Keys& keys)
     if (keys.up)
     {
         self.acc = { 0.6, 0 };
-        VecSetDirection(self.acc, self.tex.angle);
+        VecSetAngle(self.acc, self.tex.angle);
         VecSumCoords(self.vel, self.acc);
     }
 }
@@ -116,8 +115,8 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 
         if (!isCircsColliding(shipPoint, shipR, asterPoint, asterR)) continue;
         
-        VecSetDirectionByCoords(self.vel, asterPoint, shipPoint);
-        VecSetDirectionByCoords(aster->vel, shipPoint, asterPoint);
+        VecSetAngleByCoords(self.vel, asterPoint, shipPoint);
+        VecSetAngleByCoords(aster->vel, shipPoint, asterPoint);
 
         float asterRebound = 60 / ASTEROIDS[aster->type].mass;
         float shipRebound = 70 / asterRebound;
@@ -135,7 +134,7 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 void ShipShoot(Ship& self, int type)
 {
     int ticks = SDL_GetTicks();
-    if (!(ticks - self.bullets.ticks >= BULLETS[type].delay)) return;
+    if (ticks - self.bullets.ticks < BULLETS[type].delay) return;
     self.bullets.ticks = ticks;
 
     switch (type)
@@ -151,7 +150,7 @@ void ShipShoot(Ship& self, int type)
 
             Vec pos;
             VecSetLen(pos, VecGetLen(bullet->vel) * i);
-            VecSetDirection(pos, -VecGetAngle(bullet->vel));
+            VecSetAngle(pos, -VecGetAngle(bullet->vel));
 
             bullet->pos.x += pos.x;
             bullet->pos.y += pos.y;
@@ -162,7 +161,7 @@ void ShipShoot(Ship& self, int type)
         for (int angle = -45; angle < 45; angle += 15)
         {
             Bullet* bullet = BulletsPush(self.bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
-            VecSetDirection(bullet->vel, VecGetAngle(bullet->vel) - angle);
+            VecSetAngle(bullet->vel, VecGetAngle(bullet->vel) - angle);
         }
         break;
 
@@ -173,13 +172,13 @@ void ShipShoot(Ship& self, int type)
 
             Vec pos;
             VecSetLen(pos, self.tex.dstrect.w);
-            VecSetDirection(pos, VecGetAngle(bullet->vel) - angle);
+            VecSetAngle(pos, VecGetAngle(bullet->vel) - angle);
 
             bullet->pos = getRectCenter(self.tex.dstrect);
             bullet->pos.x += pos.x;
             bullet->pos.y += pos.y;
 
-            VecSetDirection(bullet->vel, VecGetAngle(bullet->vel) + angle);
+            VecSetAngle(bullet->vel, VecGetAngle(bullet->vel) + angle);
         }
         break;
     }
@@ -187,18 +186,18 @@ void ShipShoot(Ship& self, int type)
 
 bool ShipUpdateBulletCollisionWithEnemy(Ship& self, SDL_Rect& enemyRect, Health& enemyHealth, Bullet* bullet)
 {
-	if (!isPointInCirc(
-		getRectCenter(enemyRect),
-		getRadius(enemyRect),
-		{ bullet->pos.x, bullet->pos.y }
-	)) return false;
-	
-	enemyHealth.point -= BULLETS[bullet->type].damage;
-	if (enemyHealth.point <= 0)
-	{
-		ScoreUpdate(self.score, ENEMY_HEALTH);
-	}
-	BulletsDelBullet(self.bullets, bullet);
+    if (!isPointInCirc(
+        getRectCenter(enemyRect),
+        getRadius(enemyRect),
+        { bullet->pos.x, bullet->pos.y }
+    )) return false;
+    
+    enemyHealth.point -= BULLETS[bullet->type].damage;
+    if (enemyHealth.point <= 0)
+    {
+        ScoreUpdate(self.score, ENEMY_HEALTH);
+    }
+    BulletsDelBullet(self.bullets, bullet);
 
     return true;
 }
@@ -276,7 +275,7 @@ void ShipDraw(Ship& self, Keys& keys)
      // SDL_SetRenderDrawColor(ren, 255, 0, 0, 0);
      // for (int i = 0; i < 360; i += 15)
      // {
-     //     VecSetDirection(line, i);
+     //     VecSetAngle(line, i);
      //     int x2 = x1 + line.x;
      //     int y2 = y1 + line.y;
      //     SDL_RenderDrawLine(ren, x1, y1, x2, y2);

@@ -5,9 +5,9 @@
 
 struct Texture
 {
-	SDL_Texture* tex      = NULL;
-	SDL_Rect     dstrect;
-	double       angle    = 0;
+    SDL_Texture* tex      = NULL;
+    SDL_Rect     dstrect;
+    double       angle    = 0;
 };
 
 Texture loadTexture(const char filename[]);

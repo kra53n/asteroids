@@ -3,8 +3,8 @@
 
 struct Health
 {
-	float    point;
-	SDL_Rect rect;
+    float    point;
+    SDL_Rect rect;
 };
 
 void HealthInit(Health& self, SDL_Rect rect = { 0, 0, 0, 0 }, float point = 100);

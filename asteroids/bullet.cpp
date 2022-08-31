@@ -48,11 +48,11 @@ Bullet* BulletsGetNewBullet(Bullets& self, Texture& tex, int type, int affiliati
     }
 
     VecSetLen(elem->vel, BULLETS[type].speed);
-    VecSetDirection(elem->vel, tex.angle);
+    VecSetAngle(elem->vel, tex.angle);
 
     Vec pos;
     VecSetLen(pos, tex.dstrect.w / 2);
-    VecSetDirection(pos, -tex.angle);
+    VecSetAngle(pos, -tex.angle);
 
     elem->pos = {
         (int)(tex.dstrect.x + tex.dstrect.w / 2 + pos.x),

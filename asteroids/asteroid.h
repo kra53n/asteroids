@@ -1,6 +1,5 @@
 #pragma once
 #include "config.h"
-#include "structs.h"
 #include "texture.h"
 #include "animation.h"
 

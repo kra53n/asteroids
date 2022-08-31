@@ -5,9 +5,9 @@
 
 struct Score
 {
-	Texture   tex;
-	unsigned  point;
-	char*     title;
+    Texture   tex;
+    unsigned  point;
+    char*     title;
 };
 
 void ScoreInit(Score& self, SDL_Point pos, int point, char* title);

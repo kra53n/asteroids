@@ -47,10 +47,10 @@ const SDL_Color COLOR_OF_NON_ACTIVE_OPTION  = { 150, 150, 220, 255 };
 #define BACKOGRUND_MOVE_SPEED    6
 
 const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
-	"assets/images/backgrounds/background.png",
-	"assets/images/stars/Nebula Aqua-Pink.png",
-	"assets/images/stars/Nebula Blue.png",
-	"assets/images/stars/Nebula Red.png",
+    "assets/images/backgrounds/background.png",
+    "assets/images/stars/Nebula Aqua-Pink.png",
+    "assets/images/stars/Nebula Blue.png",
+    "assets/images/stars/Nebula Red.png",
 };
 
 
@@ -59,9 +59,9 @@ const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
 #define PARTICLES_FILENAMES_NUM 3
 
 const char PARTICLES_FILENAMES[PARTICLES_FILENAMES_NUM][41] = {
-	"assets/images/backgrounds/particles1.png",
-	"assets/images/backgrounds/particles2.png",
-	"assets/images/backgrounds/particles3.png",
+    "assets/images/backgrounds/particles1.png",
+    "assets/images/backgrounds/particles2.png",
+    "assets/images/backgrounds/particles3.png",
 };
 
 
@@ -69,19 +69,19 @@ const char PARTICLES_FILENAMES[PARTICLES_FILENAMES_NUM][41] = {
 
 struct BULLET_INFO
 {
-	char     filename[40];
-	unsigned speed;
-	unsigned delay;
-	unsigned damage;
+    char     filename[40];
+    unsigned speed;
+    unsigned delay;
+    unsigned damage;
 };
 
 #define BULLETS_TYPE_NUM 4
 
 const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
-	{ "assets/images/bullets/bullet1.png", 80,  200,  1 },
-	{ "assets/images/bullets/bullet1.png", 100, 800,  2 },
-	{ "assets/images/bullets/bullet2.png", 10,  1000, 3 },
-	{ "assets/images/bullets/bullet2.png", 10,  1000, 4 },
+    { "assets/images/bullets/bullet1.png", 80,  200,  1 },
+    { "assets/images/bullets/bullet1.png", 100, 800,  2 },
+    { "assets/images/bullets/bullet2.png", 10,  1000, 3 },
+    { "assets/images/bullets/bullet2.png", 10,  1000, 4 },
 };
 
 
@@ -128,22 +128,22 @@ const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
 
 struct ASTEROID_INFO
 {
-	char     filename[40];
-	float    mass;
-	unsigned health;
-	unsigned damage;
+    char     filename[40];
+    float    mass;
+    unsigned health;
+    unsigned damage;
 };
 
 #define ASTEROIDS_TYPE_NUM 9
 
 const ASTEROID_INFO ASTEROIDS[ASTEROIDS_TYPE_NUM] = {
-	{ "assets/images/asteroids/iron.png",        7.874,      10, 2 },
-	{ "assets/images/asteroids/large metal.png", 10.3 * 2,   10, 2 },
-	{ "assets/images/asteroids/large rock.png",  4.34 * 2,   10, 2 },
-	{ "assets/images/asteroids/medium rock.png", 4.34 * 0.9, 10, 2 },
-	{ "assets/images/asteroids/rock.png",        4.34,       10, 2 },
-	{ "assets/images/asteroids/silicon.png",     4.6,        10, 2 },
-	{ "assets/images/asteroids/silver.png",      10.49,      10, 2 },
-	{ "assets/images/asteroids/small rock.png",  4.34 * 0.8, 10, 2 },
-	{ "assets/images/asteroids/titanium.png",    6.505,      10, 2 },
+    { "assets/images/asteroids/iron.png",        7.874,      10, 2 },
+    { "assets/images/asteroids/large metal.png", 10.3 * 2,   10, 2 },
+    { "assets/images/asteroids/large rock.png",  4.34 * 2,   10, 2 },
+    { "assets/images/asteroids/medium rock.png", 4.34 * 0.9, 10, 2 },
+    { "assets/images/asteroids/rock.png",        4.34,       10, 2 },
+    { "assets/images/asteroids/silicon.png",     4.6,        10, 2 },
+    { "assets/images/asteroids/silver.png",      10.49,      10, 2 },
+    { "assets/images/asteroids/small rock.png",  4.34 * 0.8, 10, 2 },
+    { "assets/images/asteroids/titanium.png",    6.505,      10, 2 },
 };

@@ -47,8 +47,8 @@ void GameDraw(Game& game)
         AsteroidsDraw(game.asteroids);
         ShipDraw(game.ship, game.keys);
         EnemyDraw(game.enemy);
-		TextureDrawAsInfiniteImage(game.particles[1]);
-		TextureDrawAsInfiniteImage(game.particles[2]);
+        TextureDrawAsInfiniteImage(game.particles[1]);
+        TextureDrawAsInfiniteImage(game.particles[2]);
         break;
     }
 

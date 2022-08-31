@@ -25,13 +25,8 @@
 
 ## bugs
 
-- [ ] `VecSetDirectionByCoords` function
-- [x] memory leak menu
-- [x] fix 2nd bullet
-
 ## todo
 
-- [ ] rename some funcs in `vector.h` and `vector.cpp`
 - [ ] add player nickname feature
 - [ ] remove funcs of `background.cpp` to `texture.cpp`
 
@@ -45,6 +40,10 @@
 
 ## completed
 
+- [x] `VecSetDirectionByCoords` function
+- [x] memory leak menu
+- [x] fix 2nd bullet
+- [x] rename some funcs in `vector.h` and `vector.cpp`
 - [x] change name of `MenuProcess` to `MenuUpdate`
 - [x] detele `structs.h`
 - [x] bars
