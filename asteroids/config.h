@@ -102,7 +102,7 @@ const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
 
 #define ENEMY_FILENAME      "assets/images/enemy/enemy.png"
 #define ENEMY_DAMAGE        0.25
-#define ENMEY_BULLET_DAMAGE 5
+#define ENEMY_BULLET_DAMAGE 5
 #define ENEMY_HEALTH        200
 #define EMEMY_MAX_SPEED     30
 #define ENEMY_DELAY         100

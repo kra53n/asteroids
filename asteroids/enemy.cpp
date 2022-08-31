@@ -93,12 +93,36 @@ void EnemyUpdateCollisionWithShip(Enemy& self, Ship& ship)
     HealthUpdate(ship.health, ENEMY_DAMAGE);
 }
 
-void EnemyUpdateBullets(Enemy& self)
+bool EnemyUpdateBulletIollisionWithShip(Enemy& self, Bullet* bullet, Ship& ship)
 {
-    for (Bullet* cur = self.bullets.head; cur; cur = cur->next)
+    if (!isPointInCirc(
+        getRectCenter(ship.tex.dstrect),
+        getRadius(ship.tex.dstrect),
+        { bullet->pos.x, bullet->pos.y }
+    )) return false;
+
+    HealthUpdate(ship.health, ENEMY_BULLET_DAMAGE);
+    BulletsDelBullet(self.bullets, bullet);
+
+    return true;
+}
+
+void EnemyUpdateBullets(Enemy& self, Ship& ship)
+{
+    for (Bullet* cur = self.bullets.head; cur;)
     {
+        Bullet* curNext = cur->next;
+
         cur->pos.x += cur->vel.x;
         cur->pos.y += cur->vel.y;
+
+        if (EnemyUpdateBulletIollisionWithShip(self, cur, ship))
+        {
+            cur = curNext;
+            continue;
+        }
+
+        cur = curNext;
     }
 }
 
@@ -106,7 +130,7 @@ void EnemyUpdate(Enemy& self, Ship& ship)
 {
     EnemyUpdateMovement(self, ship);
     EnemyShoot(self);
-    EnemyUpdateBullets(self);
+    EnemyUpdateBullets(self, ship);
     EnemyUpdateCollisionWithShip(self, ship);
     boundScreen(self.tex.dstrect);
 

@@ -3,7 +3,7 @@
 - [ ] record file
 - [ ] level loading
 - [ ] menu
-- [ ] shooting enemy
+- [x] shooting enemy
 - [ ] hot-seat mode
 - [ ] music
 - [x] base controlling

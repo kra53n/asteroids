@@ -6,7 +6,6 @@
 #include "menu.h"
 #include "ship.h"
 #include "enemy.h"
-#include "bullet.h"
 #include "texture.h"
 #include "asteroid.h"
 #include "background.h"
