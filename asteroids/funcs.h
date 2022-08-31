@@ -3,3 +3,5 @@
 
 bool isCircsColliding(SDL_Point p1, float r1, SDL_Point p2, float r2);
 bool isPointInCirc(SDL_Point circ, float r, SDL_Point p);
+
+void fillRect(SDL_Rect& rect, const SDL_Color& col);
