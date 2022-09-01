@@ -88,7 +88,14 @@ void MenuChangeOption(Menu& self, Keys& keys, int& gameState, int& ticks, bool& 
     if (oneOfBtns && ticks - self.ticks >= MENU_DELAY_BUTTONS)
     {
         self.ticks = ticks;
-        gameState = self.choice + 1;
+        gameState = self.info[self.choice].mode;
+
+        switch (gameState)
+        {
+        case GAME_STATE_PLAY:
+            MenuInit(self, MODE_MENU, MODE_MENU_NUM);
+            break;
+        }
     }
 }
 

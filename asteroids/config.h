@@ -56,6 +56,12 @@ const MENU_INFO MAIN_MENU[MAIN_MENU_NUM] = {
     { "exit",     GAME_STATE_EXIT     },
 };
 
+#define MODE_MENU_NUM 2
+
+const MENU_INFO MODE_MENU[MODE_MENU_NUM] = {
+    { "solo",     GAME_STATE_SOLO },
+    { "hot-seat", GAME_STATE_SEAT },
+};
 
 // BACKGROUND CONFIGURATION
 

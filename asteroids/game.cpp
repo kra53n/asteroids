@@ -40,10 +40,11 @@ void GameDraw(Game& game)
     switch (game.state)
     {
     case GAME_STATE_MENU:
+    case GAME_STATE_PLAY:
         MenuDraw(game.menu);
         break;
 
-    case GAME_STATE_PLAY:
+    case GAME_STATE_SOLO:
         AsteroidsDraw(game.asteroids);
         ShipDraw(game.ship, game.keys);
         EnemyDraw(game.enemy);
@@ -60,7 +61,8 @@ void processKeys(Game& game)
     if (game.keys.escape)
     {
         game.keys.enter = false;
-        game.state = 0;
+        game.state = GAME_STATE_MENU;
+        MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
     }
 }
 
@@ -139,10 +141,11 @@ void GameUpdate(Game& game)
     switch (game.state)
     {
     case GAME_STATE_MENU:
+    case GAME_STATE_PLAY:
         MenuUpdate(game.menu, game.keys, game.state);
         break;
 
-    case GAME_STATE_PLAY:
+    case GAME_STATE_SOLO:
         AsteroidsUpdate(game.asteroids);
         ShipUpdate(game.ship, game.asteroids, game.enemy.tex.dstrect, game.enemy.health, game.keys, game.state);
         EnemyUpdate(game.enemy, game.ship);
