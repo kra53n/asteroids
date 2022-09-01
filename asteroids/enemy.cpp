@@ -93,7 +93,7 @@ void EnemyUpdateCollisionWithShip(Enemy& self, Ship& ship)
     HealthUpdate(ship.health, ENEMY_DAMAGE);
 }
 
-bool EnemyUpdateBulletIollisionWithShip(Enemy& self, Bullet* bullet, Ship& ship)
+bool EnemyUpdateBulletCollisionWithShip(Enemy& self, Bullet* bullet, Ship& ship)
 {
     if (!isPointInCirc(
         getRectCenter(ship.tex.dstrect),
@@ -116,7 +116,7 @@ void EnemyUpdateBullets(Enemy& self, Ship& ship)
         cur->pos.x += cur->vel.x;
         cur->pos.y += cur->vel.y;
 
-        if (EnemyUpdateBulletIollisionWithShip(self, cur, ship))
+        if (EnemyUpdateBulletCollisionWithShip(self, cur, ship))
         {
             cur = curNext;
             continue;
