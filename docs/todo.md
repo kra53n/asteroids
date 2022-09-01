@@ -27,6 +27,7 @@
 
 ## todo
 
+- [ ] add enemy damage
 - [ ] add player nickname feature
 - [ ] remove funcs of `background.cpp` to `texture.cpp`
 

@@ -12,6 +12,9 @@ enum gameStates
     GAME_STATE_EXIT,
 
     GAME_STATE_RESTART,
+
+    GAME_STATE_SOLO,
+    GAME_STATE_SEAT,
 };
 
 struct Keys
@@ -35,10 +38,23 @@ struct Keys
 #define         MENU_FONT_SIZE                50
 #define         MENU_FONT_VERTICAL_DISTANCE   80
 #define         MENU_DELAY_BUTTONS            200
-#define         MENU_OPTIONS_NUM              3
-const char      MENU_OPTIONS[][9]           = { "start", "settings", "exit" };
+
 const SDL_Color COLOR_OF_ACTIVE_OPTION      = { 255, 0, 0, 255 };
 const SDL_Color COLOR_OF_NON_ACTIVE_OPTION  = { 150, 150, 220, 255 };
+
+struct MENU_INFO
+{
+    const char* name;
+    int         mode;
+};
+
+#define MAIN_MENU_NUM 3
+
+const MENU_INFO MAIN_MENU[MAIN_MENU_NUM] = {
+    { "start",    GAME_STATE_PLAY     },
+    { "settings", GAME_STATE_SETTINGS },
+    { "exit",     GAME_STATE_EXIT     },
+};
 
 
 // BACKGROUND CONFIGURATION

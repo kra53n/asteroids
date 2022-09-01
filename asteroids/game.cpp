@@ -6,6 +6,7 @@
 #include "menu.h"
 #include "ship.h"
 #include "enemy.h"
+#include "config.h"
 #include "texture.h"
 #include "asteroid.h"
 #include "background.h"
@@ -23,7 +24,7 @@ void GameInit(Game& game)
     //int asters[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     AsteroidsInit(game.asteroids, asters);
     
-    MenuInit(game.menu);
+    MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
     ShipInit(game.ship);
     EnemyInit(game.enemy);
 }

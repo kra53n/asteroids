@@ -4,16 +4,16 @@
 
 struct Menu
 {
-    // textures of options
-    Texture textures[MENU_OPTIONS_NUM];
-    // choice of texture option
-    int choice = 0;
+    const MENU_INFO* info;
+    Texture*         textures = 0;
+    int              num;
+    int              choice   = 0;
     // text block position of top
-    int textBlockY;
-    int ticks;
+    int              textBlockY;
+    int              ticks;
 };
 
-void MenuInit(Menu& menu);
+void MenuInit(Menu& menu, const MENU_INFO* info, int optionsNum);
 void MenuDestroy(Menu& menu);
 void MenuUpdate(Menu& menu, Keys& keys, int& gameState);
 void MenuDraw(Menu& menu);
