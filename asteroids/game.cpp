@@ -4,7 +4,7 @@
 
 #include "game.h"
 #include "menu.h"
-#include "ship.h"
+#include "funcs.h"
 #include "enemy.h"
 #include "config.h"
 #include "texture.h"
@@ -25,7 +25,8 @@ void GameInit(Game& game)
     AsteroidsInit(game.asteroids, asters);
     
     MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
-    ShipInit(game.ship);
+    ShipInit(game.ship1, SHIP_FILENAME1, SHIP1);
+    ShipInit(game.ship2, SHIP_FILENAME2, SHIP2);
     EnemyInit(game.enemy);
 }
 
@@ -46,7 +47,16 @@ void GameDraw(Game& game)
 
     case GAME_STATE_SOLO:
         AsteroidsDraw(game.asteroids);
-        ShipDraw(game.ship, game.keys);
+        ShipDraw(game.ship1, game.keys);
+        EnemyDraw(game.enemy);
+        TextureDrawAsInfiniteImage(game.particles[1]);
+        TextureDrawAsInfiniteImage(game.particles[2]);
+        break;
+
+    case GAME_STATE_SEAT:
+        AsteroidsDraw(game.asteroids);
+        ShipDraw(game.ship1, game.keys);
+        ShipDraw(game.ship2, game.keys);
         EnemyDraw(game.enemy);
         TextureDrawAsInfiniteImage(game.particles[1]);
         TextureDrawAsInfiniteImage(game.particles[2]);
@@ -84,7 +94,7 @@ void GameUpdate(Game& game)
             switch (game.event.button.button)
             {
             case SDL_BUTTON_LEFT:
-                game.keys.btnLeft = true;
+                game.keys.leftClick = true;
                 break;
             }
             break;
@@ -93,7 +103,7 @@ void GameUpdate(Game& game)
             switch (game.event.button.button)
             {
             case SDL_BUTTON_LEFT:
-                game.keys.btnLeft = false;
+                game.keys.leftClick = false;
                 break;
             }
             break;
@@ -101,43 +111,48 @@ void GameUpdate(Game& game)
         case SDL_KEYDOWN:
             switch (game.event.key.keysym.scancode)
             {
-            case SDL_SCANCODE_UP:     game.keys.up     = true; break;
-            case SDL_SCANCODE_DOWN:   game.keys.down   = true; break;
-            case SDL_SCANCODE_LEFT:   game.keys.left   = true; break;
-            case SDL_SCANCODE_RIGHT:  game.keys.right  = true; break;
+            case SDL_SCANCODE_W:       game.keys.w      = true; break;
+            case SDL_SCANCODE_S:       game.keys.s      = true; break;
+            case SDL_SCANCODE_A:       game.keys.a      = true; break;
+            case SDL_SCANCODE_D:       game.keys.d      = true; break;
+            case SDL_SCANCODE_SPACE:   game.keys.space  = true; break;
 
-            case SDL_SCANCODE_W:      game.keys.up     = true; break;
-            case SDL_SCANCODE_S:      game.keys.down   = true; break;
-            case SDL_SCANCODE_A:      game.keys.left   = true; break;
-            case SDL_SCANCODE_D:      game.keys.right  = true; break;
+            case SDL_SCANCODE_UP:      game.keys.up     = true; break;
+            case SDL_SCANCODE_DOWN:    game.keys.down   = true; break;
+            case SDL_SCANCODE_LEFT:    game.keys.left   = true; break;
+            case SDL_SCANCODE_RIGHT:   game.keys.right  = true; break;
+            case SDL_SCANCODE_RCTRL:   game.keys.rctrl  = true; break;
 
-            case SDL_SCANCODE_RETURN: game.keys.enter  = true; break;
-            case SDL_SCANCODE_SPACE:  game.keys.space  = true; break;
-            case SDL_SCANCODE_ESCAPE: game.keys.escape = true; break;
+            case SDL_SCANCODE_RETURN:  game.keys.enter  = true; break;
+            case SDL_SCANCODE_RETURN2: game.keys.enter  = true; break;
+            case SDL_SCANCODE_ESCAPE:  game.keys.escape = true; break;
             }
             break;
 
         case SDL_KEYUP:
             switch (game.event.key.keysym.scancode)
             {
-            case SDL_SCANCODE_UP:     game.keys.up     = false; break;
-            case SDL_SCANCODE_DOWN:   game.keys.down   = false; break;
-            case SDL_SCANCODE_LEFT:   game.keys.left   = false; break;
-            case SDL_SCANCODE_RIGHT:  game.keys.right  = false; break;
+            case SDL_SCANCODE_W:       game.keys.w      = false; break;
+            case SDL_SCANCODE_S:       game.keys.s      = false; break;
+            case SDL_SCANCODE_A:       game.keys.a      = false; break;
+            case SDL_SCANCODE_D:       game.keys.d      = false; break;
+            case SDL_SCANCODE_SPACE:   game.keys.space  = false; break;
 
-            case SDL_SCANCODE_W:      game.keys.up     = false; break;
-            case SDL_SCANCODE_S:      game.keys.down   = false; break;
-            case SDL_SCANCODE_A:      game.keys.left   = false; break;
-            case SDL_SCANCODE_D:      game.keys.right  = false; break;
+            case SDL_SCANCODE_UP:      game.keys.up     = false; break;
+            case SDL_SCANCODE_DOWN:    game.keys.down   = false; break;
+            case SDL_SCANCODE_LEFT:    game.keys.left   = false; break;
+            case SDL_SCANCODE_RIGHT:   game.keys.right  = false; break;
+            case SDL_SCANCODE_RCTRL:   game.keys.rctrl  = false; break;
 
-            case SDL_SCANCODE_RETURN: game.keys.right  = false; break;
-            case SDL_SCANCODE_SPACE:  game.keys.space  = false; break;
-            case SDL_SCANCODE_ESCAPE: game.keys.escape = false; break;
+            case SDL_SCANCODE_RETURN:  game.keys.enter  = false; break;
+            case SDL_SCANCODE_ESCAPE:  game.keys.escape = false; break;
             }
             break;
         }
+
+        processKeys(game);
     }
-    processKeys(game);
+
     switch (game.state)
     {
     case GAME_STATE_MENU:
@@ -147,14 +162,27 @@ void GameUpdate(Game& game)
 
     case GAME_STATE_SOLO:
         AsteroidsUpdate(game.asteroids);
-        ShipUpdate(game.ship, game.asteroids, game.enemy.tex.dstrect, game.enemy.health, game.keys, game.state);
-        EnemyUpdate(game.enemy, game.ship);
+        ShipUpdate(game.ship1, game.asteroids, game.enemy.tex.dstrect, game.enemy.health, game.keys, game.state);
+        EnemyUpdate(game.enemy, game.ship1);
         TextureUpdateAsInfiniteImage(
             game.background,
-            { -game.ship.vel.x * game.ship.speedMovement, game.ship.vel.y * game.ship.speedMovement },
-            VecGetLen(game.ship.vel)
+            { -game.ship1.vel.x * game.ship1.speedMovement, game.ship1.vel.y * game.ship1.speedMovement },
+            VecGetLen(game.ship1.vel)
         );
-        ParticlesUpdate(game.particles, game.ship);
+        ParticlesUpdate(game.particles, game.ship1);
+        break;
+
+    case GAME_STATE_SEAT:
+        AsteroidsUpdate(game.asteroids);
+        ShipUpdate(game.ship1, game.asteroids, game.enemy.tex.dstrect, game.enemy.health, game.keys, game.state);
+        ShipUpdate(game.ship2, game.asteroids, game.enemy.tex.dstrect, game.enemy.health, game.keys, game.state);
+        EnemyUpdate(game.enemy, game.ship1);
+        TextureUpdateAsInfiniteImage(
+            game.background,
+            { -game.ship1.vel.x * game.ship1.speedMovement, game.ship1.vel.y * game.ship1.speedMovement },
+            VecGetLen(game.ship1.vel)
+        );
+        ParticlesUpdate(game.particles, game.ship1);
         break;
 
     case GAME_STATE_EXIT:

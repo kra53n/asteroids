@@ -19,14 +19,22 @@ enum gameStates
 
 struct Keys
 {
-    bool left     = false;
-    bool right    = false;
-    bool up       = false;
-    bool down     = false;
-    bool btnLeft  = false;
-    bool space    = false;
-    bool enter    = false;
-    bool escape   = false;
+    bool w          = false;
+    bool s          = false;
+    bool a          = false;
+    bool d          = false;
+    bool space      = false;
+
+    bool left       = false;
+    bool right      = false;
+    bool up         = false;
+    bool down       = false;
+    bool rctrl      = false;
+
+    bool enter      = false;
+    bool escape     = false;
+
+    bool leftClick  = false;
     int  mouse_x;
     int  mouse_y;
 };
@@ -117,7 +125,35 @@ const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
 #define ENGINE_FRAMES         15
 #define ENGINE_DELAY          100
 
-#define SHIP_FILENAME "assets/images/ships/ship.png"
+#define SHIP_FILENAME1 "assets/images/ships/ship1.png"
+#define SHIP_FILENAME2 "assets/images/ships/ship2.png"
+
+enum SHIP_INSTANCES { SHIP1, SHIP2 };
+
+struct ShipActions
+{
+    bool up;
+    bool down;
+    bool left;
+    bool right;
+    bool shoot;
+};
+
+const ShipActions SHIP1_ACTIONS = {
+    SDL_SCANCODE_W,
+    SDL_SCANCODE_S,
+    SDL_SCANCODE_A,
+    SDL_SCANCODE_D,
+    SDL_SCANCODE_SPACE,
+};
+
+const ShipActions SHIP2_ACTIONS = {
+    SDL_SCANCODE_UP,
+    SDL_SCANCODE_DOWN,
+    SDL_SCANCODE_LEFT,
+    SDL_SCANCODE_RIGHT,
+    SDL_SCANCODE_RCTRL,
+};
 
 
 // ENEMY CONFIGURATION
@@ -133,7 +169,7 @@ const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
 
 // SCORE CONFIGURATION
 
-#define SCORE_FONTNAME "assets/fonts/Voyager Heavy.otf"
+#define SCORE_FONTNAME  "assets/fonts/Voyager Heavy.otf"
 #define SCORE_FONT_SIZE 35
 
 

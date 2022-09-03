@@ -20,7 +20,8 @@ struct Game
     Texture    background;
     Texture    particles[PARTICLES_FILENAMES_NUM];
     Asteroids  asteroids;
-    Ship       ship;
+    Ship       ship1;
+    Ship       ship2;
     Enemy      enemy;
 
     Menu       menu;

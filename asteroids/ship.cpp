@@ -37,12 +37,18 @@ void EngineDraw(Animation& self, Ship& ship, bool cond)
     SDL_RenderCopyEx(ren, self.textures[self.frame].tex, 0, &dstrect, ship.tex.angle, 0, SDL_FLIP_NONE);
 }
 
-void ShipInit(Ship& self)
+void ShipInit(Ship& self, const char* filename, int instance)
 {
     self.ticks = SDL_GetTicks();
-    self.ticks = self.ticks;
-    self.tex = loadTexture(SHIP_FILENAME);
+    self.instance = instance;
 
+    switch (self.instance)
+    {
+    case SHIP1: self.acts = SHIP1_ACTIONS; break;
+    case SHIP2: self.acts = SHIP2_ACTIONS; break;
+    }
+
+    self.tex = loadTexture(filename);
     self.tex.dstrect.w *= SHIP_SCALE_COEFF;
     self.tex.dstrect.h *= SHIP_SCALE_COEFF;
 
@@ -50,9 +56,44 @@ void ShipInit(Ship& self)
     self.tex.dstrect.y = (winHgt - self.tex.dstrect.h) / 2;
 
     AnimationInit(self.engine, ENGINE_FRAMES, ENGINE_FILENAME, ENGINE_FILENAME_TYPE, SHIP_SCALE_COEFF);
-    ScoreInit(self.score, { 10, 3 }, 0, (char*)"Score: ");
-    HealthInit(self.health, { 10, 50, 250, 25 });
+    ScoreInit(self.score, { 10, 3 }, 0, "Score: ");
+    HealthInit(self.health, { 10, 50, 250, 25 }, 100000);
     BulletsInit(self.bullets);
+}
+
+void ShipUpdateActions(Ship& self, Keys& keys, int gameState)
+{
+    switch (gameState)
+    {
+    case GAME_STATE_SOLO:
+        self.acts.up    = keys.up    || keys.w;
+        self.acts.down  = keys.down  || keys.s;
+        self.acts.left  = keys.left  || keys.a;
+        self.acts.right = keys.right || keys.d;
+        self.acts.shoot = keys.rctrl || keys.space;
+        break;
+
+    case GAME_STATE_SEAT:
+        switch (self.instance)
+        {
+        case SHIP1:
+			self.acts.up    = keys.w;
+			self.acts.down  = keys.s;
+			self.acts.left  = keys.a;
+			self.acts.right = keys.d;
+			self.acts.shoot = keys.space;
+            break;
+
+        case SHIP2:
+			self.acts.up    = keys.up;
+			self.acts.down  = keys.down;
+			self.acts.left  = keys.left;
+			self.acts.right = keys.right;
+			self.acts.shoot = keys.rctrl;
+            break;
+        }
+        break;
+    }
 }
 
 void ShipUpdateVelocity(Ship& self, Keys& keys)
@@ -68,7 +109,7 @@ void ShipUpdateVelocity(Ship& self, Keys& keys)
 
 void ShipUpdatAcceleration(Ship& self, Keys& keys)
 {
-    if (keys.up)
+    if (self.acts.up)
     {
         self.acc = { 0.6, 0 };
         VecSetAngle(self.acc, self.tex.angle);
@@ -83,7 +124,7 @@ void ShipUpdateTicks(Ship& self, Keys& keys)
     {
         self.ticks = ticks;
 
-        if (keys.up)
+        if (self.acts.up)
         {
             int sign = self.rotationPower > 0 ? -1 : 1;
             self.rotationPower += sign * self.rotationCoeff;
@@ -227,19 +268,21 @@ void ShipBulletsUpdate(Ship& self, Asteroids& asters, SDL_Rect& enemyRect, Healt
         cur = curNext;
     }
 
-    if (!keys.space) return;
+    if (!self.acts.shoot) return;
 
     ShipShoot(self, 1);
 }
 
 void ShipUpdate(Ship& self, Asteroids& asters, SDL_Rect& enemyRect, Health& enemyHealth, Keys& keys, int& gameState)
 {
+    ShipUpdateActions(self, keys, gameState);
+
     int sign = 0;
-    if (keys.left)  sign = -1;
-    if (keys.right) sign = 1;
+    if (self.acts.left)  sign = -1;
+    if (self.acts.right) sign = 1;
     self.tex.angle += self.rotationPower;
 
-    if (keys.up && sign)
+    if (self.acts.up && sign)
     {
         self.tex.angle += sign * self.rotationSpeed;
         self.rotationPower = sign * 1.4;
@@ -262,23 +305,23 @@ void ShipUpdate(Ship& self, Asteroids& asters, SDL_Rect& enemyRect, Health& enem
 void ShipDraw(Ship& self, Keys& keys)
 {
     SDL_RenderCopyEx(ren, self.tex.tex, NULL, &self.tex.dstrect, self.tex.angle, NULL, SDL_FLIP_NONE);
-    EngineDraw(self.engine, self, keys.up);
+    EngineDraw(self.engine, self, self.acts.up);
     ScoreDraw(self.score);
     HealthDraw(self.health);
     BulletsDraw(self.bullets);
 
-     // int side = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
-     // Vec line = { side / 2, 0 };
-     // int x1 = self.tex.dstrect.x + side / 2;
-     // int y1 = self.tex.dstrect.y + side / 2;
+    // int side = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
+    // Vec line = { side / 2, 0 };
+    // int x1 = self.tex.dstrect.x + side / 2;
+    // int y1 = self.tex.dstrect.y + side / 2;
 
-     // SDL_SetRenderDrawColor(ren, 255, 0, 0, 0);
-     // for (int i = 0; i < 360; i += 15)
-     // {
-     //     VecSetAngle(line, i);
-     //     int x2 = x1 + line.x;
-     //     int y2 = y1 + line.y;
-     //     SDL_RenderDrawLine(ren, x1, y1, x2, y2);
-     // }
-     // SDL_RenderDrawRect(ren, &self.tex.dstrect);
+    // SDL_SetRenderDrawColor(ren, 255, 0, 0, 0);
+    // for (int i = 0; i < 360; i += 15)
+    // {
+    //     VecSetAngle(line, i);
+    //     int x2 = x1 + line.x;
+    //     int y2 = y1 + line.y;
+    //     SDL_RenderDrawLine(ren, x1, y1, x2, y2);
+    // }
+    // SDL_RenderDrawRect(ren, &self.tex.dstrect);
 }

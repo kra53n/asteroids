@@ -67,14 +67,14 @@ void MenuChooseOptionByMouse(Menu& self, Keys& keys, bool& cursorUnderTexture)
 
 void MenuChooseOptionByKbd(Menu& self, Keys& keys, int& ticks)
 {
-    if ((keys.up || keys.down) && ticks - self.ticks >= MENU_DELAY_BUTTONS)
+    if ((keys.up || keys.down || keys.w || keys.s) && ticks - self.ticks >= MENU_DELAY_BUTTONS)
     {
         self.ticks = ticks;
-        if (keys.up)
+        if (keys.up || keys.w)
         {
             self.choice = self.choice ? self.choice - 1 : self.num - 1;
         }
-        if (keys.down)
+        if (keys.down || keys.s)
         {
             self.choice = (self.choice + 1) % self.num;
         }
@@ -84,7 +84,8 @@ void MenuChooseOptionByKbd(Menu& self, Keys& keys, int& ticks)
 
 void MenuChangeOption(Menu& self, Keys& keys, int& gameState, int& ticks, bool& cursorUnderTexture)
 {
-    bool oneOfBtns = keys.enter || keys.space || (keys.btnLeft && cursorUnderTexture);
+    bool oneOfBtns = keys.space || keys.enter || (keys.leftClick && cursorUnderTexture);
+
     if (oneOfBtns && ticks - self.ticks >= MENU_DELAY_BUTTONS)
     {
         self.ticks = ticks;
