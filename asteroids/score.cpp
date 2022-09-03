@@ -5,10 +5,10 @@
 #include "window.h"
 #include "texture.h"
 
-void ScoreInit(Score& self, SDL_Point pos, int point, char title[])
+void ScoreInit(Score& self, SDL_Point pos, int point, const char* title)
 {
     self.point = point;
-    self.title = title;
+    self.title = (char*)title;
     self.tex.dstrect.x = pos.x;
     self.tex.dstrect.y = pos.y;
 
