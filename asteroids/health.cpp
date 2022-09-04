@@ -7,7 +7,7 @@
 
 void HealthInit(Health& self, SDL_Rect rect, float point)
 {
-    self.point = point > 100 ? 100 : point;
+    self.point = point;
     self.rect = rect;
 }
 
@@ -16,10 +16,13 @@ void HealthUpdate(Health& self, float point)
     self.point -= point;
 }
 
+#include <stdio.h>
 void HealthDraw(Health& self)
 {
     SDL_Rect curHpRect = self.rect;
     curHpRect.w = curHpRect.w * self.point / 100;
+
+    printf("\ndrawing: %d", curHpRect.w);
 
     fillRect(self.rect, COLOR_OF_NON_ACTIVE_OPTION);
     fillRect(curHpRect, COLOR_OF_ACTIVE_OPTION);

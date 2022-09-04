@@ -4,7 +4,6 @@
 
 #include "game.h"
 #include "menu.h"
-#include "funcs.h"
 #include "enemy.h"
 #include "config.h"
 #include "texture.h"
@@ -47,7 +46,7 @@ void GameDraw(Game& game)
 
     case GAME_STATE_SOLO:
         AsteroidsDraw(game.asteroids);
-        ShipDraw(game.ship1, game.keys);
+        ShipDraw(game.ship1, game.state);
         EnemyDraw(game.enemy);
         TextureDrawAsInfiniteImage(game.particles[1]);
         TextureDrawAsInfiniteImage(game.particles[2]);
@@ -55,8 +54,8 @@ void GameDraw(Game& game)
 
     case GAME_STATE_SEAT:
         AsteroidsDraw(game.asteroids);
-        ShipDraw(game.ship1, game.keys);
-        ShipDraw(game.ship2, game.keys);
+        ShipDraw(game.ship1, game.state);
+        ShipDraw(game.ship2, game.state);
         EnemyDraw(game.enemy);
         TextureDrawAsInfiniteImage(game.particles[1]);
         TextureDrawAsInfiniteImage(game.particles[2]);
@@ -158,11 +157,29 @@ void GameUpdate(Game& game)
     case GAME_STATE_MENU:
     case GAME_STATE_PLAY:
         MenuUpdate(game.menu, game.keys, game.state);
+
+        switch (game.state)
+        {
+        case GAME_STATE_PLAY:
+            game.menu.restart = true;
+
+            break;
+        }
+
         break;
 
     case GAME_STATE_SOLO:
+        if (game.menu.restart)
+        {
+            game.menu.restart = false;
+
+            ShipReset(game.ship1, { winWdt2, winHgt2 });
+            game.ship2.active = false;
+        }
+
         AsteroidsUpdate(game.asteroids);
-        ShipUpdate(game.ship1, game.asteroids, game.enemy.tex.dstrect, game.enemy.health, game.keys, game.state);
+        ShipUpdate(game.ship1, game.ship2, game.asteroids, game.enemy.tex.dstrect,
+            game.enemy.health, game.keys, game.state);
         EnemyUpdate(game.enemy, game.ship1);
         TextureUpdateAsInfiniteImage(
             game.background,
@@ -173,10 +190,23 @@ void GameUpdate(Game& game)
         break;
 
     case GAME_STATE_SEAT:
+        if (game.menu.restart)
+        {
+            game.menu.restart = false;
+
+            int distance = 100;
+            ShipReset(game.ship1, { winWdt2 - distance, winHgt2 });
+            ShipReset(game.ship2, { winWdt2 + distance, winHgt2 });
+            game.ship2.tex.angle = 180;
+            game.ship2.health.rect.x = winWdt - game.ship2.health.rect.x - game.ship2.health.rect.w;
+        }
+
         AsteroidsUpdate(game.asteroids);
-        ShipUpdate(game.ship1, game.asteroids, game.enemy.tex.dstrect, game.enemy.health, game.keys, game.state);
-        ShipUpdate(game.ship2, game.asteroids, game.enemy.tex.dstrect, game.enemy.health, game.keys, game.state);
-        EnemyUpdate(game.enemy, game.ship1);
+        ShipUpdate(game.ship1, game.ship2, game.asteroids, game.enemy.tex.dstrect,
+            game.enemy.health, game.keys, game.state);
+        ShipUpdate(game.ship2, game.ship1, game.asteroids, game.enemy.tex.dstrect,
+            game.enemy.health, game.keys, game.state);
+        //EnemyUpdate(game.enemy, game.ship1);
         TextureUpdateAsInfiniteImage(
             game.background,
             { -game.ship1.vel.x * game.ship1.speedMovement, game.ship1.vel.y * game.ship1.speedMovement },

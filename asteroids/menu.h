@@ -6,6 +6,8 @@ struct Menu
 {
     const MENU_INFO* info;
     Texture*         textures = 0;
+    // restart chosen mode
+    bool             restart;
     int              num;
     int              choice   = 0;
     // text block position of top

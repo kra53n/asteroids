@@ -14,7 +14,7 @@
 #include "texture.h"
 #include "animation.h"
 
-void EngineUpdate(Animation& self, Keys& keys)
+void EngineUpdate(Animation& self)
 {
     int ticks = SDL_GetTicks();
     if (!(ticks - self.ticks >= ENGINE_DELAY)) return;
@@ -41,6 +41,8 @@ void ShipInit(Ship& self, const char* filename, int instance)
 {
     self.ticks = SDL_GetTicks();
     self.instance = instance;
+    self.bulletType = 1;
+    self.active = true;
 
     switch (self.instance)
     {
@@ -57,8 +59,26 @@ void ShipInit(Ship& self, const char* filename, int instance)
 
     AnimationInit(self.engine, ENGINE_FRAMES, ENGINE_FILENAME, ENGINE_FILENAME_TYPE, SHIP_SCALE_COEFF);
     ScoreInit(self.score, { 10, 3 }, 0, "Score: ");
-    HealthInit(self.health, { 10, 50, 250, 25 }, 100000);
+    HealthInit(self.health, { 10, 50, 250, 25 }, 100);
     BulletsInit(self.bullets);
+}
+
+void ShipReset(Ship& self, SDL_Point pos)
+{
+    BulletsDestroy(self.bullets);
+    BulletsInit(self.bullets);
+
+    self.score.point = 0;
+    self.health.point = 100;
+
+    float center = getRadius(self.tex.dstrect);
+    self.tex.dstrect.x = pos.x - center;
+    self.tex.dstrect.y = pos.y - center;
+    self.tex.angle = 0;
+
+    self.acc = { 0, 0 };
+    self.vel = { 0, 0 };
+    self.rotationPower = 0;
 }
 
 void ShipUpdateActions(Ship& self, Keys& keys, int gameState)
@@ -77,26 +97,26 @@ void ShipUpdateActions(Ship& self, Keys& keys, int gameState)
         switch (self.instance)
         {
         case SHIP1:
-			self.acts.up    = keys.w;
-			self.acts.down  = keys.s;
-			self.acts.left  = keys.a;
-			self.acts.right = keys.d;
-			self.acts.shoot = keys.space;
+            self.acts.up    = keys.w;
+            self.acts.down  = keys.s;
+            self.acts.left  = keys.a;
+            self.acts.right = keys.d;
+            self.acts.shoot = keys.space;
             break;
 
         case SHIP2:
-			self.acts.up    = keys.up;
-			self.acts.down  = keys.down;
-			self.acts.left  = keys.left;
-			self.acts.right = keys.right;
-			self.acts.shoot = keys.rctrl;
+            self.acts.up    = keys.up;
+            self.acts.down  = keys.down;
+            self.acts.left  = keys.left;
+            self.acts.right = keys.right;
+            self.acts.shoot = keys.rctrl;
             break;
         }
         break;
     }
 }
 
-void ShipUpdateVelocity(Ship& self, Keys& keys)
+void ShipUpdateVelocity(Ship& self)
 {
     if (fabs(self.vel.x) > self.maxSpeed)
         self.vel.x = self.vel.x > 0 ? self.maxSpeed : -self.maxSpeed;
@@ -107,7 +127,7 @@ void ShipUpdateVelocity(Ship& self, Keys& keys)
     self.tex.dstrect.y -= self.vel.y;
 }
 
-void ShipUpdatAcceleration(Ship& self, Keys& keys)
+void ShipUpdatAcceleration(Ship& self)
 {
     if (self.acts.up)
     {
@@ -117,7 +137,7 @@ void ShipUpdatAcceleration(Ship& self, Keys& keys)
     }
 }
 
-void ShipUpdateTicks(Ship& self, Keys& keys)
+void ShipUpdateTicks(Ship& self)
 {
     int ticks = SDL_GetTicks();
     if (ticks - self.ticks >= 1000)
@@ -233,7 +253,7 @@ bool ShipUpdateBulletCollisionWithEnemy(Ship& self, SDL_Rect& enemyRect, Health&
         { bullet->pos.x, bullet->pos.y }
     )) return false;
     
-    enemyHealth.point -= BULLETS[bullet->type].damage;
+    HealthUpdate(enemyHealth, BULLETS[bullet->type].damage);
     if (enemyHealth.point <= 0)
     {
         ScoreUpdate(self.score, ENEMY_HEALTH);
@@ -243,7 +263,24 @@ bool ShipUpdateBulletCollisionWithEnemy(Ship& self, SDL_Rect& enemyRect, Health&
     return true;
 }
 
-void ShipBulletsUpdate(Ship& self, Asteroids& asters, SDL_Rect& enemyRect, Health& enemyHealth, Keys& keys)
+bool ShipUpdateBulletCollisionWithShip(Ship& self, Ship& ship, Bullet* bullet)
+{
+    if (!(self.active && ship.active)) return false;
+
+    if (!isPointInCirc(
+        getRectCenter(ship.tex.dstrect),
+        getRadius(ship.tex.dstrect),
+        { bullet->pos.x, bullet->pos.y }
+    )) return false;
+    
+    ship.health.point -= BULLETS[bullet->type].damage;
+    HealthUpdate(ship.health, BULLETS[bullet->type].damage);
+    BulletsDelBullet(self.bullets, bullet);
+
+    return true;
+}
+
+void ShipBulletsUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect, Health& enemyHealth)
 {
     for (Bullet* cur = self.bullets.head; cur != NULL;)
     {
@@ -252,15 +289,20 @@ void ShipBulletsUpdate(Ship& self, Asteroids& asters, SDL_Rect& enemyRect, Healt
         cur->pos.x += cur->vel.x;
         cur->pos.y -= cur->vel.y;
 
-        if (BulletsUpdateCollisionWithAstroids(self.bullets, cur, asters, self.score) ||
-            ShipUpdateBulletCollisionWithEnemy(self, enemyRect, enemyHealth, cur))
+        if (
+            BulletsUpdateCollisionWithAstroids(self.bullets, cur, asters, self.score) ||
+            ShipUpdateBulletCollisionWithEnemy(self, enemyRect, enemyHealth, cur) ||
+            ShipUpdateBulletCollisionWithShip(self, ship, cur)
+        )
         {
             cur = curNext;
             continue;
         }
 
-        if (cur->pos.x < 0 || cur->pos.x > winWdt || 
-            cur->pos.y < 0 || cur->pos.y > winHgt)
+        if (
+            cur->pos.x < 0 || cur->pos.x > winWdt || 
+            cur->pos.y < 0 || cur->pos.y > winHgt
+        )
         {
             BulletsDelBullet(self.bullets, cur);
         }
@@ -270,10 +312,31 @@ void ShipBulletsUpdate(Ship& self, Asteroids& asters, SDL_Rect& enemyRect, Healt
 
     if (!self.acts.shoot) return;
 
-    ShipShoot(self, 1);
+    ShipShoot(self, self.bulletType);
 }
 
-void ShipUpdate(Ship& self, Asteroids& asters, SDL_Rect& enemyRect, Health& enemyHealth, Keys& keys, int& gameState)
+void ShipUpdateCollisionWithShip(Ship& self, Ship& ship)
+{
+    if (!(self.active && ship.active)) return;
+
+    SDL_Point s1Center = getRectCenter(self.tex.dstrect);
+    SDL_Point s2Center = getRectCenter(ship.tex.dstrect);
+
+    if (!isCircsColliding(
+        s1Center, getRadius(self.tex.dstrect),
+        s2Center, getRadius(self.tex.dstrect)
+    )) return;
+    
+    HealthUpdate(self.health, SHIP_DAMAGE);
+    HealthUpdate(ship.health, SHIP_DAMAGE);
+
+    VecSetAngleByCoords(self.vel, s2Center, s1Center);
+    VecSetAngleByCoords(ship.vel, s1Center, s2Center);
+}
+
+void ShipUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,
+    Health& enemyHealth, Keys& keys, int& gameState
+)
 {
     ShipUpdateActions(self, keys, gameState);
 
@@ -288,13 +351,14 @@ void ShipUpdate(Ship& self, Asteroids& asters, SDL_Rect& enemyRect, Health& enem
         self.rotationPower = sign * 1.4;
     }
 
-    ShipUpdateVelocity(self, keys);
-    ShipUpdatAcceleration(self, keys);
-    ShipUpdateTicks(self, keys);
+    ShipUpdateVelocity(self);
+    ShipUpdatAcceleration(self);
+    ShipUpdateTicks(self);
+    ShipUpdateCollisionWithShip(self, ship);
     ShipUpdateCollisionWithAstroids(self, asters);
-    ShipBulletsUpdate(self, asters, enemyRect, enemyHealth, keys);
+    ShipBulletsUpdate(self, ship, asters, enemyRect, enemyHealth);
     
-    EngineUpdate(self.engine, keys);
+    EngineUpdate(self.engine);
 
     boundScreen(self.tex.dstrect);
 
@@ -302,13 +366,15 @@ void ShipUpdate(Ship& self, Asteroids& asters, SDL_Rect& enemyRect, Health& enem
         gameState = GAME_STATE_RESTART;
 }
 
-void ShipDraw(Ship& self, Keys& keys)
+void ShipDraw(Ship& self, int gameState)
 {
     SDL_RenderCopyEx(ren, self.tex.tex, NULL, &self.tex.dstrect, self.tex.angle, NULL, SDL_FLIP_NONE);
     EngineDraw(self.engine, self, self.acts.up);
-    ScoreDraw(self.score);
-    HealthDraw(self.health);
     BulletsDraw(self.bullets);
+    HealthDraw(self.health);
+
+    if (gameState != GAME_STATE_SEAT)
+        ScoreDraw(self.score);
 
     // int side = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
     // Vec line = { side / 2, 0 };
