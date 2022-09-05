@@ -67,3 +67,8 @@ void VecSumCoords(Vec& vec1, Vec& vec2)
     vec1.x += vec2.x;
     vec1.y += vec2.y;
 }
+
+Vec& VecGetMaxVec(Vec& vec1, Vec& vec2)
+{
+    return VecGetLen(vec1) > VecGetLen(vec2) ? vec1 : vec2;
+}

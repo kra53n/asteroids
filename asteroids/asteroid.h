@@ -26,6 +26,8 @@ struct Asteroids
     Asteroid* head                        = 0;
 };
 
+extern Asteroids ASTEROIDS_EMPTY;
+
 void AsteroidsInit(Asteroids& self, int asteroidsTpyesNum[ASTEROIDS_TYPE_NUM]);
 void AsteroidsDestroy(Asteroids& self);
 

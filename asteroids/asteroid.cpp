@@ -10,6 +10,8 @@
 #include "asteroid.h"
 #include "animation.h"
 
+Asteroids ASTEROIDS_EMPTY = { 0, 0, 0, 0, 0 };
+
 void ExplosionUpdate(Asteroids& self)
 {
     if (!self.explosion.frame) return;

@@ -21,13 +21,13 @@ void ParticlesInit(Texture self[PARTICLES_FILENAMES_NUM])
         self[i] = loadTexture(PARTICLES_FILENAMES[i]);
 }
 
-void ParticlesUpdate(Texture self[PARTICLES_FILENAMES_NUM], Ship& ship)
+void ParticlesUpdate(Texture self[PARTICLES_FILENAMES_NUM], Vec& vec)
 {
     float speed = 0.3;
 
     for (int i = 0; i < PARTICLES_FILENAMES_NUM; i++, speed += 0.6)
     {
-        Vec offset = ship.vel;
+        Vec offset = vec;
         float offsetLen = VecGetLen(offset);
 
         if (offsetLen >= 5)

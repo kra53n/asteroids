@@ -6,7 +6,7 @@
 struct Score
 {
     Texture   tex;
-    unsigned  point;
+    int       point;
     char*     title;
 };
 

@@ -15,6 +15,10 @@ enum gameStates
 
     GAME_STATE_SOLO,
     GAME_STATE_SEAT,
+
+    GAME_STATE_LOOSE,
+    GAME_STATE_PLAYER1_WIN,
+    GAME_STATE_PLAYER2_WIN,
 };
 
 struct Keys

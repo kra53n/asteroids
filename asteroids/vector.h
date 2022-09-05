@@ -20,3 +20,4 @@ void VecSetAngle(Vec& vec, float angle);
 void VecSetAngleByCoords(Vec& vec, SDL_Point p1, SDL_Point p2);
 
 void VecSumCoords(Vec& vec1, Vec& vec2);
+Vec &VecGetMaxVec(Vec& vec1, Vec& vec2);

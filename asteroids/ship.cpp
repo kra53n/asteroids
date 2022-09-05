@@ -69,6 +69,8 @@ void ShipReset(Ship& self, SDL_Point pos)
     BulletsInit(self.bullets);
 
     self.score.point = 0;
+    ScoreUpdate(self.score);
+
     self.health.point = 100;
 
     float center = getRadius(self.tex.dstrect);
@@ -332,6 +334,10 @@ void ShipUpdateCollisionWithShip(Ship& self, Ship& ship)
 
     VecSetAngleByCoords(self.vel, s2Center, s1Center);
     VecSetAngleByCoords(ship.vel, s1Center, s2Center);
+    
+    float maxVel = max(VecGetLen(self.vel), VecGetLen(ship.vel));
+    VecSetLen(self.vel, maxVel);
+    VecSetLen(ship.vel, maxVel);
 }
 
 void ShipUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,

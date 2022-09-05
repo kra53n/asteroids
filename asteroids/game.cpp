@@ -53,10 +53,8 @@ void GameDraw(Game& game)
         break;
 
     case GAME_STATE_SEAT:
-        AsteroidsDraw(game.asteroids);
         ShipDraw(game.ship1, game.state);
         ShipDraw(game.ship2, game.state);
-        EnemyDraw(game.enemy);
         TextureDrawAsInfiniteImage(game.particles[1]);
         TextureDrawAsInfiniteImage(game.particles[2]);
         break;
@@ -73,6 +71,16 @@ void processKeys(Game& game)
         game.state = GAME_STATE_MENU;
         MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
     }
+}
+
+SDL_FPoint getMiddlePointBetweenShips(Ship& s1, Ship& s2, int coeff = 100)
+{
+    Vec vec;
+    SDL_Point center1 = getRectCenter(s1.tex.dstrect);
+    SDL_Point center2 = getRectCenter(s2.tex.dstrect);
+    VecSetLenByCoords(vec, center1, center2);
+    VecSetLen(vec, VecGetLen(vec) / 2);
+    return { (center1.x + vec.x) / coeff, (center1.y + vec.y) / coeff };
 }
 
 void GameUpdate(Game& game)
@@ -162,10 +170,8 @@ void GameUpdate(Game& game)
         {
         case GAME_STATE_PLAY:
             game.menu.restart = true;
-
             break;
         }
-
         break;
 
     case GAME_STATE_SOLO:
@@ -175,18 +181,20 @@ void GameUpdate(Game& game)
 
             ShipReset(game.ship1, { winWdt2, winHgt2 });
             game.ship2.active = false;
+
+            game.ship1.health.rect.y = 50;
         }
 
         AsteroidsUpdate(game.asteroids);
         ShipUpdate(game.ship1, game.ship2, game.asteroids, game.enemy.tex.dstrect,
             game.enemy.health, game.keys, game.state);
         EnemyUpdate(game.enemy, game.ship1);
-        TextureUpdateAsInfiniteImage(
-            game.background,
+
+        TextureUpdateAsInfiniteImage(game.background,
             { -game.ship1.vel.x * game.ship1.speedMovement, game.ship1.vel.y * game.ship1.speedMovement },
-            VecGetLen(game.ship1.vel)
-        );
-        ParticlesUpdate(game.particles, game.ship1);
+            VecGetLen(game.ship1.vel));
+
+        ParticlesUpdate(game.particles, game.ship1.vel);
         break;
 
     case GAME_STATE_SEAT:
@@ -199,20 +207,25 @@ void GameUpdate(Game& game)
             ShipReset(game.ship2, { winWdt2 + distance, winHgt2 });
             game.ship2.tex.angle = 180;
             game.ship2.health.rect.x = winWdt - game.ship2.health.rect.x - game.ship2.health.rect.w;
+
+            game.ship1.health.rect.y = 10;
+            game.ship2.health.rect.y = 10;
         }
 
-        AsteroidsUpdate(game.asteroids);
-        ShipUpdate(game.ship1, game.ship2, game.asteroids, game.enemy.tex.dstrect,
+        ShipUpdate(game.ship1, game.ship2, ASTEROIDS_EMPTY, game.enemy.tex.dstrect,
             game.enemy.health, game.keys, game.state);
-        ShipUpdate(game.ship2, game.ship1, game.asteroids, game.enemy.tex.dstrect,
+        ShipUpdate(game.ship2, game.ship1, ASTEROIDS_EMPTY, game.enemy.tex.dstrect,
             game.enemy.health, game.keys, game.state);
-        //EnemyUpdate(game.enemy, game.ship1);
-        TextureUpdateAsInfiniteImage(
-            game.background,
-            { -game.ship1.vel.x * game.ship1.speedMovement, game.ship1.vel.y * game.ship1.speedMovement },
-            VecGetLen(game.ship1.vel)
-        );
-        ParticlesUpdate(game.particles, game.ship1);
+
+        TextureUpdateAsInfiniteImage(game.background,
+            getMiddlePointBetweenShips(game.ship1, game.ship2), VecGetLen(game.ship1.vel));
+
+        ParticlesUpdate(game.particles, VecGetMaxVec(game.ship1.vel, game.ship2.vel));
+
+        if (game.ship1.health.point < 0)
+            game.state = GAME_STATE_PLAYER2_WIN;
+        if (game.ship2.health.point < 0)
+            game.state = GAME_STATE_PLAYER1_WIN;
         break;
 
     case GAME_STATE_EXIT:
