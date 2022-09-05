@@ -8,6 +8,7 @@ extern int winWdt;
 extern int winHgt;
 extern int winWdt2;
 extern int winHgt2;
+extern SDL_Rect winRect;
 
 void init();
 void deInit(int error);

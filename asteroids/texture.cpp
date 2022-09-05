@@ -52,16 +52,6 @@ Texture loadFont(const char text[], const char fontname[], SDL_Color color, int 
     return texture;
 }
 
-SDL_Point getRectCenter(SDL_Rect& rect)
-{
-    return { rect.x + rect.w / 2, rect.y + rect.h / 2 };
-}
-
-float getRadius(SDL_Rect& rect)
-{
-    return rect.h / 2;
-}
-
 // cond - condition for update
 void TextureUpdateAsInfiniteImage(Texture& self, SDL_FPoint offset, bool cond)
 {

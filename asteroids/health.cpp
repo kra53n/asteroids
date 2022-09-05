@@ -22,8 +22,6 @@ void HealthDraw(Health& self)
     SDL_Rect curHpRect = self.rect;
     curHpRect.w = curHpRect.w * self.point / 100;
 
-    printf("\ndrawing: %d", curHpRect.w);
-
     fillRect(self.rect, COLOR_OF_NON_ACTIVE_OPTION);
     fillRect(curHpRect, COLOR_OF_ACTIVE_OPTION);
 }

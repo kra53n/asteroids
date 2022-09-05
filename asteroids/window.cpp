@@ -1,4 +1,6 @@
 #include <stdio.h>
+
+#include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
@@ -11,6 +13,7 @@ int winWdt = 1280;
 int winHgt = 720;
 int winWdt2 = winWdt / 2;
 int winHgt2 = winHgt / 2;
+SDL_Rect winRect = { 0, 0, winWdt, winHgt };
 
 void init()
 {

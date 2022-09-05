@@ -4,6 +4,7 @@
 
 #include "game.h"
 #include "menu.h"
+#include "funcs.h"
 #include "enemy.h"
 #include "config.h"
 #include "texture.h"
@@ -58,9 +59,19 @@ void GameDraw(Game& game)
         TextureDrawAsInfiniteImage(game.particles[1]);
         TextureDrawAsInfiniteImage(game.particles[2]);
         break;
+
+    case GAME_STATE_PLAYER1_WIN:
+    case GAME_STATE_PLAYER2_WIN:
+        SDL_RenderCopy(ren, game.messageTexture.tex, 0, &game.messageTexture.dstrect);
+        break;
     }
 
     SDL_RenderPresent(ren);
+}
+
+void updateMessageTexture(Game& game, const char* message)
+{
+    game.messageTexture = loadFont(message, MENU_FONTNAME, COLOR_OF_NON_ACTIVE_OPTION, MENU_FONT_SIZE);
 }
 
 void processKeys(Game& game)
@@ -222,10 +233,23 @@ void GameUpdate(Game& game)
 
         ParticlesUpdate(game.particles, VecGetMaxVec(game.ship1.vel, game.ship2.vel));
 
-        if (game.ship1.health.point < 0)
-            game.state = GAME_STATE_PLAYER2_WIN;
-        if (game.ship2.health.point < 0)
-            game.state = GAME_STATE_PLAYER1_WIN;
+        if (game.ship1.health.point < 0 || game.ship2.health.point < 0)
+        {
+            game.state = game.ship1.health.point < 0 ? GAME_STATE_PLAYER2_WIN : GAME_STATE_PLAYER1_WIN;
+            updateMessageTexture(game,
+                game.state == GAME_STATE_PLAYER1_WIN ? "1st player won" : "2nd player won");
+            centerizeRect(game.messageTexture.dstrect, winRect);
+        }
+        break;
+    
+    case GAME_STATE_PLAYER1_WIN:
+    case GAME_STATE_PLAYER2_WIN:
+        if (game.keys.enter)
+        {
+            game.state = GAME_STATE_MENU;
+            game.menu.restart = true;
+            SDL_Delay(100);
+        }
         break;
 
     case GAME_STATE_EXIT:

@@ -23,3 +23,21 @@ void fillRect(SDL_Rect& rect, const SDL_Color& col)
     SDL_SetRenderDrawColor(ren, col.r, col.g, col.b, col.a);
     SDL_RenderFillRect(ren, &rect);
 }
+
+SDL_Point getRectCenter(SDL_Rect& rect)
+{
+    return { rect.x + rect.w / 2, rect.y + rect.h / 2 };
+}
+
+float getRadius(SDL_Rect& rect)
+{
+    return rect.h / 2;
+}
+
+void centerizeRect(SDL_Rect& centerize, SDL_Rect& border)
+{
+    SDL_Point borderCenter = getRectCenter(border);
+    SDL_Point centerizeCenter = getRectCenter(centerize);
+    centerize.x += borderCenter.x - centerizeCenter.x;
+    centerize.y += borderCenter.y - centerizeCenter.y;
+}

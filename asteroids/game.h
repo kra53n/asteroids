@@ -25,6 +25,7 @@ struct Game
     Enemy      enemy;
 
     Menu       menu;
+    Texture    messageTexture;
 };
 
 void processKeys(Game& game);
