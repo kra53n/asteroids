@@ -2,6 +2,7 @@
 #include "menu.h"
 #include "ship.h"
 #include "enemy.h"
+#include "level.h"
 #include "config.h"
 #include "bullet.h"
 #include "texture.h"
@@ -18,15 +19,16 @@ struct Game
     SDL_Event  event;
     Keys       keys;
 
+    Menu       menu;
+    Levels     levels;
+    Texture    messageTexture;
+
     Texture    background;
     Texture    particles[PARTICLES_FILENAMES_NUM];
     Asteroids  asteroids;
     Ship       ship1;
     Ship       ship2;
     Enemy      enemy;
-
-    Menu       menu;
-    Texture    messageTexture;
 };
 
 void processKeys(Game& game);

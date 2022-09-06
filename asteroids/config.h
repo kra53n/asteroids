@@ -2,7 +2,7 @@
 #include <SDL.h>
 
 #define ABOUT_MESSAGE "This game was created by kra53n " \
-                      "(https://github.com/kra53n) for programming course" \
+                      "(https://github.com/kra53n) for programming course " \
                       "project in the 1st year of university. He is really " \
                       "tired to do it. When he choosed this project he didn't " \
                       "expect how hard it will be."
@@ -18,6 +18,8 @@ enum gameStates
     GAME_STATE_SETTINGS,
     GAME_STATE_ABOUT,
     GAME_STATE_EXIT,
+
+    GAME_STATE_LEVELS,
 
     GAME_STATE_SOLO,
     GAME_STATE_SEAT,
@@ -52,6 +54,14 @@ struct Keys
 };
 
 
+// LEVEL CONFIGURAION
+
+#define LEVEL_FILE_FILENAME     "config/levels/levels.txt"
+#define LEVEL_FONT_SIZE         80
+#define LEVEL_VERTICAL_DISTANCE 15
+#define LEVEL_DELAY_BUTTONS     100
+
+
 // MENU CONFIGURATION
 
 #define         MENU_FONTNAME                 "assets/fonts/Voyager Heavy.otf"
@@ -80,8 +90,8 @@ const MENU_INFO MAIN_MENU[MAIN_MENU_NUM] = {
 #define MODE_MENU_NUM 2
 
 const MENU_INFO MODE_MENU[MODE_MENU_NUM] = {
-    { "solo",     GAME_STATE_SOLO },
-    { "hot-seat", GAME_STATE_SEAT },
+    { "solo",     GAME_STATE_LEVELS },
+    { "hot-seat", GAME_STATE_SEAT   },
 };
 
 // BACKGROUND CONFIGURATION

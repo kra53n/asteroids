@@ -145,6 +145,10 @@ void AsteroidsDestroy(Asteroids& self)
         free(aster);
     }
     self.head = NULL;
+
+    for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
+        if (self.texture[i].tex)
+            SDL_DestroyTexture(self.texture[i].tex);
 }
 
 void AsteroidsUpdate(Asteroids& self)

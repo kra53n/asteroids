@@ -4,6 +4,7 @@
 
 #include "game.h"
 #include "menu.h"
+#include "level.h"
 #include "funcs.h"
 #include "enemy.h"
 #include "config.h"
@@ -19,10 +20,12 @@ void GameInit(Game& game)
     BackgroundInit(game.background, 0);
     ParticlesInit(game.particles);
 
+    game.levels = LevelLoadFile(LEVEL_FILE_FILENAME);
+
     //int asters[ASTEROIDS_TYPE_NUM] = { 9, 2, 1, 1, 1, 1, 1, 1, 1 };
-    int asters[ASTEROIDS_TYPE_NUM] = { 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+    //int asters[ASTEROIDS_TYPE_NUM] = { 1, 0, 0, 0, 0, 0, 0, 0, 0 };
     //int asters[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    AsteroidsInit(game.asteroids, asters);
+    //AsteroidsInit(game.asteroids, asters);
     
     MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
     ShipInit(game.ship1, SHIP_FILENAME1, SHIP1);
@@ -43,6 +46,11 @@ void GameDraw(Game& game)
     case GAME_STATE_MENU:
     case GAME_STATE_PLAY:
         MenuDraw(game.menu);
+        break;
+
+    case GAME_STATE_LEVELS:
+        if (game.levels.inited)
+            LevelDraw(game.levels);
         break;
 
     case GAME_STATE_SOLO:
@@ -87,6 +95,9 @@ void processKeys(Game& game)
         game.keys.enter = false;
         game.state = GAME_STATE_MENU;
         MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
+
+        LevelDestroy(game.levels);
+        game.levels.inited = false;
     }
 }
 
@@ -190,6 +201,12 @@ void GameUpdate(Game& game)
             game.menu.restart = true;
             break;
         }
+        break;
+
+    case GAME_STATE_LEVELS:
+        if (!game.levels.inited)
+            LevelInit(game.levels);
+        LevelUpdate(game.levels, game.keys);
         break;
 
     case GAME_STATE_SOLO:

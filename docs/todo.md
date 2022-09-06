@@ -4,7 +4,7 @@
 - [ ] level loading
 - [ ] menu
 - [x] shooting enemy
-- [ ] hot-seat mode
+- [x] hot-seat mode
 - [ ] music
 - [x] base controlling
 - [x] shooting

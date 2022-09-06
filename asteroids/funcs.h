@@ -1,6 +1,9 @@
 #pragma once
 #include <SDL.h>
 
+#include "config.h"
+#include "texture.h"
+
 #define max(a,b) (((a)>(b))?(a):(b))
 
 bool isCircsColliding(SDL_Point p1, float r1, SDL_Point p2, float r2);
