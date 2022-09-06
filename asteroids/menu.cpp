@@ -19,8 +19,23 @@ void changeTextureOptionColor(Menu& self)
     }
 }
 
+void MenuDestroy(Menu& self)
+{
+    if (!self.textures) return;
+
+    for (int opt = 0; opt < self.num; opt++)
+    {
+        SDL_DestroyTexture(self.textures[opt].tex);
+    }
+    free(self.textures);
+
+    self.textures = NULL;
+}
+
 void MenuInit(Menu& self, const MENU_INFO* info, int optionsNum)
 {
+    MenuDestroy(self);
+
     self.ticks = SDL_GetTicks();
     self.info = info;
     self.num = optionsNum;
@@ -34,20 +49,10 @@ void MenuInit(Menu& self, const MENU_INFO* info, int optionsNum)
     }
 
     for (int opt = 0; opt < self.num; opt++)
-    {
         self.textures[opt] = loadFont(info[opt].name, MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_SIZE);
-    }
 
     self.textBlockY = (winHgt - ((MENU_FONT_SIZE + MENU_FONT_VERTICAL_DISTANCE) * self.num - MENU_FONT_VERTICAL_DISTANCE)) / 2;
     changeTextureOptionColor(self);
-}
-
-void MenuDestroy(Menu& self)
-{
-    for (int opt = 0; opt < self.num; opt++)
-    {
-        SDL_DestroyTexture(self.textures[opt].tex);
-    }
 }
 
 void MenuChooseOptionByMouse(Menu& self, Keys& keys, bool& cursorUnderTexture)
