@@ -1,0 +1,9 @@
+level 1
+asteroids 2 3 4 5 6 7 8
+enemy 0
+background 1
+
+level 2
+asteroids 1 1 1 1 1 1 1 1 1
+enemy 1
+background 2
