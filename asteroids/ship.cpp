@@ -367,9 +367,6 @@ void ShipUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,
     EngineUpdate(self.engine);
 
     boundScreen(self.tex.dstrect);
-
-    if (self.health.point <= 0)
-        gameState = GAME_STATE_RESTART;
 }
 
 void ShipDraw(Ship& self, int gameState)

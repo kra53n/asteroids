@@ -1,6 +1,13 @@
 #pragma once
 #include <SDL.h>
 
+#define ABOUT_MESSAGE "This game was created by kra53n " \
+                      "(https://github.com/kra53n) for programming course" \
+                      "project in the 1st year of university. He is really " \
+                      "tired to do it. When he choosed this project he didn't " \
+                      "expect how hard it will be."
+#define ABOUT_FONTNAME "assets/fonts/MontserratAlternates-Regular.otf"
+
 
 // GAME CONFIGURATION
 
@@ -9,14 +16,15 @@ enum gameStates
     GAME_STATE_MENU,
     GAME_STATE_PLAY,
     GAME_STATE_SETTINGS,
+    GAME_STATE_ABOUT,
     GAME_STATE_EXIT,
-
-    GAME_STATE_RESTART,
 
     GAME_STATE_SOLO,
     GAME_STATE_SEAT,
 
     GAME_STATE_LOOSE,
+    GAME_STATE_WIN,
+
     GAME_STATE_PLAYER1_WIN,
     GAME_STATE_PLAYER2_WIN,
 };
@@ -48,7 +56,7 @@ struct Keys
 
 #define         MENU_FONTNAME                 "assets/fonts/Voyager Heavy.otf"
 #define         MENU_FONT_SIZE                50
-#define         MENU_FONT_VERTICAL_DISTANCE   80
+#define         MENU_FONT_VERTICAL_DISTANCE   40
 #define         MENU_DELAY_BUTTONS            200
 
 const SDL_Color COLOR_OF_ACTIVE_OPTION      = { 255, 0, 0, 255 };
@@ -60,11 +68,12 @@ struct MENU_INFO
     int         mode;
 };
 
-#define MAIN_MENU_NUM 3
+#define MAIN_MENU_NUM 4
 
 const MENU_INFO MAIN_MENU[MAIN_MENU_NUM] = {
     { "start",    GAME_STATE_PLAY     },
     { "settings", GAME_STATE_SETTINGS },
+    { "about",    GAME_STATE_ABOUT    },
     { "exit",     GAME_STATE_EXIT     },
 };
 
@@ -81,7 +90,7 @@ const MENU_INFO MODE_MENU[MODE_MENU_NUM] = {
 #define BACKOGRUND_MOVE_SPEED    6
 
 const char FILENAMES[BACKGROUND_FILENAMES_NUM][41] = {
-    "assets/images/backgrounds/background.png",
+    "assets/images/backgrounds/bg1.png",
     "assets/images/stars/Nebula Aqua-Pink.png",
     "assets/images/stars/Nebula Blue.png",
     "assets/images/stars/Nebula Red.png",

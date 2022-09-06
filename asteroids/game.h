@@ -9,11 +9,12 @@
 
 struct Game
 {
-    int        wdt        = winWdt;
-    int        hgt        = winHgt;
+    int        wdt         = winWdt;
+    int        hgt         = winHgt;
                           
-    bool       run        = false;
-    int        state      = 0;
+    bool       run         = false;
+    bool       aboutInited = false;
+    int        state       = 0;
     SDL_Event  event;
     Keys       keys;
 

@@ -60,6 +60,9 @@ void GameDraw(Game& game)
         TextureDrawAsInfiniteImage(game.particles[2]);
         break;
 
+    case GAME_STATE_ABOUT:
+    case GAME_STATE_LOOSE:
+    case GAME_STATE_WIN:
     case GAME_STATE_PLAYER1_WIN:
     case GAME_STATE_PLAYER2_WIN:
         SDL_RenderCopy(ren, game.messageTexture.tex, 0, &game.messageTexture.dstrect);
@@ -69,9 +72,12 @@ void GameDraw(Game& game)
     SDL_RenderPresent(ren);
 }
 
-void updateMessageTexture(Game& game, const char* message)
+void updateMessageTexture(Texture& tex, const char* message,
+    const char* fontname = MENU_FONTNAME, int size = MENU_FONT_SIZE)
 {
-    game.messageTexture = loadFont(message, MENU_FONTNAME, COLOR_OF_NON_ACTIVE_OPTION, MENU_FONT_SIZE);
+    if (tex.tex)
+        SDL_DestroyTexture(tex.tex);
+    tex = loadFont(message, fontname, COLOR_OF_NON_ACTIVE_OPTION, size);
 }
 
 void processKeys(Game& game)
@@ -176,6 +182,7 @@ void GameUpdate(Game& game)
     case GAME_STATE_MENU:
     case GAME_STATE_PLAY:
         MenuUpdate(game.menu, game.keys, game.state);
+        game.aboutInited = false;
 
         switch (game.state)
         {
@@ -206,6 +213,17 @@ void GameUpdate(Game& game)
             VecGetLen(game.ship1.vel));
 
         ParticlesUpdate(game.particles, game.ship1.vel);
+        if (game.ship1.health.point < 0)
+        {
+            game.state = GAME_STATE_LOOSE;
+
+            char message[50];
+            sprintf_s(message, 50, "ur score: %d\nbest score: nani", game.ship1.score.point);
+            updateMessageTexture(game.messageTexture, message);
+
+            centerizeRect(game.messageTexture.dstrect, winRect);
+        }
+
         break;
 
     case GAME_STATE_SEAT:
@@ -236,19 +254,37 @@ void GameUpdate(Game& game)
         if (game.ship1.health.point < 0 || game.ship2.health.point < 0)
         {
             game.state = game.ship1.health.point < 0 ? GAME_STATE_PLAYER2_WIN : GAME_STATE_PLAYER1_WIN;
-            updateMessageTexture(game,
+            updateMessageTexture(game.messageTexture,
                 game.state == GAME_STATE_PLAYER1_WIN ? "1st player won" : "2nd player won");
             centerizeRect(game.messageTexture.dstrect, winRect);
         }
         break;
     
+    case GAME_STATE_ABOUT:
+    case GAME_STATE_LOOSE:
+    case GAME_STATE_WIN:
     case GAME_STATE_PLAYER1_WIN:
     case GAME_STATE_PLAYER2_WIN:
+        switch (game.state)
+        {
+        case GAME_STATE_ABOUT:
+            if (!game.aboutInited)
+            {
+                game.aboutInited = true;
+                updateMessageTexture(game.messageTexture, ABOUT_MESSAGE, ABOUT_FONTNAME, 35);
+                centerizeRect(game.messageTexture.dstrect, winRect);
+            }
+            break;
+        }
+
         if (game.keys.enter)
         {
+            int ticks = SDL_GetTicks();
+            if (ticks - game.menu.ticks < MENU_DELAY_BUTTONS) return;
+            game.menu.ticks = ticks;
+
             game.state = GAME_STATE_MENU;
             game.menu.restart = true;
-            SDL_Delay(100);
         }
         break;
 
