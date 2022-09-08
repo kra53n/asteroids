@@ -128,6 +128,8 @@ void EnemyUpdateBullets(Enemy& self, Ship& ship)
 
 void EnemyUpdate(Enemy& self, Ship& ship)
 {
+    if (!self.active) return;
+
     EnemyUpdateMovement(self, ship);
     EnemyShoot(self);
     EnemyUpdateBullets(self, ship);
@@ -143,6 +145,7 @@ void EnemyUpdate(Enemy& self, Ship& ship)
 
 void EnemyDraw(Enemy& self)
 {
+    if (!self.active) return;
     SDL_RenderCopy(ren, self.tex.tex, 0, &self.tex.dstrect);
     BulletsDraw(self.bullets);
 }

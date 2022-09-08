@@ -31,10 +31,11 @@ void ShipInit(Ship& self, const char* filename, int instance);
 void ShipReset(Ship& self, SDL_Point);
 
 void ShipShoot(Ship& self, int type);
-void ShipBulletsUpdate(Ship& ship, Asteroids& asters, SDL_Rect& enemyRect, Health& enemyHealth);
+void ShipBulletsUpdate(Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,
+    int& enemyInited, Health& enemyHealth);
 
 void ShipUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,
-    Health& enemyHealth, Keys& keys, int& gameState);
+    Health& enemyHealth, bool& enemyActive, Keys& keys, int& gameState);
 void ShipDraw(Ship& self, int gameState);
 
 void ShipUpdateCollisionWithShip(Ship& s1, Ship& s2);

@@ -1,4 +1,6 @@
 #pragma once
+#include "ship.h"
+#include "health.h"
 #include "config.h"
 #include "vector.h"
 #include "bullet.h"
@@ -14,6 +16,7 @@ struct Enemy
     int     damage      = ENEMY_DAMAGE;
     int     ticks;
     int     damageTicks;
+    bool    active;
 };
 
 void EnemyInit(Enemy& self);

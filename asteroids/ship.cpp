@@ -5,7 +5,6 @@
 #include "ship.h"
 #include "score.h"
 #include "funcs.h"
-#include "enemy.h"
 #include "bullet.h"
 #include "vector.h"
 #include "window.h"
@@ -247,18 +246,21 @@ void ShipShoot(Ship& self, int type)
     }
 }
 
-bool ShipUpdateBulletCollisionWithEnemy(Ship& self, SDL_Rect& enemyRect, Health& enemyHealth, Bullet* bullet)
+bool ShipUpdateBulletCollisionWithEnemy(Ship& self, SDL_Rect& enemyRect,
+    Health& enemyHealth, bool& enemyInited, Bullet* bullet
+)
 {
     if (!isPointInCirc(
         getRectCenter(enemyRect),
         getRadius(enemyRect),
         { bullet->pos.x, bullet->pos.y }
     )) return false;
-    
+
     HealthUpdate(enemyHealth, BULLETS[bullet->type].damage);
     if (enemyHealth.point <= 0)
     {
         ScoreUpdate(self.score, ENEMY_HEALTH);
+        enemyInited = false;
     }
     BulletsDelBullet(self.bullets, bullet);
 
@@ -282,7 +284,9 @@ bool ShipUpdateBulletCollisionWithShip(Ship& self, Ship& ship, Bullet* bullet)
     return true;
 }
 
-void ShipBulletsUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect, Health& enemyHealth)
+void ShipBulletsUpdate(Ship& self, Ship& ship, Asteroids& asters,
+    SDL_Rect& enemyRect, bool& enemyActive, Health& enemyHealth
+)
 {
     for (Bullet* cur = self.bullets.head; cur != NULL;)
     {
@@ -293,7 +297,7 @@ void ShipBulletsUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enem
 
         if (
             BulletsUpdateCollisionWithAstroids(self.bullets, cur, asters, self.score) ||
-            ShipUpdateBulletCollisionWithEnemy(self, enemyRect, enemyHealth, cur) ||
+            ShipUpdateBulletCollisionWithEnemy(self, enemyRect, enemyHealth, enemyActive, cur) ||
             ShipUpdateBulletCollisionWithShip(self, ship, cur)
         )
         {
@@ -341,7 +345,7 @@ void ShipUpdateCollisionWithShip(Ship& self, Ship& ship)
 }
 
 void ShipUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,
-    Health& enemyHealth, Keys& keys, int& gameState
+    Health& enemyHealth, bool& enemyActive, Keys& keys, int& gameState
 )
 {
     ShipUpdateActions(self, keys, gameState);
@@ -362,7 +366,7 @@ void ShipUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,
     ShipUpdateTicks(self);
     ShipUpdateCollisionWithShip(self, ship);
     ShipUpdateCollisionWithAstroids(self, asters);
-    ShipBulletsUpdate(self, ship, asters, enemyRect, enemyHealth);
+    ShipBulletsUpdate(self, ship, asters, enemyRect, enemyActive, enemyHealth);
     
     EngineUpdate(self.engine);
 

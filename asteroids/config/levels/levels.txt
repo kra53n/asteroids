@@ -1,9 +1,14 @@
 level 1
-asteroids 2 3 4 5 6 7 8
+asteroids 1
 enemy 0
-background 1
+background 0
 
 level 2
-asteroids 1 1 1 1 1 1 1 1 1
+asteroids 0 0 0 0 0 1 0 0 1
+enemy 1
+background 2
+
+level 3
+asteroids 0 0 0 1 0 1 0 0 1
 enemy 1
 background 2

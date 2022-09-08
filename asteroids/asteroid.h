@@ -1,4 +1,5 @@
 #pragma once
+#include "vector.h"
 #include "config.h"
 #include "texture.h"
 #include "animation.h"

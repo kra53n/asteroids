@@ -20,11 +20,12 @@ void GameInit(Game& game)
     BackgroundInit(game.background, 0);
     ParticlesInit(game.particles);
 
-    game.levels = LevelLoadFile(LEVEL_FILE_FILENAME);
 
-    //int asters[ASTEROIDS_TYPE_NUM] = { 9, 2, 1, 1, 1, 1, 1, 1, 1 };
-    //int asters[ASTEROIDS_TYPE_NUM] = { 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+    //int asters[ASTEROIDS_TYPE_NUM] = { 2, 2, 1, 1, 1, 1, 1, 1, 1 };
+    //int asters[ASTEROIDS_TYPE_NUM] = { 1, 0, 0, 1, 0, 0, 2, 0, 0 };
     //int asters[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+    game.levels = LevelLoadFile(LEVEL_FILE_FILENAME);
     //AsteroidsInit(game.asteroids, asters);
     
     MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
@@ -96,7 +97,6 @@ void processKeys(Game& game)
         game.state = GAME_STATE_MENU;
         MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
 
-        LevelDestroy(game.levels);
         game.levels.inited = false;
     }
 }
@@ -206,7 +206,7 @@ void GameUpdate(Game& game)
     case GAME_STATE_LEVELS:
         if (!game.levels.inited)
             LevelInit(game.levels);
-        LevelUpdate(game.levels, game.keys);
+        LevelUpdate(game.levels, game.asteroids, game.enemy, game.keys, game.state);
         break;
 
     case GAME_STATE_SOLO:
@@ -222,7 +222,7 @@ void GameUpdate(Game& game)
 
         AsteroidsUpdate(game.asteroids);
         ShipUpdate(game.ship1, game.ship2, game.asteroids, game.enemy.tex.dstrect,
-            game.enemy.health, game.keys, game.state);
+            game.enemy.health, game.enemy.active, game.keys, game.state);
         EnemyUpdate(game.enemy, game.ship1);
 
         TextureUpdateAsInfiniteImage(game.background,
@@ -259,9 +259,9 @@ void GameUpdate(Game& game)
         }
 
         ShipUpdate(game.ship1, game.ship2, ASTEROIDS_EMPTY, game.enemy.tex.dstrect,
-            game.enemy.health, game.keys, game.state);
+            game.enemy.health, game.enemy.active, game.keys, game.state);
         ShipUpdate(game.ship2, game.ship1, ASTEROIDS_EMPTY, game.enemy.tex.dstrect,
-            game.enemy.health, game.keys, game.state);
+            game.enemy.health, game.enemy.active, game.keys, game.state);
 
         TextureUpdateAsInfiniteImage(game.background,
             getMiddlePointBetweenShips(game.ship1, game.ship2), VecGetLen(game.ship1.vel));
@@ -271,8 +271,10 @@ void GameUpdate(Game& game)
         if (game.ship1.health.point < 0 || game.ship2.health.point < 0)
         {
             game.state = game.ship1.health.point < 0 ? GAME_STATE_PLAYER2_WIN : GAME_STATE_PLAYER1_WIN;
-            updateMessageTexture(game.messageTexture,
-                game.state == GAME_STATE_PLAYER1_WIN ? "1st player won" : "2nd player won");
+            const char* message = GAME_STATE_PLAYER1_WIN ? "1st player won" : "2nd player won";
+            if (game.ship1.health.point == 0 && game.ship2.health.point == 0)
+                message = "its draw";
+            updateMessageTexture(game.messageTexture, message);
             centerizeRect(game.messageTexture.dstrect, winRect);
         }
         break;

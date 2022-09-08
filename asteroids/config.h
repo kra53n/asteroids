@@ -60,6 +60,7 @@ struct Keys
 #define LEVEL_FONT_SIZE         80
 #define LEVEL_VERTICAL_DISTANCE 15
 #define LEVEL_DELAY_BUTTONS     100
+#define LEVEL_FONT_TRANSPARENT  100
 
 
 // MENU CONFIGURATION
@@ -131,7 +132,7 @@ struct BULLET_INFO
 #define BULLETS_TYPE_NUM 4
 
 const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
-    { "assets/images/bullets/bullet1.png", 80,  200,  1 },
+    { "assets/images/bullets/bullet1.png", 80,  200,  5 },
     { "assets/images/bullets/bullet1.png", 100, 800,  2 },
     { "assets/images/bullets/bullet2.png", 10,  1000, 3 },
     { "assets/images/bullets/bullet2.png", 10,  1000, 4 },

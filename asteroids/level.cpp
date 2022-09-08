@@ -5,14 +5,24 @@
 #include <SDL.h>
 
 #include "menu.h"
+#include "enemy.h"
 #include "funcs.h"
 #include "level.h"
 #include "config.h"
 #include "window.h"
 #include "texture.h"
+#include "asteroid.h"
 
 LevelState readState(LevelState state, char const* string);
-LevelState processState(LevelState state, const char* string, Level& level);
+void processState(LevelState state, const char* string, Level& level);
+
+void printLevels(Levels& self)
+{
+    for (int i = 0; i < self.num; i++)
+    {
+        printf("\nlevel num: %d", self.levels[i].num);
+    }
+}
 
 Levels LevelLoadFile(const char* filename)
 {
@@ -40,16 +50,19 @@ Levels LevelLoadFile(const char* filename)
             tmpState = state;
             continue;
         }
-        state = processState(state, string, level);
 
-        if (state == LEVEL_STATE)
+        if (state == LEVEL_NUM)
         {
-            levels.num++;
-            levels.levels = (Level*)realloc(levels.levels, sizeof(Level) * levels.num);
-            levels.levels[levels.num-1] = level;
+            levels.levels = (Level*)realloc(levels.levels, sizeof(Level) * (levels.num + 1));
+            if (levels.num)
+                levels.levels[levels.num-1] = level;
             level = { 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 };
+            levels.num++;
         }
+
+        processState(state, string, level);
     }
+    levels.levels[levels.num-1] = level;
 
     fclose(f);
 
@@ -62,7 +75,6 @@ LevelState readState(LevelState state, char const* string)
     else if (!strcmp(string, "asteroids"))  return LEVEL_ASTEROIDS;
     else if (!strcmp(string, "enemy"))      return LEVEL_ENEMY;
     else if (!strcmp(string, "background")) return LEVEL_BACKGROUND;
-    else if (!strcmp(string, "rectord"))    return LEVEL_RECORD;
     return state;
 }
 
@@ -71,7 +83,7 @@ void processAsteroidsState(const char* string, Level& level);
 void processEnemyState(const char* string, Level& level);
 void processBackgroundState(const char* string, Level& level);
 
-LevelState processState(LevelState state, const char* string, Level& level)
+void processState(LevelState state, const char* string, Level& level)
 {
     switch (state)
     {
@@ -80,9 +92,6 @@ LevelState processState(LevelState state, const char* string, Level& level)
     case LEVEL_ENEMY:      processEnemyState(string, level);      break;
     case LEVEL_BACKGROUND: processBackgroundState(string, level); break;
     }
-    if (state == LEVEL_BACKGROUND)
-        return LEVEL_STATE;
-    return state;
 }
 
 void processNumState(const char* string, Level& level)
@@ -95,13 +104,23 @@ void processAsteroidsState(const char* string, Level& level)
     if (level.asters[ASTEROIDS_TYPE_NUM-1])
         return;
 
-    for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
+    static int idx = 0;
+    static int levelNum = level.num;
+
+    if (levelNum != level.num)
     {
-        if (level.asters[i])
-            continue;
-        level.asters[i] = atoi(string);
-        break;
+        levelNum = level.num;
+        idx = 0;
     }
+
+    if (level.asters[idx])
+    {
+        idx++;
+        return;
+    }
+
+    level.asters[idx] = atoi(string);
+    idx++;
 }
 
 void processEnemyState(const char* string, Level& level)
@@ -120,36 +139,50 @@ void LevelInit(Levels& levels)
     levels.cur = 0;
     levels.ticks = SDL_GetTicks();
 
-    levels.textures = (Texture*)malloc(sizeof(Texture) * levels.num);
+    levels.numTextures = (Texture*)malloc(sizeof(Texture) * levels.num);
 
     for (int i = 0; i < levels.num; i++)
     {
         char num[4];
         sprintf_s(num, "%d", levels.levels[i].num, 3);
 
-        levels.textures[i] = loadFont(num, MENU_FONTNAME,
+        levels.numTextures[i] = loadFont(num, MENU_FONTNAME,
             COLOR_OF_NON_ACTIVE_OPTION, LEVEL_FONT_SIZE);
 
         if (i == 0)
         {
-            centerizeRect(levels.textures[i].dstrect, winRect);
-            levels.x = levels.textures[i].dstrect.x;
+            centerizeRect(levels.numTextures[i].dstrect, winRect);
+            levels.x = levels.numTextures[i].dstrect.x;
         }
         else
         {
             SDL_Rect r = {
-				levels.textures[i-1].dstrect.x, levels.textures[i-1].dstrect.y,
-				levels.textures[i-1].dstrect.w, levels.textures[i-1].dstrect.h,
+                levels.numTextures[i-1].dstrect.x, levels.numTextures[i-1].dstrect.y,
+                levels.numTextures[i-1].dstrect.w, levels.numTextures[i-1].dstrect.h,
             };
-            levels.textures[i].dstrect.x += levels.x;
-            levels.textures[i].dstrect.y += r.y + r.h + LEVEL_VERTICAL_DISTANCE;
+            levels.numTextures[i].dstrect.x += levels.x;
+            levels.numTextures[i].dstrect.y += r.y + r.h + LEVEL_VERTICAL_DISTANCE;
         }
     }
+
+    levels.levelTexture = loadFont("level", MENU_FONTNAME, COLOR_OF_NON_ACTIVE_OPTION,
+        LEVEL_FONT_SIZE - 40);
+    centerizeRect(levels.levelTexture.dstrect, levels.numTextures[levels.cur].dstrect);
+    levels.levelTexture.dstrect.x -= levels.levelTexture.dstrect.w / 2;
 }
 
-void LevelDestroy(Levels& levels)
+void LevelDestroyLevel(Asteroids& asters)
 {
+    AsteroidsDestroy(asters);
+}
 
+void LevelLoadLevel(Levels& self, Asteroids& asters, Enemy& enemy)
+{
+    LevelDestroyLevel(asters);
+
+    Level level = self.levels[self.cur];
+    AsteroidsInit(asters, level.asters);
+    enemy.active = level.enemy;
 }
 
 void shiftElements(Levels& self, int side)
@@ -157,18 +190,20 @@ void shiftElements(Levels& self, int side)
     int sign;
     switch (side)
     {
-    case LEVEL_SHIFT_UP:  sign = -1; break;
+    case LEVEL_SHIFT_UP:   sign = -1; break;
     case LEVEL_SHIFT_DOWN: sign = 1;  break;
     }
 
-    int offset = self.textures[0].dstrect.h + LEVEL_VERTICAL_DISTANCE;
+    int offset = self.numTextures[0].dstrect.h + LEVEL_VERTICAL_DISTANCE;
 
     for (int i = 0; i < self.num; i++)
-        self.textures[i].dstrect.y -= sign * offset;
+        self.numTextures[i].dstrect.y -= sign * offset;
     self.cur += sign;
 }
 
-void LevelUpdate(Levels& levels, Keys& keys)
+void LevelUpdate(Levels& levels, Asteroids& asters, Enemy& enemy, Keys& keys,
+    int& gameState
+)
 {
     int ticks = SDL_GetTicks();
     if (ticks - levels.ticks < LEVEL_DELAY_BUTTONS) return;
@@ -185,15 +220,29 @@ void LevelUpdate(Levels& levels, Keys& keys)
         if (levels.cur == levels.num - 1) return;
         shiftElements(levels, LEVEL_SHIFT_DOWN);
     }
+
+    if (keys.space || keys.enter)
+    {
+        LevelLoadFile(LEVEL_FILE_FILENAME);
+        LevelLoadLevel(levels, asters, enemy);
+        gameState = GAME_STATE_SOLO;
+        levels.inited = false;
+    }
 }
 
 void LevelDraw(Levels& levels)
 {
     for (int i = 0; i < levels.num; i++)
     {
-        SDL_Rect rect = levels.textures[i].dstrect;
+        SDL_Rect rect = levels.numTextures[i].dstrect;
+        int alpha = LEVEL_FONT_TRANSPARENT;
         if (i == levels.cur)
+        {
             rect.x += 30;
-        SDL_RenderCopy(ren, levels.textures[i].tex, 0, &rect);
+            alpha = 255;
+        }
+        SDL_SetTextureAlphaMod(levels.numTextures[i].tex, alpha);
+        SDL_RenderCopy(ren, levels.numTextures[i].tex, 0, &rect);
     }
+    SDL_RenderCopy(ren, levels.levelTexture.tex, 0, &levels.levelTexture.dstrect);
 }
