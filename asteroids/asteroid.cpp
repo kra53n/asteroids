@@ -140,11 +140,8 @@ void AsteroidsInit(Asteroids& self, int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 
 void AsteroidsDestroy(Asteroids& self)
 {
-    for (Asteroid* aster = self.head; aster != NULL; aster = aster->next)
-    {
-        free(aster);
-    }
-    self.head = NULL;
+    while (self.head)
+        AsteroidsDelAsteroid(self, self.head);
 
     for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
         if (self.texture[i].tex)
