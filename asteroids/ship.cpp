@@ -40,7 +40,7 @@ void ShipInit(Ship& self, const char* filename, int instance)
 {
     self.ticks = SDL_GetTicks();
     self.instance = instance;
-    self.bulletType = 1;
+    self.bulletType = 0;
     self.active = true;
 
     switch (self.instance)
@@ -206,16 +206,18 @@ void ShipShoot(Ship& self, int type)
         break;
 
     case 1:
-        for (float i = 0; i < 350; i += 0.1)
+        for (int i = -90; i <= 90; i += 180)
         {
             Bullet* bullet = BulletsPush(self.bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
 
             Vec pos;
-            VecSetLen(pos, VecGetLen(bullet->vel) * i);
-            VecSetAngle(pos, -VecGetAngle(bullet->vel));
+            VecSetLen(pos, getRadius(self.tex.dstrect));
+            VecSetAngle(pos, -self.tex.angle + i);
+            VecSetAngle(bullet->vel, self.tex.angle);
 
-            bullet->pos.x += pos.x;
-            bullet->pos.y += pos.y;
+            SDL_Point center = getRectCenter(self.tex.dstrect);
+            bullet->pos.x = center.x + pos.x;
+            bullet->pos.y = center.y + pos.y;
         }
         break;
 

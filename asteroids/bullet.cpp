@@ -147,6 +147,7 @@ void BulletsDraw(Bullets& self)
     {
         Texture tex = self.texs[cur->type];
         SDL_Rect rect = { cur->pos.x, cur->pos.y, tex.dstrect.w, tex.dstrect.h };
-        SDL_RenderCopyEx(ren, tex.tex, 0, &rect, VecGetAngle(cur->vel), 0, SDL_FLIP_NONE);
+        SDL_Point center = { 0, self.texs[cur->type].dstrect.h / 2 };
+        SDL_RenderCopyEx(ren, tex.tex, 0, &rect, VecGetAngle(cur->vel), &center, SDL_FLIP_NONE);
     }
 }

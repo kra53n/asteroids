@@ -132,10 +132,10 @@ struct BULLET_INFO
 #define BULLETS_TYPE_NUM 4
 
 const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
-    { "assets/images/bullets/bullet1.png", 80,  200,  5 },
-    { "assets/images/bullets/bullet1.png", 100, 800,  2 },
-    { "assets/images/bullets/bullet2.png", 10,  1000, 3 },
-    { "assets/images/bullets/bullet2.png", 10,  1000, 4 },
+    { "assets/images/bullets/bullet1.png", 80,  200,  5  },
+    { "assets/images/bullets/bullet2.png", 100, 800,  10 },
+    { "assets/images/bullets/bullet3.png", 10,  1000, 3  },
+    { "assets/images/bullets/bullet3.png", 10,  1000, 4  },
 };
 
 

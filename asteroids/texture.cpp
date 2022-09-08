@@ -55,7 +55,7 @@ Texture loadFont(const char text[], const char fontname[], SDL_Color color, int 
 // cond - condition for update
 void TextureUpdateAsInfiniteImage(Texture& self, SDL_FPoint offset, bool cond)
 {
-	if (!cond) return;
+    if (!cond) return;
 
     self.dstrect.x += offset.x;
     self.dstrect.y += offset.y;
