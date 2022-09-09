@@ -6,6 +6,10 @@
 
 #define max(a,b) (((a)>(b))?(a):(b))
 
+enum SORTING_BY { SORTING_BY_INCREMENCE, SORTING_BY_DECREMENCE };
+
+void sortNums(int* nums, int size, int by = SORTING_BY_INCREMENCE);
+
 bool isCircsColliding(SDL_Point p1, float r1, SDL_Point p2, float r2);
 bool isPointInCirc(SDL_Point circ, float r, SDL_Point p);
 

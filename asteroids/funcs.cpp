@@ -3,6 +3,31 @@
 #include "funcs.h"
 #include "window.h"
 
+void sortNums(int* nums, int size, int by)
+{
+    for (int i = 0; i < size - 1; i++)
+    {
+        bool swapped = false;
+        for (int j = 0; j < size - 1; j++)
+        {
+            bool cond;
+            switch (by)
+            {
+            case SORTING_BY_INCREMENCE: cond = nums[j] < nums[j + 1]; break;
+            case SORTING_BY_DECREMENCE: cond = nums[j] > nums[j + 1]; break;
+            }
+            if (cond)
+                continue;
+            int tmp = nums[j];
+            nums[j] = nums[j+1];
+            nums[j+1] = tmp;
+            swapped = true;
+        }
+        if (!swapped)
+            break;
+    }
+}
+
 bool isCircsColliding(SDL_Point p1, float r1, SDL_Point p2, float r2)
 {
     int x = p2.x - p1.x;
