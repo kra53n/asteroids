@@ -7,6 +7,7 @@
 #include "level.h"
 #include "funcs.h"
 #include "enemy.h"
+#include "record.h"
 #include "config.h"
 #include "texture.h"
 #include "asteroid.h"
@@ -230,13 +231,18 @@ void GameUpdate(Game& game)
             VecGetLen(game.ship1.vel));
 
         ParticlesUpdate(game.particles, game.ship1.vel);
+
         if (game.ship1.health.point < 0)
         {
             game.state = GAME_STATE_LOOSE;
 
-            char message[50];
-            sprintf_s(message, 50, "ur score: %d\nbest score: nani", game.ship1.score.point);
-            updateMessageTexture(game.messageTexture, message);
+            char message[80];
+            sprintf_s(message, 80, "ur score: %d\nbest score: %d\nur position in top: %d",
+                game.ship1.score.point,
+                getBestScore(game.levels.cur + 1, game.ship1.score.point),
+                getPosInLevelRecords(game.levels.cur+1, game.ship1.score.point) + 1);
+            writeScore(game.levels.cur + 1, game.ship1.score.point);
+            updateMessageTexture(game.messageTexture, message, MENU_FONTNAME, 40);
 
             centerizeRect(game.messageTexture.dstrect, winRect);
         }

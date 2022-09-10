@@ -63,6 +63,12 @@ struct Keys
 #define LEVEL_FONT_TRANSPARENT  100
 
 
+// LEVEL CONFIGURAION
+
+#define RECORD_FILENAME_PREFIX  "data/records_in_"
+#define RECORD_FILENAME_POSTFIX "_level.txt"
+
+
 // MENU CONFIGURATION
 
 #define         MENU_FONTNAME                 "assets/fonts/Voyager Heavy.otf"
@@ -94,6 +100,7 @@ const MENU_INFO MODE_MENU[MODE_MENU_NUM] = {
     { "solo",     GAME_STATE_LEVELS },
     { "hot-seat", GAME_STATE_SEAT   },
 };
+
 
 // BACKGROUND CONFIGURATION
 

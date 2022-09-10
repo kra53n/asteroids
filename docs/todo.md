@@ -27,7 +27,9 @@
 
 ## todo
 
+- [ ] send player to level state after won
 - [ ] add enemy damage
+- [ ] rename `point` to `points`
 - [ ] add player nickname feature
 - [ ] remove funcs of `background.cpp` to `texture.cpp`
 

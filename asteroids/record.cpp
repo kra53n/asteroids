@@ -12,7 +12,6 @@ char* getFilename(int levelNum)
     int len = 32;
     char* filename = (char*)malloc(sizeof(char) * len);
     sprintf_s(filename, len, "%s%d%s", RECORD_FILENAME_PREFIX, levelNum, RECORD_FILENAME_POSTFIX);
-    printf("\nrecord filename: %s", filename);
     return filename;
 }
 
@@ -41,50 +40,24 @@ int* readRecordFile(int& num, int levelNum)
     }
     free(filename);
 
-    int* records = 0;
+    int* scores = 0;
     num = 0;
 
     while (!feof(f))
     {
-        char record[120];
-        fscanf_s(f, "%s", record, 120);
+        char score[120];
+        fscanf_s(f, "%s", score, 120);
 
         num++;
-        records = (int*)realloc(records, sizeof(int) * num);
-        records[num-1] = atoi(record);
+        scores = (int*)realloc(scores, sizeof(int) * num);
+        scores[num-1] = atoi(score);
     }
 
-    return records;
+    fclose(f);
+    return scores;
 }
 
-int getPosInLevelRecords(int levelNum, int record)
-{
-    if (!recordFileExist(levelNum))
-        return 0;
-
-    int num;
-    int* records = readRecordFile(num, levelNum);
-
-    sortNums(records, num, SORTING_BY_DECREMENCE);
-
-    int pos = -1;
-    for (int i = 0; i < num; i++)
-    {
-        printf("\nnum: %d", records[i]);
-        if (record < records[i])
-            continue;
-        pos = i;
-        break;
-    }
-
-    if (pos < 0)
-        pos = num;
-
-    free(records);
-    return pos;
-}
-
-void writeRecord(int levelNum, int record)
+void writeScore(int levelNum, int score)
 {
     char* filename = getFilename(levelNum);
 
@@ -95,6 +68,57 @@ void writeRecord(int levelNum, int record)
         deInit(1);
     }
     free(filename);
-    fprintf(f, "%d ", record);
+    fprintf(f, "%d\n", score);
     fclose(f);
+}
+
+int getPosInLevelRecords(int levelNum, int score)
+{
+    if (!recordFileExist(levelNum))
+        return 0;
+
+    int num;
+    int* scores = readRecordFile(num, levelNum);
+    sortNums(scores, num, SORTING_BY_DECREMENCE);
+
+    int pos = -1;
+    for (int i = 0; i < num; i++)
+    {
+        if (score < scores[i])
+            continue;
+        pos = i;
+        break;
+    }
+
+    if (pos < 0)
+        pos = num-1;
+
+    free(scores);
+    return pos;
+}
+
+// return -1 if record file without records
+int getFirstPosInLevelRecords(int levelNum)
+{
+    if (!recordFileExist(levelNum))
+        return 0;
+
+    int num;
+    int* records = readRecordFile(num, levelNum);
+    sortNums(records, num, SORTING_BY_DECREMENCE);
+
+    int pos = num > 0 ? records[0] : -1;
+    free(records);
+    return pos;
+}
+
+int getBestScore(int levelNum, int curScore)
+{
+    if (!recordFileExist(levelNum))
+        return curScore;
+
+    int pos = getPosInLevelRecords(levelNum, curScore);
+    if (pos == 0)
+        return curScore;
+    return getFirstPosInLevelRecords(levelNum);
 }
