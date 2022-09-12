@@ -150,16 +150,12 @@ void ShipUpdatAcceleration(Ship& self)
 void ShipUpdateTicks(Ship& self)
 {
     int ticks = SDL_GetTicks();
-    if (ticks - self.ticks >= 1000)
-    {
-        self.ticks = ticks;
-        
-        if (self.acts.up)
-            return;
+    if (ticks - self.ticks < 1000) return;
+    self.ticks = ticks;
 
-        self.vel.x /= 1.8;
-        self.vel.y /= 1.8;
-    }
+    if (self.acts.up) return;
+    self.vel.x /= 1.8;
+    self.vel.y /= 1.8;
 }
 
 void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
