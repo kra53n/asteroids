@@ -14,12 +14,8 @@ struct Ship
     Bullets      bullets;
     Health       health;
     Score        score;
-    float        speedMovement = 0.5;
-    float        rotationSpeed = 2.7;
-    float        rotationCoeff = 0.1;
-    int          rotationPower = 0;
+    float        angularVel;
     int          ticks         = 0;
-    int          maxSpeed      = 10;
     int          instance;
     int          bulletType;
     bool         active;

@@ -19,3 +19,5 @@ SDL_Point getRectCenter(SDL_Rect& rect);
 float getRadius(SDL_Rect& rect);
 
 void centerizeRect(SDL_Rect& centerize, SDL_Rect& border);
+
+void updateMaxValue(float& value, float maximum);

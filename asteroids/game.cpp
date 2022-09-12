@@ -227,7 +227,7 @@ void GameUpdate(Game& game)
         EnemyUpdate(game.enemy, game.ship1);
 
         TextureUpdateAsInfiniteImage(game.background,
-            { -game.ship1.vel.x * game.ship1.speedMovement, game.ship1.vel.y * game.ship1.speedMovement },
+            { -game.ship1.vel.x * (float)0.5, game.ship1.vel.y * (float)0.5 },
             VecGetLen(game.ship1.vel));
 
         ParticlesUpdate(game.particles, game.ship1.vel);

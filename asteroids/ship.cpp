@@ -77,9 +77,9 @@ void ShipReset(Ship& self, SDL_Point pos)
     self.tex.dstrect.y = pos.y - center;
     self.tex.angle = 0;
 
-    self.acc = { 0, 0 };
     self.vel = { 0, 0 };
-    self.rotationPower = 0;
+    self.acc = { 0, 0 };
+    self.angularVel = 0;
 }
 
 void ShipUpdateActions(Ship& self, Keys& keys, int gameState)
@@ -119,13 +119,16 @@ void ShipUpdateActions(Ship& self, Keys& keys, int gameState)
 
 void ShipUpdateVelocity(Ship& self)
 {
-    if (fabs(self.vel.x) > self.maxSpeed)
-        self.vel.x = self.vel.x > 0 ? self.maxSpeed : -self.maxSpeed;
-    if (fabs(self.vel.y) > self.maxSpeed)
-        self.vel.y = self.vel.y > 0 ? self.maxSpeed : -self.maxSpeed;
+    if (fabs(self.vel.x) > SHIP_MAX_VEL)
+        updateMaxValue(self.vel.x, SHIP_MAX_VEL);
+    if (fabs(self.vel.y) > SHIP_MAX_VEL)
+        updateMaxValue(self.vel.y, SHIP_MAX_VEL);
 
     self.tex.dstrect.x += self.vel.x;
     self.tex.dstrect.y -= self.vel.y;
+
+    updateMaxValue(self.angularVel, SHIP_MAX_ANGULAR_VEL);
+    self.tex.angle += self.angularVel;
 }
 
 void ShipUpdatAcceleration(Ship& self)
@@ -136,6 +139,12 @@ void ShipUpdatAcceleration(Ship& self)
         VecSetAngle(self.acc, self.tex.angle);
         VecSumCoords(self.vel, self.acc);
     }
+
+    if (self.acts.left)
+        self.angularVel -= SHIP_ANGULAR_ACC;
+    if (self.acts.right)
+        self.angularVel += SHIP_ANGULAR_ACC;
+    self.angularVel /= SHIP_INCREASE_ANGULAR_ACC;
 }
 
 void ShipUpdateTicks(Ship& self)
@@ -144,17 +153,12 @@ void ShipUpdateTicks(Ship& self)
     if (ticks - self.ticks >= 1000)
     {
         self.ticks = ticks;
-
+        
         if (self.acts.up)
-        {
-            int sign = self.rotationPower > 0 ? -1 : 1;
-            self.rotationPower += sign * self.rotationCoeff;
-        }
-        else
-        {
-            self.vel.x /= 1.8;
-            self.vel.y /= 1.8;
-        }
+            return;
+
+        self.vel.x /= 1.8;
+        self.vel.y /= 1.8;
     }
 }
 
@@ -351,18 +355,6 @@ void ShipUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,
 )
 {
     ShipUpdateActions(self, keys, gameState);
-
-    int sign = 0;
-    if (self.acts.left)  sign = -1;
-    if (self.acts.right) sign = 1;
-    self.tex.angle += self.rotationPower;
-
-    if (self.acts.up && sign)
-    {
-        self.tex.angle += sign * self.rotationSpeed;
-        self.rotationPower = sign * 1.4;
-    }
-
     ShipUpdateVelocity(self);
     ShipUpdatAcceleration(self);
     ShipUpdateTicks(self);

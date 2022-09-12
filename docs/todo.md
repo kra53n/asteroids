@@ -1,8 +1,8 @@
 ## tasks
 
-- [ ] record file
-- [ ] level loading
-- [ ] menu
+- [x] record file
+- [x] level loading
+- [x] menu
 - [x] shooting enemy
 - [x] hot-seat mode
 - [ ] music
@@ -27,15 +27,15 @@
 
 ## todo
 
+- [ ] fix ship collision
 - [ ] send player to level state after won
 - [ ] add enemy damage
 - [ ] rename `point` to `points`
-- [ ] add player nickname feature
-- [ ] remove funcs of `background.cpp` to `texture.cpp`
 
 ## extra features
 
 - [ ] add aggressive enemy mode
+- [ ] add player nickname feature
 - [ ] blured bg in menu
 - [ ] camera
 - [ ] look at interesting thgins in LazyFoo.net
@@ -43,6 +43,7 @@
 
 ## completed
 
+- [x] fix angular acceleration
 - [x] `VecSetDirectionByCoords` function
 - [x] memory leak menu
 - [x] fix 2nd bullet

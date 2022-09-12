@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <math.h>
 
 #include "funcs.h"
 #include "window.h"
@@ -65,4 +66,10 @@ void centerizeRect(SDL_Rect& centerize, SDL_Rect& border)
     SDL_Point centerizeCenter = getRectCenter(centerize);
     centerize.x += borderCenter.x - centerizeCenter.x;
     centerize.y += borderCenter.y - centerizeCenter.y;
+}
+
+void updateMaxValue(float& value, float maximum)
+{
+    if (fabs(value) > maximum)
+        value = value > maximum ? maximum : -maximum;
 }

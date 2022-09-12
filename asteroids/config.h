@@ -155,8 +155,12 @@ const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
 #define ENGINE_FRAMES         15
 #define ENGINE_DELAY          100
 
-#define SHIP_SCALE_COEFF  3
-#define SHIP_DAMAGE       0.1
+#define SHIP_SCALE_COEFF          3
+#define SHIP_DAMAGE               0.1
+#define SHIP_MAX_VEL              10
+#define SHIP_MAX_ANGULAR_VEL      5
+#define SHIP_ANGULAR_ACC          0.5
+#define SHIP_INCREASE_ANGULAR_ACC 1.05
 
 #define SHIP_FILENAME1 "assets/images/ships/ship1.png"
 #define SHIP_FILENAME2 "assets/images/ships/ship2.png"
