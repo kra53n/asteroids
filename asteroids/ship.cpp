@@ -286,7 +286,7 @@ bool ShipUpdateBulletCollisionWithShip(Ship& self, Ship& ship, Bullet* bullet)
     return true;
 }
 
-void ShipBulletsUpdate(Ship& self, Ship& ship, Asteroids& asters,
+void ShipUpdateBullets(Ship& self, Ship& ship, Asteroids& asters,
     SDL_Rect& enemyRect, bool& enemyActive, Health& enemyHealth
 )
 {
@@ -319,7 +319,6 @@ void ShipBulletsUpdate(Ship& self, Ship& ship, Asteroids& asters,
     }
 
     if (!self.acts.shoot) return;
-
     ShipShoot(self, self.bulletType);
 }
 
@@ -356,7 +355,7 @@ void ShipUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,
     ShipUpdateTicks(self);
     ShipUpdateCollisionWithShip(self, ship);
     ShipUpdateCollisionWithAstroids(self, asters);
-    ShipBulletsUpdate(self, ship, asters, enemyRect, enemyActive, enemyHealth);
+    ShipUpdateBullets(self, ship, asters, enemyRect, enemyActive, enemyHealth);
     
     EngineUpdate(self.engine);
 
