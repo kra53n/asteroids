@@ -1,11 +1,14 @@
 #pragma once
 #include <SDL.h>
 
-#define ABOUT_MESSAGE "This game was created by kra53n " \
-                      "(https://github.com/kra53n) for programming course " \
-                      "project in the 1st year of university. He is really " \
-                      "tired to do it. When he choosed this project he didn't " \
-                      "expect how hard it will be."
+//#define ABOUT_MESSAGE "This game was created by kra53n " \
+//                      "(https://github.com/kra53n) for programming course " \
+//                      "project in the 1st year of university. He is really " \
+//                      "tired to do it. When he choosed this project he didn't " \
+//                      "expect how hard it will be."
+#define ABOUT_MESSAGE "Курсовую работу по программированию по теме 'Аркадный " \
+                      "космический симулятор' выполнил студент БГТУ группы " \
+                      "О-21-ИВТ-2-ПО-Б Бахтин Григорий"
 #define ABOUT_FONTNAME "assets/fonts/MontserratAlternates-Regular.otf"
 
 
@@ -61,6 +64,8 @@ struct Keys
 #define LEVEL_VERTICAL_DISTANCE 15
 #define LEVEL_DELAY_BUTTONS     100
 #define LEVEL_FONT_TRANSPARENT  100
+#define LEVEL_BONUS_TIME        10'000
+#define LEVEL_BONUS_TIME_COEFF  100
 
 
 // LEVEL CONFIGURAION

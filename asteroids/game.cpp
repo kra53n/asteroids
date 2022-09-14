@@ -102,14 +102,64 @@ void processKeys(Game& game)
     }
 }
 
-SDL_FPoint getMiddlePointBetweenShips(Ship& s1, Ship& s2, int coeff = 100)
+void GameUpdateSoloStateLoose(Game& game)
 {
-    Vec vec;
-    SDL_Point center1 = getRectCenter(s1.tex.dstrect);
-    SDL_Point center2 = getRectCenter(s2.tex.dstrect);
-    VecSetLenByCoords(vec, center1, center2);
-    VecSetLen(vec, VecGetLen(vec) / 2);
-    return { (center1.x + vec.x) / coeff, (center1.y + vec.y) / coeff };
+    game.state = GAME_STATE_LOOSE;
+
+    char message[80];
+    sprintf_s(message, 80, "ur score: %d\nbest score: %d\nur position in top: %d",
+        game.ship1.score.point,
+        getBestScore(game.levels.cur + 1, game.ship1.score.point),
+        getPosInLevelRecords(game.levels.cur+1, game.ship1.score.point) + 1);
+    writeScore(game.levels.cur + 1, game.ship1.score.point);
+    updateMessageTexture(game.messageTexture, message, MENU_FONTNAME, 40);
+
+    centerizeRect(game.messageTexture.dstrect, winRect);
+}
+
+int GameUpdateSoloStateGetBonusTime(Game& game)
+{
+    int ticks = SDL_GetTicks();
+    int timeSpent = ticks - game.levels.ticks;
+    return timeSpent <= LEVEL_BONUS_TIME ?
+        (LEVEL_BONUS_TIME - timeSpent) / LEVEL_BONUS_TIME_COEFF : 0;
+}
+
+void GameUpdateSoloStateWin(Game& game)
+{
+    game.state = GAME_STATE_WIN;
+    int score = game.ship1.score.point + GameUpdateSoloStateGetBonusTime(game);
+
+    char message[100];
+    sprintf_s(message, 100, "You have passed\nur score: %d\nbest score: %d\nur position in top: %d",
+        score,
+        getBestScore(game.levels.cur + 1, score),
+        getPosInLevelRecords(game.levels.cur+1, score) + 1);
+    writeScore(game.levels.cur + 1, score);
+    updateMessageTexture(game.messageTexture, message, MENU_FONTNAME, 40);
+
+    centerizeRect(game.messageTexture.dstrect, winRect);
+}
+
+void GameUpdateSoloState(Game& game)
+{
+    if (game.ship1.health.point <= 0)
+        GameUpdateSoloStateLoose(game);
+    else if (game.enemy.active <= 0 && game.asteroids.head == NULL)
+        GameUpdateSoloStateWin(game);
+}
+
+void GameUpdateSeatState(Game& game)
+{
+    if (game.ship1.health.point < 0 || game.ship2.health.point < 0)
+    {
+        game.state = game.ship1.health.point < 0 ? GAME_STATE_PLAYER2_WIN : GAME_STATE_PLAYER1_WIN;
+        const char* message = GAME_STATE_PLAYER1_WIN ? "1st player won" : "2nd player won";
+        if (game.ship1.health.point == 0 && game.ship2.health.point == 0)
+            message = "its draw";
+        updateMessageTexture(game.messageTexture, message);
+        centerizeRect(game.messageTexture.dstrect, winRect);
+    }
 }
 
 void GameUpdate(Game& game)
@@ -231,22 +281,9 @@ void GameUpdate(Game& game)
             VecGetLen(game.ship1.vel));
 
         ParticlesUpdate(game.particles, game.ship1.vel);
-
-        if (game.ship1.health.point < 0)
-        {
-            game.state = GAME_STATE_LOOSE;
-
-            char message[80];
-            sprintf_s(message, 80, "ur score: %d\nbest score: %d\nur position in top: %d",
-                game.ship1.score.point,
-                getBestScore(game.levels.cur + 1, game.ship1.score.point),
-                getPosInLevelRecords(game.levels.cur+1, game.ship1.score.point) + 1);
-            writeScore(game.levels.cur + 1, game.ship1.score.point);
-            updateMessageTexture(game.messageTexture, message, MENU_FONTNAME, 40);
-
-            centerizeRect(game.messageTexture.dstrect, winRect);
-        }
-
+        
+        printf("\nticks: %d", SDL_GetTicks() - game.levels.ticks);
+        GameUpdateSoloState(game);
         break;
 
     case GAME_STATE_SEAT:
@@ -274,15 +311,7 @@ void GameUpdate(Game& game)
 
         ParticlesUpdate(game.particles, VecGetMaxVec(game.ship1.vel, game.ship2.vel));
 
-        if (game.ship1.health.point < 0 || game.ship2.health.point < 0)
-        {
-            game.state = game.ship1.health.point < 0 ? GAME_STATE_PLAYER2_WIN : GAME_STATE_PLAYER1_WIN;
-            const char* message = GAME_STATE_PLAYER1_WIN ? "1st player won" : "2nd player won";
-            if (game.ship1.health.point == 0 && game.ship2.health.point == 0)
-                message = "its draw";
-            updateMessageTexture(game.messageTexture, message);
-            centerizeRect(game.messageTexture.dstrect, winRect);
-        }
+        GameUpdateSeatState(game);
         break;
     
     case GAME_STATE_ABOUT:

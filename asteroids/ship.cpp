@@ -40,7 +40,7 @@ void ShipInit(Ship& self, const char* filename, int instance)
 {
     self.ticks = SDL_GetTicks();
     self.instance = instance;
-    self.bulletType = 0;
+    self.bulletType = 1;
     self.active = true;
 
     switch (self.instance)
@@ -386,4 +386,14 @@ void ShipDraw(Ship& self, int gameState)
     //     SDL_RenderDrawLine(ren, x1, y1, x2, y2);
     // }
     // SDL_RenderDrawRect(ren, &self.tex.dstrect);
+}
+
+SDL_FPoint getMiddlePointBetweenShips(Ship& s1, Ship& s2, int coeff)
+{
+    Vec vec;
+    SDL_Point center1 = getRectCenter(s1.tex.dstrect);
+    SDL_Point center2 = getRectCenter(s2.tex.dstrect);
+    VecSetLenByCoords(vec, center1, center2);
+    VecSetLen(vec, VecGetLen(vec) / 2);
+    return { (center1.x + vec.x) / coeff, (center1.y + vec.y) / coeff };
 }
