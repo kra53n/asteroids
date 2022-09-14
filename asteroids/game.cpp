@@ -18,17 +18,10 @@ void GameInit(Game& game)
     srand(time(0));
 
     game.run = true;
+    game.levels = LevelLoadFile(LEVEL_FILE_FILENAME);
+    
     BackgroundInit(game.background, 0);
     ParticlesInit(game.particles);
-
-
-    //int asters[ASTEROIDS_TYPE_NUM] = { 2, 2, 1, 1, 1, 1, 1, 1, 1 };
-    //int asters[ASTEROIDS_TYPE_NUM] = { 1, 0, 0, 1, 0, 0, 2, 0, 0 };
-    //int asters[ASTEROIDS_TYPE_NUM] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-    game.levels = LevelLoadFile(LEVEL_FILE_FILENAME);
-    //AsteroidsInit(game.asteroids, asters);
-    
     MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
     ShipInit(game.ship1, SHIP_FILENAME1, SHIP1);
     ShipInit(game.ship2, SHIP_FILENAME2, SHIP2);
@@ -102,8 +95,17 @@ void processKeys(Game& game)
     }
 }
 
+int GameUpdateSoloStateGetBonusTime(Game& game)
+{
+    int ticks = SDL_GetTicks();
+    int timeSpent = ticks - game.levels.ticks;
+    return timeSpent <= LEVEL_BONUS_TIME ?
+        (LEVEL_BONUS_TIME - timeSpent) / LEVEL_BONUS_TIME_COEFF : 0;
+}
+
 void GameUpdateSoloStateLoose(Game& game)
 {
+    if (game.ship1.health.point > 0) return;
     game.state = GAME_STATE_LOOSE;
 
     char message[80];
@@ -117,16 +119,10 @@ void GameUpdateSoloStateLoose(Game& game)
     centerizeRect(game.messageTexture.dstrect, winRect);
 }
 
-int GameUpdateSoloStateGetBonusTime(Game& game)
-{
-    int ticks = SDL_GetTicks();
-    int timeSpent = ticks - game.levels.ticks;
-    return timeSpent <= LEVEL_BONUS_TIME ?
-        (LEVEL_BONUS_TIME - timeSpent) / LEVEL_BONUS_TIME_COEFF : 0;
-}
-
 void GameUpdateSoloStateWin(Game& game)
 {
+    if (game.enemy.active || game.asteroids.head) return;
+
     game.state = GAME_STATE_WIN;
     int score = game.ship1.score.point + GameUpdateSoloStateGetBonusTime(game);
 
@@ -143,14 +139,58 @@ void GameUpdateSoloStateWin(Game& game)
 
 void GameUpdateSoloState(Game& game)
 {
-    if (game.ship1.health.point <= 0)
-        GameUpdateSoloStateLoose(game);
-    else if (game.enemy.active <= 0 && game.asteroids.head == NULL)
-        GameUpdateSoloStateWin(game);
+    if (game.menu.restart)
+    {
+        game.menu.restart = false;
+
+        ShipReset(game.ship1, { winWdt2, winHgt2 });
+        game.ship2.active = false;
+
+        game.ship1.health.rect.y = 50;
+    }
+
+    AsteroidsUpdate(game.asteroids);
+    ShipUpdate(game.ship1, game.ship2, game.asteroids, game.enemy.tex.dstrect,
+        game.enemy.health, game.enemy.active, game.keys, game.state);
+    EnemyUpdate(game.enemy, game.ship1);
+
+    TextureUpdateAsInfiniteImage(game.background,
+        { -game.ship1.vel.x * (float)0.5, game.ship1.vel.y * (float)0.5 },
+        VecGetLen(game.ship1.vel));
+
+    ParticlesUpdate(game.particles, game.ship1.vel);
+
+    GameUpdateSoloStateLoose(game);
+    GameUpdateSoloStateWin(game);
+
 }
 
 void GameUpdateSeatState(Game& game)
 {
+    if (game.menu.restart)
+    {
+        game.menu.restart = false;
+
+        int distance = 100;
+        ShipReset(game.ship1, { winWdt2 - distance, winHgt2 });
+        ShipReset(game.ship2, { winWdt2 + distance, winHgt2 });
+        game.ship2.tex.angle = 180;
+        game.ship2.health.rect.x = winWdt - game.ship2.health.rect.x - game.ship2.health.rect.w;
+
+        game.ship1.health.rect.y = 10;
+        game.ship2.health.rect.y = 10;
+    }
+
+    ShipUpdate(game.ship1, game.ship2, ASTEROIDS_EMPTY, game.enemy.tex.dstrect,
+        game.enemy.health, game.enemy.active, game.keys, game.state);
+    ShipUpdate(game.ship2, game.ship1, ASTEROIDS_EMPTY, game.enemy.tex.dstrect,
+        game.enemy.health, game.enemy.active, game.keys, game.state);
+
+    TextureUpdateAsInfiniteImage(game.background,
+        getMiddlePointBetweenShips(game.ship1, game.ship2), VecGetLen(game.ship1.vel));
+
+    ParticlesUpdate(game.particles, VecGetMaxVec(game.ship1.vel, game.ship2.vel));
+
     if (game.ship1.health.point < 0 || game.ship2.health.point < 0)
     {
         game.state = game.ship1.health.point < 0 ? GAME_STATE_PLAYER2_WIN : GAME_STATE_PLAYER1_WIN;
@@ -260,59 +300,8 @@ void GameUpdate(Game& game)
         LevelUpdate(game.levels, game.asteroids, game.enemy, game.keys, game.state);
         break;
 
-    case GAME_STATE_SOLO:
-        if (game.menu.restart)
-        {
-            game.menu.restart = false;
-
-            ShipReset(game.ship1, { winWdt2, winHgt2 });
-            game.ship2.active = false;
-
-            game.ship1.health.rect.y = 50;
-        }
-
-        AsteroidsUpdate(game.asteroids);
-        ShipUpdate(game.ship1, game.ship2, game.asteroids, game.enemy.tex.dstrect,
-            game.enemy.health, game.enemy.active, game.keys, game.state);
-        EnemyUpdate(game.enemy, game.ship1);
-
-        TextureUpdateAsInfiniteImage(game.background,
-            { -game.ship1.vel.x * (float)0.5, game.ship1.vel.y * (float)0.5 },
-            VecGetLen(game.ship1.vel));
-
-        ParticlesUpdate(game.particles, game.ship1.vel);
-        
-        printf("\nticks: %d", SDL_GetTicks() - game.levels.ticks);
-        GameUpdateSoloState(game);
-        break;
-
-    case GAME_STATE_SEAT:
-        if (game.menu.restart)
-        {
-            game.menu.restart = false;
-
-            int distance = 100;
-            ShipReset(game.ship1, { winWdt2 - distance, winHgt2 });
-            ShipReset(game.ship2, { winWdt2 + distance, winHgt2 });
-            game.ship2.tex.angle = 180;
-            game.ship2.health.rect.x = winWdt - game.ship2.health.rect.x - game.ship2.health.rect.w;
-
-            game.ship1.health.rect.y = 10;
-            game.ship2.health.rect.y = 10;
-        }
-
-        ShipUpdate(game.ship1, game.ship2, ASTEROIDS_EMPTY, game.enemy.tex.dstrect,
-            game.enemy.health, game.enemy.active, game.keys, game.state);
-        ShipUpdate(game.ship2, game.ship1, ASTEROIDS_EMPTY, game.enemy.tex.dstrect,
-            game.enemy.health, game.enemy.active, game.keys, game.state);
-
-        TextureUpdateAsInfiniteImage(game.background,
-            getMiddlePointBetweenShips(game.ship1, game.ship2), VecGetLen(game.ship1.vel));
-
-        ParticlesUpdate(game.particles, VecGetMaxVec(game.ship1.vel, game.ship2.vel));
-
-        GameUpdateSeatState(game);
-        break;
+    case GAME_STATE_SOLO: GameUpdateSoloState(game); break;
+    case GAME_STATE_SEAT: GameUpdateSeatState(game); break;
     
     case GAME_STATE_ABOUT:
     case GAME_STATE_LOOSE:
