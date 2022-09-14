@@ -8,19 +8,20 @@
 
 struct Ship
 {
-    ShipActions  acts;
-    Animation    engine;
-    Texture      tex;
-    Bullets      bullets;
-    Health       health;
-    Score        score;
-    float        angularVel;
-    int          ticks         = 0;
-    int          instance;
-    int          bulletType;
-    bool         active;
-    Vec          vel           = { 0, 0 };
-    Vec          acc           = { 0, 0 };
+    ShipActions acts;
+    Animation   engine;
+    Texture     tex;
+    Bullets     bullets;
+    Health      health;
+    Score       score;
+    float       angularVel;
+    int         rad;
+    int         ticks       = 0;
+    int         instance;
+    int         bulletType;
+    bool        active;
+    Vec         vel         = { 0, 0 };
+    Vec         acc         = { 0, 0 };
 };
 
 void ShipInit(Ship& self, const char* filename, int instance);

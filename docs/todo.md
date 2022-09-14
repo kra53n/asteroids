@@ -27,10 +27,11 @@
 
 ## todo
 
-- [ ] fix ship collision
-- [ ] send player to level state after won
-- [ ] add enemy damage
+- [x] fix ship collision
+- [x] send player to level state after won
+- [x] add enemy damage
 - [ ] rename `point` to `points`
+- [ ] move `boundScreen` to `funcs.*`
 
 ## extra features
 

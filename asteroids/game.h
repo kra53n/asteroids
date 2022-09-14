@@ -1,6 +1,9 @@
 #pragma once
+#include <SDL_mixer.h>
+
 #include "menu.h"
 #include "ship.h"
+#include "music.h"
 #include "enemy.h"
 #include "level.h"
 #include "config.h"
@@ -29,6 +32,8 @@ struct Game
     Ship       ship1;
     Ship       ship2;
     Enemy      enemy;
+    
+    Music      music;
 };
 
 void processKeys(Game& game);

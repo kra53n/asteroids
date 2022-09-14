@@ -130,6 +130,8 @@ void EnemyUpdate(Enemy& self, Ship& ship)
 {
     if (!self.active) return;
 
+    printf("\nhealth: %f", self.health.point);
+
     EnemyUpdateMovement(self, ship);
     EnemyShoot(self);
     EnemyUpdateBullets(self, ship);

@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 #include "window.h"
 
@@ -15,46 +16,36 @@ int winWdt2 = winWdt / 2;
 int winHgt2 = winHgt / 2;
 SDL_Rect winRect = { 0, 0, winWdt, winHgt };
 
+void logError(const char* message, const char* error = SDL_GetError())
+{
+	printf("%s! SDL_Error: %s\n", message, error);
+	system("pause");
+	deInit(1);
+}
+
 void init()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
-        printf("SDL couldn't init SDL_INIT_VIDEO! SDL_Error: %s\n", SDL_GetError());
-        system("pause");
-        deInit(1);
-    }
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+        logError("SDL couldn't initialize");
 
     if (SDL_Init(IMG_INIT_PNG) < 0)
-    {
-        printf("SDL couldn't init IMG_INIT_PNG! SDL_Error: %s\n", SDL_GetError());
-        system("pause");
-        deInit(1);
-    }
+        logError("SDL couldn't init IMG_INIT_PNG");
 
     if (TTF_Init())
-    {
-        printf("SDL couldn't init TTF_Init! SDL_Error: %s\n", SDL_GetError());
-        system("pause");
-        deInit(1);
-    }
+        logError("SDL_TTF couldn't init TTF_Init");
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 1, 1024 * 26))
+        logError("SDL_Mixer couldn't initialize", Mix_GetError());
 
     win = SDL_CreateWindow("Asteroids!", SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED, winWdt, winHgt, SDL_WINDOW_SHOWN
     );
     if (win == NULL)
-    {
-        printf("SDL couldn't init! SDL_Error: %s\n", SDL_GetError());
-        system("pause");
-        deInit(1);
-    }
+        logError("SDL couldn't init!");
 
     ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
     if (ren == NULL)
-    {
-        printf("SDL couldn't create renderer! SDL_Error: %s\n", SDL_GetError());
-        system("pause");
-        deInit(1);
-    }
+        logError("SDL couldn't create renderer");
 }
 
 void deInit(int error)

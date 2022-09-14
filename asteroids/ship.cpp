@@ -56,6 +56,8 @@ void ShipInit(Ship& self, const char* filename, int instance)
     self.tex.dstrect.x = (winWdt - self.tex.dstrect.w) / 2;
     self.tex.dstrect.y = (winHgt - self.tex.dstrect.h) / 2;
 
+    self.rad = (int)getRadius(self.tex.dstrect) - SHIP_RADIUS_NARROWING;
+
     AnimationInit(self.engine, ENGINE_FRAMES, ENGINE_FILENAME, ENGINE_FILENAME_TYPE, SHIP_SCALE_COEFF);
     ScoreInit(self.score, { 10, 3 }, 0, "Score: ");
     HealthInit(self.health, { 10, 50, 250, 25 }, 100);
@@ -160,8 +162,6 @@ void ShipUpdateTicks(Ship& self)
 
 void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 {
-    int shipR = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
-    shipR /= 2;
     SDL_Point shipPoint = {
         self.tex.dstrect.x + self.tex.dstrect.w/2 ,
         self.tex.dstrect.y + self.tex.dstrect.h/2 
@@ -175,15 +175,15 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
             aster->pos.y + asterR
         };
 
-        if (!isCircsColliding(shipPoint, shipR, asterPoint, asterR)) continue;
+        if (!isCircsColliding(shipPoint, self.rad, asterPoint, asterR)) continue;
         
         VecSetAngleByCoords(self.vel, asterPoint, shipPoint);
         VecSetAngleByCoords(aster->vel, shipPoint, asterPoint);
 
         float asterRebound = 60 / ASTEROIDS[aster->type].mass;
         float shipRebound = 70 / asterRebound;
-        asterRebound /= shipR / 10;
-        asterRebound *= shipR / 10;
+        asterRebound /= self.rad / 10;
+        asterRebound *= self.rad / 10;
 
         VecSetLen(self.vel, 70 / asterRebound);
         VecSetLen(aster->vel, asterRebound);
@@ -275,7 +275,7 @@ bool ShipUpdateBulletCollisionWithShip(Ship& self, Ship& ship, Bullet* bullet)
 
     if (!isPointInCirc(
         getRectCenter(ship.tex.dstrect),
-        getRadius(ship.tex.dstrect),
+        ship.rad,
         { bullet->pos.x, bullet->pos.y }
     )) return false;
     
@@ -329,10 +329,7 @@ void ShipUpdateCollisionWithShip(Ship& self, Ship& ship)
     SDL_Point s1Center = getRectCenter(self.tex.dstrect);
     SDL_Point s2Center = getRectCenter(ship.tex.dstrect);
 
-    if (!isCircsColliding(
-        s1Center, getRadius(self.tex.dstrect),
-        s2Center, getRadius(self.tex.dstrect)
-    )) return;
+    if (!isCircsColliding(s1Center, self.rad, s2Center, ship.rad)) return;
     
     HealthUpdate(self.health, SHIP_DAMAGE);
     HealthUpdate(ship.health, SHIP_DAMAGE);
@@ -371,21 +368,6 @@ void ShipDraw(Ship& self, int gameState)
 
     if (gameState != GAME_STATE_SEAT)
         ScoreDraw(self.score);
-
-    // int side = self.tex.dstrect.w > self.tex.dstrect.h ? self.tex.dstrect.h : self.tex.dstrect.w;
-    // Vec line = { side / 2, 0 };
-    // int x1 = self.tex.dstrect.x + side / 2;
-    // int y1 = self.tex.dstrect.y + side / 2;
-
-    // SDL_SetRenderDrawColor(ren, 255, 0, 0, 0);
-    // for (int i = 0; i < 360; i += 15)
-    // {
-    //     VecSetAngle(line, i);
-    //     int x2 = x1 + line.x;
-    //     int y2 = y1 + line.y;
-    //     SDL_RenderDrawLine(ren, x1, y1, x2, y2);
-    // }
-    // SDL_RenderDrawRect(ren, &self.tex.dstrect);
 }
 
 SDL_FPoint getMiddlePointBetweenShips(Ship& s1, Ship& s2, int coeff)

@@ -7,6 +7,7 @@
 #include "level.h"
 #include "funcs.h"
 #include "enemy.h"
+#include "music.h"
 #include "record.h"
 #include "config.h"
 #include "texture.h"
@@ -26,6 +27,8 @@ void GameInit(Game& game)
     ShipInit(game.ship1, SHIP_FILENAME1, SHIP1);
     ShipInit(game.ship2, SHIP_FILENAME2, SHIP2);
     EnemyInit(game.enemy);
+
+    MusicLoad(game.music, MUSIC_MAIN_THEME);
 }
 
 void GameDraw(Game& game)
@@ -88,10 +91,13 @@ void processKeys(Game& game)
     if (game.keys.escape)
     {
         game.keys.enter = false;
+        game.levels.inited = false;
+
+        if (game.music.cur != MUSIC_MAIN_THEME)
+            MusicLoad(game.music, MUSIC_MAIN_THEME);
+
         game.state = GAME_STATE_MENU;
         MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
-
-        game.levels.inited = false;
     }
 }
 
@@ -314,6 +320,7 @@ void GameUpdate(Game& game)
             if (!game.aboutInited)
             {
                 game.aboutInited = true;
+                MusicLoad(game.music, MUSIC_ABOUT_THEME);
                 updateMessageTexture(game.messageTexture, ABOUT_MESSAGE, ABOUT_FONTNAME, 35);
                 centerizeRect(game.messageTexture.dstrect, winRect);
             }

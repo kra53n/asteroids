@@ -166,6 +166,7 @@ const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
 #define SHIP_MAX_ANGULAR_VEL      5
 #define SHIP_ANGULAR_ACC          0.5
 #define SHIP_INCREASE_ANGULAR_ACC 1.05
+#define SHIP_RADIUS_NARROWING     10
 
 #define SHIP_FILENAME1 "assets/images/ships/ship1.png"
 #define SHIP_FILENAME2 "assets/images/ships/ship2.png"
@@ -247,3 +248,9 @@ const ASTEROID_INFO ASTEROIDS[ASTEROIDS_TYPE_NUM] = {
     { "assets/images/asteroids/small rock.png",  4.34 * 0.8, 10, 2 },
     { "assets/images/asteroids/titanium.png",    6.505,      10, 2 },
 };
+
+
+// MUSIC CONFIGURATION
+
+#define MUSIC_MAIN_THEME  "assets/audio/music/Space Music Royalty Free - Music Unlimited - No Copyright Music.wav"
+#define MUSIC_ABOUT_THEME "assets/audio/music/unɔuɐƆ (NOITIDE AGES) [prod. ScrewStache].wav"
