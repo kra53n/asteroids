@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
+#include "music.h"
 #include "score.h"
 #include "funcs.h"
 #include "vector.h"
@@ -37,7 +38,7 @@ void BulletsClear(Bullets& self)
     self.head = NULL;
 }
 
-Bullet* BulletsGetNewBullet(Bullets& self, Texture& tex, int type, int affiliation)
+Bullet* BulletsGetNewBullet(Bullets& self, Texture& tex, int type)
 {
     Bullet* elem = (Bullet*)malloc(sizeof(Bullet));
 
@@ -60,16 +61,15 @@ Bullet* BulletsGetNewBullet(Bullets& self, Texture& tex, int type, int affiliati
     };
 
     elem->ticks = SDL_GetTicks();
-    elem->affiliation = affiliation;
     elem->type = type;
     elem->next = NULL;
 
     return elem;
 }
 
-Bullet* BulletsPush(Bullets& self, Texture& tex, int type, int affiliation)
+Bullet* BulletsPush(Bullets& self, Texture& tex, int type)
 {
-    Bullet* elem = BulletsGetNewBullet(self, tex, type, affiliation);
+    Bullet* elem = BulletsGetNewBullet(self, tex, type);
 
     for (Bullet* cur = self.head; cur != NULL; cur = cur->next)
     {

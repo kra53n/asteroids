@@ -18,9 +18,9 @@ SDL_Rect winRect = { 0, 0, winWdt, winHgt };
 
 void logError(const char* message, const char* error = SDL_GetError())
 {
-	printf("%s! SDL_Error: %s\n", message, error);
-	system("pause");
-	deInit(1);
+    printf("%s! SDL_Error: %s\n", message, error);
+    system("pause");
+    deInit(1);
 }
 
 void init()

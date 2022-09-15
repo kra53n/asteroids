@@ -5,13 +5,6 @@
 #include "vector.h"
 #include "asteroid.h"
 
-enum BulletsAffiliation
-{
-    BULLET_PLAYER1_AFFILIATION,
-    BULLET_PLAYER2_AFFILIATION,
-    BULLET_ENEMY_AFFILIATION,
-};
-
 struct Bullet
 {
     Vec       vel;
@@ -35,6 +28,6 @@ void BulletsDestroy(Bullets& self);
 
 void BulletsDelBullet(Bullets& self, Bullet* bullet);
 bool BulletsUpdateCollisionWithAstroids(Bullets& self, Bullet* bullet, Asteroids& asters, Score& score);
-Bullet* BulletsPush(Bullets& self, Texture& tex, int type, int affiliation);
+Bullet* BulletsPush(Bullets& self, Texture& tex, int type);
 
 void BulletsDraw(Bullets& self);

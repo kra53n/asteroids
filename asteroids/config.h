@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 //#define ABOUT_MESSAGE "This game was created by kra53n " \
 //                      "(https://github.com/kra53n) for programming course " \
@@ -14,7 +15,7 @@
 
 // GAME CONFIGURATION
 
-enum gameStates
+enum GAME_STATES
 {
     GAME_STATE_MENU,
     GAME_STATE_PLAY,
@@ -55,6 +56,34 @@ struct Keys
     int  mouse_x;
     int  mouse_y;
 };
+
+
+// MUSIC CONFIGURATION
+
+#define MUSIC_MAIN_THEME   "assets/audio/music/Space Music Royalty Free - Music Unlimited - No Copyright Music.wav"
+#define MUSIC_ABOUT_THEME  "assets/audio/music/unɔuɐƆ (NOITIDE AGES) [prod. ScrewStache].wav"
+
+enum MUSIC_EFFECTS_TYPES
+{
+    MUSIC_BULLET_1,
+	MUSIC_BULLET_2,
+	MUSIC_BUTTON,
+	MUSIC_COLLIDED,
+	MUSIC_DESTROYED,
+	MUSIC_BULLET_ENEMY,
+	MUSIC_LOOSE,
+};
+
+#define MUSIC_EFFECTS_NUM 7
+
+struct MUSIC_EFFECT_INFO
+{
+    int         effect;
+    const char* filename;
+    Mix_Chunk*  chunk;
+};
+
+extern MUSIC_EFFECT_INFO MusicEffects[MUSIC_EFFECTS_NUM];
 
 
 // LEVEL CONFIGURAION
@@ -136,18 +165,19 @@ const char PARTICLES_FILENAMES[PARTICLES_FILENAMES_NUM][41] = {
 struct BULLET_INFO
 {
     char     filename[40];
-    unsigned speed;
-    unsigned delay;
-    unsigned damage;
+    int      speed;
+    int      delay;
+    int      damage;
+    int      chunk;
 };
 
 #define BULLETS_TYPE_NUM 4
 
 const BULLET_INFO BULLETS[BULLETS_TYPE_NUM] = {
-    { "assets/images/bullets/bullet1.png", 80,  200,  5  },
-    { "assets/images/bullets/bullet2.png", 100, 800,  10 },
-    { "assets/images/bullets/bullet3.png", 10,  1000, 3  },
-    { "assets/images/bullets/bullet3.png", 10,  1000, 4  },
+    { "assets/images/bullets/bullet1.png", 80,  200,  5,  MUSIC_BULLET_1 },
+    { "assets/images/bullets/bullet2.png", 100, 800,  10, MUSIC_BULLET_2 },
+    { "assets/images/bullets/bullet3.png", 10,  1000, 3,  MUSIC_BULLET_1 },
+    { "assets/images/bullets/bullet3.png", 10,  1000, 4,  MUSIC_BULLET_2 },
 };
 
 
@@ -248,9 +278,3 @@ const ASTEROID_INFO ASTEROIDS[ASTEROIDS_TYPE_NUM] = {
     { "assets/images/asteroids/small rock.png",  4.34 * 0.8, 10, 2 },
     { "assets/images/asteroids/titanium.png",    6.505,      10, 2 },
 };
-
-
-// MUSIC CONFIGURATION
-
-#define MUSIC_MAIN_THEME  "assets/audio/music/Space Music Royalty Free - Music Unlimited - No Copyright Music.wav"
-#define MUSIC_ABOUT_THEME "assets/audio/music/unɔuɐƆ (NOITIDE AGES) [prod. ScrewStache].wav"

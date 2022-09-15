@@ -2,6 +2,7 @@
 #include <malloc.h>
 #include <stdlib.h>
 
+#include "music.h"
 #include "config.h"
 #include "window.h"
 #include "health.h"
@@ -108,6 +109,7 @@ void AsteroidsDelAsteroid(Asteroids& self, Asteroid* aster)
 
     self.explosionPos = { aster->pos.x, aster->pos.y };
     self.explosion.frame = 1;
+    MusicEffectsPlay(MUSIC_DESTROYED);
     free(aster);
 }
 

@@ -28,6 +28,7 @@ void GameInit(Game& game)
     ShipInit(game.ship2, SHIP_FILENAME2, SHIP2);
     EnemyInit(game.enemy);
 
+    MusicEffectsInit();
     MusicLoad(game.music, MUSIC_MAIN_THEME);
 }
 

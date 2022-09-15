@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "ship.h"
+#include "music.h"
 #include "score.h"
 #include "funcs.h"
 #include "bullet.h"
@@ -190,6 +191,8 @@ void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
         
         HealthUpdate(self.health, ASTEROIDS[aster->type].damage);
         aster->health -= 10;
+
+        MusicEffectsPlay(MUSIC_COLLIDED);
     }
 }
 
@@ -198,17 +201,19 @@ void ShipShoot(Ship& self, int type)
     int ticks = SDL_GetTicks();
     if (ticks - self.bullets.ticks < BULLETS[type].delay) return;
     self.bullets.ticks = ticks;
+    
+    Bullet* bullet = 0;
 
     switch (type)
     {
     case 0:
-        BulletsPush(self.bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
+        bullet = BulletsPush(self.bullets, self.tex, type);
         break;
 
     case 1:
         for (int i = -90; i <= 90; i += 180)
         {
-            Bullet* bullet = BulletsPush(self.bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
+            bullet = BulletsPush(self.bullets, self.tex, type);
 
             Vec pos;
             VecSetLen(pos, getRadius(self.tex.dstrect));
@@ -224,7 +229,7 @@ void ShipShoot(Ship& self, int type)
     case 2:
         for (int angle = -45; angle < 45; angle += 15)
         {
-            Bullet* bullet = BulletsPush(self.bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
+            bullet = BulletsPush(self.bullets, self.tex, type);
             VecSetAngle(bullet->vel, VecGetAngle(bullet->vel) - angle);
         }
         break;
@@ -232,7 +237,7 @@ void ShipShoot(Ship& self, int type)
     case 3:
         for (int angle = -180; angle < 180; angle += 30)
         {
-            Bullet* bullet = BulletsPush(self.bullets, self.tex, type, BULLET_PLAYER1_AFFILIATION);
+            bullet = BulletsPush(self.bullets, self.tex, type);
 
             Vec pos;
             VecSetLen(pos, self.tex.dstrect.w);
@@ -246,6 +251,9 @@ void ShipShoot(Ship& self, int type)
         }
         break;
     }
+
+    if (bullet)
+        MusicEffectsPlay(BULLETS[bullet->type].chunk);
 }
 
 bool ShipUpdateBulletCollisionWithEnemy(Ship& self, SDL_Rect& enemyRect,
@@ -340,6 +348,8 @@ void ShipUpdateCollisionWithShip(Ship& self, Ship& ship)
     float maxVel = max(VecGetLen(self.vel), VecGetLen(ship.vel));
     VecSetLen(self.vel, maxVel);
     VecSetLen(ship.vel, maxVel);
+
+    MusicEffectsPlay(MUSIC_COLLIDED);
 }
 
 void ShipUpdate(Ship& self, Ship& ship, Asteroids& asters, SDL_Rect& enemyRect,

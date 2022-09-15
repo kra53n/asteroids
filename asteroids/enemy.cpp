@@ -68,7 +68,7 @@ void EnemyShoot(Enemy& self)
     for (int i = 0; i < 360; i += 45)
     {
         Vec pos;
-        Bullet* bullet = BulletsPush(self.bullets, self.tex, 2, BULLET_ENEMY_AFFILIATION);
+        Bullet* bullet = BulletsPush(self.bullets, self.tex, 2);
         float angle = VecGetAngle(bullet->vel) + i;
 
         VecSetLen(pos, getRadius(self.tex.dstrect));
@@ -79,7 +79,6 @@ void EnemyShoot(Enemy& self)
         bullet->pos = getRectCenter(self.tex.dstrect);
         bullet->pos.x += pos.x;
         bullet->pos.y += pos.y;
-        bullet->affiliation = BULLET_ENEMY_AFFILIATION;
     }
 }
 
@@ -129,8 +128,6 @@ void EnemyUpdateBullets(Enemy& self, Ship& ship)
 void EnemyUpdate(Enemy& self, Ship& ship)
 {
     if (!self.active) return;
-
-    printf("\nhealth: %f", self.health.point);
 
     EnemyUpdateMovement(self, ship);
     EnemyShoot(self);

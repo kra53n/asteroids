@@ -27,6 +27,7 @@
 
 ## todo
 
+- [ ] delete bullet affilation
 - [x] fix ship collision
 - [x] send player to level state after won
 - [x] add enemy damage

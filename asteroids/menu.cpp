@@ -5,6 +5,7 @@
 #include "game.h"
 #include "menu.h"
 #include "funcs.h"
+#include "music.h"
 #include "window.h"
 #include "config.h"
 #include "texture.h"
@@ -95,6 +96,7 @@ void MenuChangeOption(Menu& self, Keys& keys, int& gameState, int& ticks, bool& 
     {
         self.ticks = ticks;
         gameState = self.info[self.choice].mode;
+        MusicEffectsPlay(MUSIC_BUTTON);
 
         switch (gameState)
         {
@@ -109,6 +111,7 @@ void MenuUpdate(Menu& self, Keys& keys, int& gameState)
 {
     int ticks = SDL_GetTicks();
     bool cursorUnderTexture = false;
+    bool switched = false;
 
     MenuChooseOptionByMouse(self, keys, cursorUnderTexture);
     if (!cursorUnderTexture)
