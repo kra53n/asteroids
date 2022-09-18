@@ -5,7 +5,7 @@
 - [x] menu
 - [x] shooting enemy
 - [x] hot-seat mode
-- [ ] music
+- [x] music
 - [x] base controlling
 - [x] shooting
 - [x] asteroids

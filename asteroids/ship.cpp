@@ -41,7 +41,7 @@ void ShipInit(Ship& self, const char* filename, int instance)
 {
     self.ticks = SDL_GetTicks();
     self.instance = instance;
-    self.bulletType = 1;
+    self.bulletType = 0;
     self.active = true;
 
     switch (self.instance)

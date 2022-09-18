@@ -201,7 +201,8 @@ void GameUpdateSeatState(Game& game)
     if (game.ship1.health.point < 0 || game.ship2.health.point < 0)
     {
         game.state = game.ship1.health.point < 0 ? GAME_STATE_PLAYER2_WIN : GAME_STATE_PLAYER1_WIN;
-        const char* message = GAME_STATE_PLAYER1_WIN ? "1st player won" : "2nd player won";
+        const char* message = game.state == GAME_STATE_PLAYER1_WIN ?
+            "1st player won" : "2nd player won";
         if (game.ship1.health.point == 0 && game.ship2.health.point == 0)
             message = "its draw";
         updateMessageTexture(game.messageTexture, message);
