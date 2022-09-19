@@ -16,7 +16,7 @@ int winWdt2 = winWdt / 2;
 int winHgt2 = winHgt / 2;
 SDL_Rect winRect = { 0, 0, winWdt, winHgt };
 
-void logError(const char* message, const char* error = SDL_GetError())
+void logError(const char* message, const char* error)
 {
     printf("%s! SDL_Error: %s\n", message, error);
     system("pause");

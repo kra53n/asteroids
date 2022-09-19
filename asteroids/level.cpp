@@ -5,6 +5,7 @@
 #include <SDL.h>
 
 #include "menu.h"
+#include "music.h"
 #include "enemy.h"
 #include "funcs.h"
 #include "level.h"
@@ -225,6 +226,7 @@ void LevelUpdate(Levels& levels, Asteroids& asters, Enemy& enemy, Keys& keys,
     {
         LevelLoadFile(LEVEL_FILE_FILENAME);
         LevelLoadLevel(levels, asters, enemy);
+        MusicEffectsPlay(MUSIC_BUTTON);
         gameState = GAME_STATE_SOLO;
         levels.inited = false;
     }

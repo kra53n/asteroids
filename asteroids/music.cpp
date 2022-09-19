@@ -1,3 +1,5 @@
+#include <SDL_mixer.h>
+
 #include "music.h"
 #include "config.h"
 

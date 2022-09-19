@@ -14,22 +14,24 @@
 #include "asteroid.h"
 #include "background.h"
 
-void GameInit(Game& game)
+void GameInit(Game& self)
 {
     srand(time(0));
 
-    game.run = true;
-    game.levels = LevelLoadFile(LEVEL_FILE_FILENAME);
+    self.run = true;
+    self.levels = LevelLoadFile(LEVEL_FILE_FILENAME);
     
-    BackgroundInit(game.background, 0);
-    ParticlesInit(game.particles);
-    MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);
-    ShipInit(game.ship1, SHIP_FILENAME1, SHIP1);
-    ShipInit(game.ship2, SHIP_FILENAME2, SHIP2);
-    EnemyInit(game.enemy);
+    BackgroundInit(self.background, 0);
+    ParticlesInit(self.particles);
+    MenuInit(self.menu, MAIN_MENU, MAIN_MENU_NUM);
+    ShipInit(self.ship1, SHIP_FILENAME1, SHIP1);
+    ShipInit(self.ship2, SHIP_FILENAME2, SHIP2);
+    EnemyInit(self.enemy);
 
     MusicEffectsInit();
-    MusicLoad(game.music, MUSIC_MAIN_THEME);
+    MusicLoad(self.music, MUSIC_MAIN_THEME);
+
+    SettingsInit(self.menu.settings);
 }
 
 void GameDraw(Game& game)
@@ -96,6 +98,7 @@ void processKeys(Game& game)
 
         if (game.music.cur != MUSIC_MAIN_THEME)
             MusicLoad(game.music, MUSIC_MAIN_THEME);
+        MusicEffectsPlay(MUSIC_BUTTON);
 
         game.state = GAME_STATE_MENU;
         MenuInit(game.menu, MAIN_MENU, MAIN_MENU_NUM);

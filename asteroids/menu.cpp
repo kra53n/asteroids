@@ -1,6 +1,8 @@
-#include <SDL.h>
 #include <stdio.h>
 #include <malloc.h>
+
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 #include "game.h"
 #include "menu.h"
@@ -133,4 +135,48 @@ void MenuDraw(Menu& self)
         SDL_RenderCopy(ren, self.textures[i].tex, NULL, &drawRect);
         drawRect.y += drawRect.h + MENU_FONT_VERTICAL_DISTANCE;
     }
+}
+
+void SettingsSaveData(Settings& self)
+{
+    FILE* f;
+    if (fopen_s(&f, SETTINGS_DATA_FILENAME, "wb"))
+    {
+        char logMessage[120];
+        sprintf_s(logMessage, 120, "Couldn't open %s file", SETTINGS_DATA_FILENAME);
+        logError(logMessage);
+    }
+
+    Settings buffer;
+    buffer.volume = MIX_MAX_VOLUME;
+
+    fwrite(&buffer, sizeof(buffer), 1, f);
+    fclose(f);
+}
+
+void SettingsLoadData(Settings& self)
+{
+    FILE* f;
+    if (fopen_s(&f, SETTINGS_DATA_FILENAME, "rb"))
+    {
+        SettingsSaveData(self);
+        SettingsLoadData(self);
+    }
+    else
+    {
+        fread(&self, sizeof(self), 1, f);
+        fclose(f);
+    }
+}
+
+void SettingsInit(Settings& self)
+{
+    SettingsLoadData(self);
+    self.inited = true;
+}
+
+void SettingsDestroy(Settings& self)
+{
+    SettingsSaveData(self);
+    self.inited = false;
 }

@@ -10,6 +10,8 @@ extern int winWdt2;
 extern int winHgt2;
 extern SDL_Rect winRect;
 
+void logError(const char* message, const char* error = SDL_GetError());
+
 void init();
 void deInit(int error);
 

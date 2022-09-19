@@ -3,10 +3,10 @@
 #include <SDL_mixer.h>
 
 //#define ABOUT_MESSAGE "This game was created by kra53n " \
-//                      "(https://github.com/kra53n) for programming course " \
-//                      "project in the 1st year of university. He is really " \
-//                      "tired to do it. When he choosed this project he didn't " \
-//                      "expect how hard it will be."
+//                      "(https://github.com/kra53n) as a final project for " \
+//                      "the 1st year programming course. It was really " \
+//                      "tiring process. When he chos this project he didn't " \
+//                      "expect how hard it might be."
 #define ABOUT_MESSAGE "Курсовую работу по программированию по теме 'Аркадный " \
                       "космический симулятор' выполнил студент БГТУ группы " \
                       "О-21-ИВТ-2-ПО-Б Бахтин Григорий"
@@ -136,6 +136,11 @@ const MENU_INFO MODE_MENU[MODE_MENU_NUM] = {
 };
 
 
+// SETTINGS CONFIGURATION
+
+#define SETTINGS_DATA_FILENAME "data/settings.bin"
+
+
 // BACKGROUND CONFIGURATION
 
 #define BACKGROUND_FILENAMES_NUM 4
@@ -234,7 +239,7 @@ const ShipActions SHIP2_ACTIONS = {
 #define ENEMY_FILENAME      "assets/images/enemy/enemy.png"
 #define ENEMY_DAMAGE        0.25
 #define ENEMY_BULLET_DAMAGE 5
-#define ENEMY_HEALTH        200
+#define ENEMY_HEALTH        30
 #define EMEMY_MAX_SPEED     30
 #define ENEMY_DELAY         100
 #define ENEMY_SCALE_COEFF   4

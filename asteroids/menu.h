@@ -2,6 +2,12 @@
 #include "config.h"
 #include "texture.h"
 
+struct Settings
+{
+    bool inited = false;
+    int  volume;
+};
+
 struct Menu
 {
     const MENU_INFO* info;
@@ -13,9 +19,14 @@ struct Menu
     // text block position of top
     int              textBlockY;
     int              ticks;
+
+    Settings         settings;
 };
 
 void MenuInit(Menu& menu, const MENU_INFO* info, int optionsNum);
 void MenuDestroy(Menu& menu);
 void MenuUpdate(Menu& menu, Keys& keys, int& gameState);
 void MenuDraw(Menu& menu);
+
+void SettingsInit(Settings& self);
+void SettingsDestroy(Settings& self);
