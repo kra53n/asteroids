@@ -43,6 +43,7 @@ void MenuInit(Menu& self, const MENU_INFO* info, int optionsNum)
     self.info = info;
     self.num = optionsNum;
     self.choice = 0;
+    self.restart = true;
 
     self.textures = (Texture*)malloc(sizeof(Texture) * self.num);
     if (!self.textures)
@@ -179,4 +180,9 @@ void SettingsDestroy(Settings& self)
 {
     SettingsSaveData(self);
     self.inited = false;
+}
+
+void SettingsDraw(Settings& self)
+{
+
 }

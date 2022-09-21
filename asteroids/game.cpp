@@ -185,7 +185,7 @@ void GameUpdateSeatState(Game& game)
         ShipReset(game.ship1, { winWdt2 - distance, winHgt2 });
         ShipReset(game.ship2, { winWdt2 + distance, winHgt2 });
         game.ship2.tex.angle = 180;
-        game.ship2.health.rect.x = winWdt - game.ship2.health.rect.x - game.ship2.health.rect.w;
+        game.ship2.health.rect.x = winWdt - game.ship1.health.rect.x - game.ship2.health.rect.w;
 
         game.ship1.health.rect.y = 10;
         game.ship2.health.rect.y = 10;

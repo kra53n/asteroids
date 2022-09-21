@@ -16,7 +16,6 @@ void HealthUpdate(Health& self, float point)
     self.point -= point;
 }
 
-#include <stdio.h>
 void HealthDraw(Health& self)
 {
     SDL_Rect curHpRect = self.rect;
