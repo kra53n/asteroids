@@ -21,9 +21,8 @@ void VecSetLen(Vec& vec, float len)
 
 void VecSetLenByCoords(Vec& vec, SDL_Point p1, SDL_Point p2)
 {
-    int x = p2.x - p1.x;
-    int y = p2.y - p1.y;
-    VecSetLen(vec, sqrt(x*x + y*y));
+    Vec other = { p2.x - p1.x, p2.y - p1.y };
+    VecSetLen(vec, VecGetLen(other));
 }
 
 float VecGetAngle(Vec& vec)

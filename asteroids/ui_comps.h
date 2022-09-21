@@ -1,8 +1,6 @@
 #pragma once
 #include <SDL.h>
 
-enum UI_Comps { Text, Button, CheckButton, Scale, };
-
 struct UI_Entity
 {
 	const char* text;
@@ -18,7 +16,7 @@ struct UI_Button
 	bool      act;
 };
 
-typedef UI_Entity UI_Button;
+typedef UI_Button UI_CheckButton;
 
 struct Scale
 {
