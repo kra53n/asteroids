@@ -15,6 +15,12 @@ void ScoreInit(Score& self, SDL_Point pos, int point, const char* title)
     ScoreUpdate(self);
 }
 
+void ScoreDestroy(Score& self)
+{
+    if (self.tex.tex)
+        SDL_DestroyTexture(self.tex.tex);
+}
+
 void ScoreUpdate(Score& self, int point)
 {
     self.point += point;
@@ -22,8 +28,7 @@ void ScoreUpdate(Score& self, int point)
     char message[120];
     sprintf_s(message, 120, "%s%d", self.title, self.point);
 
-    if (self.tex.tex)
-        SDL_DestroyTexture(self.tex.tex);
+    ScoreDestroy(self);
 
     SDL_Rect rect = self.tex.dstrect;
     self.tex = loadFont(message, SCORE_FONTNAME, COLOR_OF_ACTIVE_OPTION, SCORE_FONT_SIZE);

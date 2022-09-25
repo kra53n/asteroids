@@ -11,7 +11,6 @@ struct Bullet
     SDL_Point pos;
     int       type;
     int       ticks;
-    int       affiliation;
     Bullet*   next;
     Bullet*   prev;
 };
@@ -20,7 +19,7 @@ struct Bullets
 {
     Bullet*  head                    = 0;
     Texture  texs[BULLETS_TYPE_NUM];
-    unsigned ticks                   = 0;
+    int      ticks                   = 0;
 };
 
 void BulletsInit(Bullets& self);
