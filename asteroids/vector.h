@@ -3,11 +3,7 @@
 
 #define RADIANS M_PI / 180
 
-struct Vec
-{
-    float x;
-    float y;
-};
+typedef SDL_FPoint Vec;
 
 float VecGetLenSquared(Vec& vec);
 float VecGetLen(Vec& vec);
