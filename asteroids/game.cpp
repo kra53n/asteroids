@@ -189,6 +189,9 @@ void GameUpdateSeatState(Game& game)
 
         game.ship1.health.rect.y = 10;
         game.ship2.health.rect.y = 10;
+
+        game.ship1.active = true;
+        game.ship2.active = true;
     }
 
     ShipUpdate(game.ship1, game.ship2, ASTEROIDS_EMPTY, game.enemy.tex.dstrect,

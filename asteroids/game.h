@@ -13,9 +13,6 @@
 
 struct Game
 {
-    int        wdt         = winWdt;
-    int        hgt         = winHgt;
-                          
     bool       run         = false;
     bool       aboutInited = false;
     int        state       = 0;
