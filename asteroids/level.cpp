@@ -225,7 +225,6 @@ void LevelUpdate(Levels& levels, Asteroids& asters, Enemy& enemy, Keys& keys,
 
     if (keys.space || keys.enter)
     {
-        LevelLoadFile(LEVEL_FILE_FILENAME);
         LevelLoadLevel(levels, asters, enemy);
         MusicEffectsPlay(MUSIC_BUTTON);
         gameState = GAME_STATE_SOLO;

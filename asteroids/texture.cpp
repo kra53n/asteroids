@@ -78,7 +78,6 @@ void drawTextureWithOffset(Texture& texture, SDL_Point offset = { 0, 0 })
 
 void TextureDrawAsInfiniteImage(Texture& self)
 {
-    SDL_Rect rect;
     int wdt = 0;
     int hgt = 0;
 

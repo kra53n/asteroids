@@ -115,6 +115,8 @@ void AsteroidsDelAsteroid(Asteroids& self, Asteroid* aster)
 
 void AsteroidsInit(Asteroids& self, int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 {
+    AsteroidsDestroy(self);
+
     int ticks = SDL_GetTicks();
 
     for (int i = 0; i < ASTEROIDS_TYPE_NUM; i++)
@@ -125,11 +127,18 @@ void AsteroidsInit(Asteroids& self, int asteroidTypeNums[ASTEROIDS_TYPE_NUM])
 
     int num = AsteroidsGetNum(asteroidTypeNums);
 
-    for (int i = 0, asterType = 0, asterTypeIndex = 0; i < num; i++)
+    for (int i = 0, asterType = 0, asterTypeIndex = 0; i < num;)
     {
-        AsteroidsPush(self, asterType, ticks);
+        if (!asteroidTypeNums[asterType])
+        {
+            asterType++;
+            continue;
+        }
+        i++;
 
+        AsteroidsPush(self, asterType, ticks);
         asterTypeIndex++;
+
         if (asteroidTypeNums[asterType] == asterTypeIndex)
         {
             asterTypeIndex = 0;
