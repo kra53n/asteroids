@@ -18,7 +18,7 @@ void ExplosionUpdate(Asteroids& self)
     if (!self.explosion.frame) return;
 
     int ticks = SDL_GetTicks();
-    if (!(ticks- self.explosion.ticks >= EXPLOSION_DELAY)) return;
+    if (ticks - self.explosion.ticks < EXPLOSION_DELAY) return;
     self.explosion.ticks = ticks;
 
     self.explosion.frame = self.explosion.frame < EXPLOSION_FRAMES - 1 ? ++self.explosion.frame : 0;

@@ -68,6 +68,14 @@ void TextureUpdateAsInfiniteImage(Texture& self, SDL_FPoint offset, bool cond)
         self.dstrect.y = 0;
 }
 
+void drawTextureWithOffset(Texture& texture, SDL_Point offset = { 0, 0 })
+{
+    SDL_Rect rect = texture.dstrect;
+    rect.x += offset.x;
+    rect.y += offset.y;
+    SDL_RenderCopy(ren, texture.tex, 0, &rect);
+}
+
 void TextureDrawAsInfiniteImage(Texture& self)
 {
     SDL_Rect rect;
@@ -84,24 +92,11 @@ void TextureDrawAsInfiniteImage(Texture& self)
     else if (self.dstrect.y > 0)
         hgt = -self.dstrect.h;
 
-    SDL_RenderCopy(ren, self.tex, NULL, &self.dstrect);
+    drawTextureWithOffset(self);
     if (wdt)
-    {
-        rect = self.dstrect;
-        rect.x += wdt;
-        SDL_RenderCopy(ren, self.tex, NULL, &rect);
-    }
+        drawTextureWithOffset(self, { wdt, 0 });
     if (hgt)
-    {
-        rect = self.dstrect;
-        rect.y += hgt;
-        SDL_RenderCopy(ren, self.tex, NULL, &rect);
-    }
+        drawTextureWithOffset(self, { 0, hgt });
     if (wdt && hgt)
-    {
-        rect = self.dstrect;
-        rect.x += wdt;
-        rect.y += hgt;
-        SDL_RenderCopy(ren, self.tex, NULL, &rect);
-    }
+        drawTextureWithOffset(self, { wdt, hgt });
 }
