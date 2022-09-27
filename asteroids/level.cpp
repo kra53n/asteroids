@@ -30,12 +30,13 @@ Levels LevelLoadFile(const char* filename)
     FILE* f;
     if (fopen_s(&f, filename, "r"))
     {
-        printf("\nError while trying to read file with filename: %s", filename);
-        deInit(1);
+        char message[120];
+        sprintf_s(message, 120, "Error while trying to read file with filename: %s in LevelLoadFile", filename);
+        logError(message);
     }
 
     Levels levels;
-    Level level = { 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 };
+    Level levelInfo = LEVEL_STANDART_INFO;
 
     LevelState state = LEVEL_STATE;
     LevelState tmpState = state;
@@ -56,14 +57,14 @@ Levels LevelLoadFile(const char* filename)
         {
             levels.levels = (Level*)realloc(levels.levels, sizeof(Level) * (levels.num + 1));
             if (levels.num)
-                levels.levels[levels.num-1] = level;
-            level = { 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0 };
+                levels.levels[levels.num-1] = levelInfo;
+            levelInfo = LEVEL_STANDART_INFO;
             levels.num++;
         }
 
-        processState(state, string, level);
+        processState(state, string, levelInfo);
     }
-    levels.levels[levels.num-1] = level;
+    levels.levels[levels.num-1] = levelInfo;
 
     fclose(f);
 
