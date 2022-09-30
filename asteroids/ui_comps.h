@@ -1,28 +1,41 @@
 #pragma once
 #include <SDL.h>
 
-struct UI_Entity
+#include "texture.h"
+
+enum UI_TYPES { UI_TEXT, UI_BUTTON, UI_CHECKBUTTON, UI_SCALE };
+
+enum UI_SCALE_MOVES { UI_SCALE_LEFT, UI_SCALE_RIGHT };
+
+struct UI_Component
 {
+	int         type;
+
+	// UI_TEXT, UI_BUTTON, UI_CHECKBUTTON, UI_SCALE
 	const char* text;
-	SDL_Color&  actCol;
-	SDL_Color&  nactCol;
+	Texture     textTexture;
+	int         hgt;
+	SDL_Color*  actCol;
+	SDL_Color*  nactCol;
+
+	bool        act      = true;
+
+	// keys
+	bool        pressed = false;
+	bool        left    = false;
+	bool        right   = false;
+	int         ticks;
+
+	// right margin from textTexture.x
+	// if margin = 0, margin will be equal textTexture.x + textTexture.w
+	int         margin   = 0;
+
+	// UI_SCALE
+	SDL_Rect    rect;
+	int         maxScale;
+	int         minScale;
+	int         curScale;
 };
 
-typedef UI_Entity UI_Text;
-
-struct UI_Button
-{
-	UI_Entity entity;
-	bool      act;
-};
-
-typedef UI_Button UI_CheckButton;
-
-struct Scale
-{
-	UI_Entity entity;
-	SDL_Rect  rect;
-	int       max;
-	int       min;
-	int       cur;
-};
+UI_Component* UI_GetComponent(int type, const char* text, SDL_Color& actCol,
+	SDL_Color& nactColor, bool act, int minScale, int maxScale, int curScale);

@@ -21,3 +21,6 @@ float getRadius(SDL_Rect& rect);
 void centerizeRect(SDL_Rect& centerize, SDL_Rect& border);
 
 void updateMaxValue(float& value, float maximum);
+
+void drawBorderLine(int x1, int y1, int x2, int y2, int size, SDL_Color& col);
+void drawBorderRect(SDL_Rect& rect, int size, SDL_Color& col);

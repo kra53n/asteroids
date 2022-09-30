@@ -28,7 +28,7 @@ void EngineDraw(Animation& self, Ship& ship, bool cond)
 
     Vec pos;
     VecSetLen(pos, (ship.tex.dstrect.w + self.textures->dstrect.w) / 2);
-    VecSetAngle(pos, -ship.tex.angle);
+    VecSetAngle(pos, ship.tex.angle);
 
     SDL_Rect dstrect = self.textures->dstrect;
     dstrect.x = ship.tex.dstrect.x + (ship.tex.dstrect.w - self.textures->dstrect.w) / 2 - pos.x;
@@ -41,7 +41,7 @@ void ShipInit(Ship& self, const char* filename, int instance)
 {
     self.ticks = SDL_GetTicks();
     self.instance = instance;
-    self.bulletType = 0;
+    self.bulletType = 1;
     self.active = true;
 
     switch (self.instance)
@@ -139,7 +139,7 @@ void ShipUpdatAcceleration(Ship& self)
     if (self.acts.up)
     {
         self.acc = { 0.6, 0 };
-        VecSetAngle(self.acc, self.tex.angle);
+        VecSetAngle(self.acc, -self.tex.angle);
         VecSumCoords(self.vel, self.acc);
     }
 
@@ -203,7 +203,7 @@ void ShipShoot(Ship& self, int type)
     self.bullets.ticks = ticks;
     
     Bullet* bullet = 0;
-
+    
     switch (type)
     {
     case 0:
@@ -217,7 +217,7 @@ void ShipShoot(Ship& self, int type)
 
             Vec pos;
             VecSetLen(pos, getRadius(self.tex.dstrect));
-            VecSetAngle(pos, -self.tex.angle + i);
+            VecSetAngle(pos, self.tex.angle + i);
             VecSetAngle(bullet->vel, self.tex.angle);
 
             SDL_Point center = getRectCenter(self.tex.dstrect);
@@ -247,7 +247,7 @@ void ShipShoot(Ship& self, int type)
             bullet->pos.x += pos.x;
             bullet->pos.y += pos.y;
 
-            VecSetAngle(bullet->vel, VecGetAngle(bullet->vel) + angle);
+            VecSetAngle(bullet->vel, VecGetAngle(bullet->vel) - angle);
         }
         break;
     }
@@ -303,7 +303,7 @@ void ShipUpdateBullets(Ship& self, Ship& ship, Asteroids& asters,
         Bullet* curNext = cur->next;
 
         cur->pos.x += cur->vel.x;
-        cur->pos.y -= cur->vel.y;
+        cur->pos.y += cur->vel.y;
 
         if (
             BulletsUpdateCollisionWithAstroids(self.bullets, cur, asters, self.score) ||

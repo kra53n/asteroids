@@ -16,7 +16,7 @@ void VecSetLen(Vec& vec, float len)
 {
     float angle = atan2(vec.y, vec.x);
     vec.x = cos(angle) * len;
-    vec.y = -sin(angle) * len;
+    vec.y = sin(angle) * len;
 }
 
 void VecSetLenByCoords(Vec& vec, SDL_Point p1, SDL_Point p2)
@@ -27,7 +27,7 @@ void VecSetLenByCoords(Vec& vec, SDL_Point p1, SDL_Point p2)
 
 float VecGetAngle(Vec& vec)
 {
-    float angle = atan2(-vec.y, vec.x);
+    float angle = atan2(vec.y, vec.x);
     angle /= RADIANS;
     return angle;
 }
@@ -39,7 +39,7 @@ void VecChangeAngle(Vec& vec, float angle)
     angle += atan2(vec.y, vec.x);
     float len = VecGetLen(vec);
     vec.x = cos(angle) * len;
-    vec.y = -sin(angle) * len;
+    vec.y = sin(angle) * len;
 }
 
 // Set direction in degrees
@@ -48,7 +48,7 @@ void VecSetAngle(Vec& vec, float angle)
     angle *= RADIANS;
     float len = VecGetLen(vec);
     vec.x = cos(angle) * len;
-    vec.y = -sin(angle) * len;
+    vec.y = sin(angle) * len;
 }
 
 // Set direction from p1 to p2

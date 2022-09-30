@@ -53,7 +53,7 @@ Bullet* BulletsGetNewBullet(Bullets& self, Texture& tex, int type)
 
     Vec pos;
     VecSetLen(pos, tex.dstrect.w / 2);
-    VecSetAngle(pos, -tex.angle);
+    VecSetAngle(pos, tex.angle);
 
     elem->pos = {
         (int)(tex.dstrect.x + tex.dstrect.w / 2 + pos.x),

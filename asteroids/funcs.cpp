@@ -3,6 +3,7 @@
 
 #include "funcs.h"
 #include "window.h"
+#include "vector.h"
 
 void sortNums(int* nums, int size, int by)
 {
@@ -72,4 +73,36 @@ void updateMaxValue(float& value, float maximum)
 {
     if (fabs(value) > maximum)
         value = value > maximum ? maximum : -maximum;
+}
+
+void drawBorderLine(int x1, int y1, int x2, int y2, int size, SDL_Color& col)
+{
+    Vec vec;
+    VecSetLenByCoords(vec, { x1, y1 }, { x2, y2 });
+    VecSetAngleByCoords(vec, { x1, y1 }, { x2, y2 });
+
+    int len = VecGetLen(vec);
+    int step = len / size;
+
+    VecSetLen(vec, 1);
+
+    int size2 = size / 2;
+    SDL_FRect rect = { 0, 0, size, size };
+    SDL_SetRenderDrawColor(ren, col.r, col.g, col.b, col.a);
+    for (; VecGetLen(vec) <= len; VecSetLen(vec, VecGetLen(vec) + size2))
+    {
+        rect.x = x1 + vec.x - size2;
+        rect.y = y1 + vec.y - size2;
+        SDL_RenderFillRectF(ren, &rect);
+    }
+    SDL_SetRenderDrawColor(ren, 255, col.g, col.b, col.a);
+    SDL_RenderDrawLine(ren, x1, y1, x2, y2);
+}
+
+void drawBorderRect(SDL_Rect& rect, int size, SDL_Color& col)
+{
+    drawBorderLine(rect.x, rect.y, rect.x + rect.w, rect.y, size, col);
+    drawBorderLine(rect.x + rect.w, rect.y, rect.x + rect.w, rect.y + rect.h, size, col);
+    drawBorderLine(rect.x, rect.y + rect.h, rect.x + rect.w, rect.y + rect.h, size, col);
+    drawBorderLine(rect.x, rect.y, rect.x, rect.y + rect.h, size, col);
 }

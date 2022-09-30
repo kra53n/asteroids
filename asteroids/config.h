@@ -2,14 +2,14 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
-//#define ABOUT_MESSAGE "This game was created by kra53n " \
-//                      "(https://github.com/kra53n) as a final project for " \
-//                      "the 1st year programming course. It was really " \
-//                      "tiring process. When he chos this project he didn't " \
-//                      "expect how hard it might be."
-#define ABOUT_MESSAGE "Курсовую работу по программированию по теме 'Аркадный " \
-                      "космический симулятор' выполнил студент БГТУ группы " \
-                      "О-21-ИВТ-2-ПО-Б Бахтин Григорий"
+#define ABOUT_MESSAGE "This game was created by kra53n " \
+                      "(https://github.com/kra53n) as a final project for " \
+                      "the 1st year programming course. It was really " \
+                      "tiring process. When he chos this project he didn't " \
+                      "expect how hard it might be."
+//#define ABOUT_MESSAGE "Курсовую работу по программированию по теме 'Аркадный " \
+//                      "космический симулятор' выполнил студент БГТУ группы " \
+//                      "О-21-ИВТ-2-ПО-Б Бахтин Григорий"
 #define ABOUT_FONTNAME "assets/fonts/MontserratAlternates-Regular.otf"
 
 
