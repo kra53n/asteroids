@@ -1,6 +1,7 @@
 #pragma once
 #include "config.h"
 #include "texture.h"
+#include "ui_comps.h"
 
 struct Settings
 {

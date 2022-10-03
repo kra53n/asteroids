@@ -15,15 +15,15 @@ struct UI_Component
 	const char* text;
 	Texture     textTexture;
 	int         hgt;
-	SDL_Color*  actCol;
-	SDL_Color*  nactCol;
+	SDL_Color   actCol;
+	SDL_Color   nactCol;
 
-	bool        act      = true;
+	bool        act      = false;
 
 	// keys
-	bool        pressed = false;
-	bool        left    = false;
-	bool        right   = false;
+	bool        selected = false;
+	bool        left     = false;
+	bool        right    = false;
 	int         ticks;
 
 	// right margin from textTexture.x
@@ -37,5 +37,6 @@ struct UI_Component
 	int         curScale;
 };
 
-UI_Component* UI_GetComponent(int type, const char* text, SDL_Color& actCol,
-	SDL_Color& nactColor, bool act, int minScale, int maxScale, int curScale);
+UI_Component* UI_GetComponent(int type, const char* text, SDL_Color actCol,
+	SDL_Color nactColor, bool act, int minScale, int maxScale, int curScale);
+void UI_ComponentDraw(UI_Component& self);

@@ -19,7 +19,7 @@ void EnemyInit(Enemy& self)
     self.damageTicks = self.ticks;
 
     BulletsInit(self.bullets);
-    HealthInit(self.health);
+    HealthInit(self.health, { 0, 0, 0, 0}, ENEMY_HEALTH);
 }
 
 void EnemyDestroy(Enemy& self)

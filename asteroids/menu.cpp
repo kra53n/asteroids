@@ -11,6 +11,7 @@
 #include "window.h"
 #include "config.h"
 #include "texture.h"
+#include "ui_comps.h"
 
 void changeTextureOptionColor(Menu& self)
 {
@@ -53,7 +54,8 @@ void MenuInit(Menu& self, const MENU_INFO* info, int optionsNum)
     }
 
     for (int opt = 0; opt < self.num; opt++)
-        self.textures[opt] = loadFont(info[opt].name, MENU_FONTNAME, COLOR_OF_ACTIVE_OPTION, MENU_FONT_SIZE);
+        self.textures[opt] = loadFont(info[opt].name, MENU_FONTNAME,
+            COLOR_OF_ACTIVE_OPTION, MENU_FONT_SIZE);
 
     self.textBlockY = (winHgt - ((MENU_FONT_SIZE + MENU_FONT_VERTICAL_DISTANCE) * self.num - MENU_FONT_VERTICAL_DISTANCE)) / 2;
     changeTextureOptionColor(self);
