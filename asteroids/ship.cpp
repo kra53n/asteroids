@@ -122,10 +122,10 @@ void ShipUpdateActions(Ship& self, Keys& keys, int gameState)
 
 void ShipUpdateVelocity(Ship& self)
 {
-    if (fabs(self.vel.x) > SHIP_MAX_VEL)
-        updateMaxValue(self.vel.x, SHIP_MAX_VEL);
-    if (fabs(self.vel.y) > SHIP_MAX_VEL)
-        updateMaxValue(self.vel.y, SHIP_MAX_VEL);
+    float vel = VecGetLen(self.vel);
+    if (fabs(vel) > SHIP_MAX_VEL)
+        updateMaxValue(vel, SHIP_MAX_VEL);
+    VecSetLen(self.vel, vel);
 
     self.tex.dstrect.x += self.vel.x;
     self.tex.dstrect.y -= self.vel.y;
@@ -157,16 +157,12 @@ void ShipUpdateTicks(Ship& self)
     self.ticks = ticks;
 
     if (self.acts.up) return;
-    self.vel.x /= 1.8;
-    self.vel.y /= 1.8;
+    VecSetLen(self.vel, VecGetLen(self.vel) / 1.8);
 }
 
 void ShipUpdateCollisionWithAstroids(Ship& self, Asteroids& asters)
 {
-    SDL_Point shipPoint = {
-        self.tex.dstrect.x + self.tex.dstrect.w/2 ,
-        self.tex.dstrect.y + self.tex.dstrect.h/2 
-    };
+    SDL_Point shipPoint = getRectCenter(self.tex.dstrect);
 
     for (Asteroid* aster = asters.head; aster != NULL; aster = aster->next)
     {

@@ -35,7 +35,7 @@ void ParticlesUpdate(Texture self[PARTICLES_FILENAMES_NUM], Vec& vec)
         else
             VecSetLen(offset, 2 + speed);
 
-        TextureUpdateAsInfiniteImage(self[i], { -offset.x, -offset.y });
+        TextureUpdateAsInfiniteImage(self[i], { -offset.x, offset.y });
     }
 }
 
