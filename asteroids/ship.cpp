@@ -300,12 +300,12 @@ void ShipUpdateBullets(Ship& self, Ship& ship, Asteroids& asters,
 
         cur->pos.x += cur->vel.x;
         cur->pos.y += cur->vel.y;
-
-        if (
-            BulletsUpdateCollisionWithAstroids(self.bullets, cur, asters, self.score) ||
-            ShipUpdateBulletCollisionWithEnemy(self, enemyRect, enemyHealth, enemyActive, cur) ||
-            ShipUpdateBulletCollisionWithShip(self, ship, cur)
-        )
+        
+        bool cond = 0;
+        cond |= BulletsUpdateCollisionWithAstroids(self.bullets, cur, asters, self.score);
+        cond |= ShipUpdateBulletCollisionWithEnemy(self, enemyRect, enemyHealth, enemyActive, cur);
+        cond |= ShipUpdateBulletCollisionWithShip(self, ship, cur);
+        if (cond)
         {
             cur = curNext;
             continue;
